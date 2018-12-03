@@ -1,0 +1,1 @@
+# Champions [![](http://cf.way2muchnoise.eu/versions/champions.svg)](https://minecraft.curseforge.com/projects/champions) [![](http://cf.way2muchnoise.eu/short_champions_downloads.svg)](https://minecraft.curseforge.com/projects/champions/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
