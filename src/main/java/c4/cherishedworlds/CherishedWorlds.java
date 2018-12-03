@@ -21,10 +21,13 @@ package c4.cherishedworlds;
 
 import c4.cherishedworlds.event.EventHandlerClient;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 @Mod(   modid = CherishedWorlds.MODID,
@@ -50,5 +53,10 @@ public class CherishedWorlds {
     @EventHandler
     public void init(FMLInitializationEvent evt) {
         MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
+    }
+
+    @EventHandler
+    public void onFingerPrintViolation(FMLFingerprintViolationEvent evt) {
+        FMLLog.log.log(Level.ERROR, "Invalid fingerprint detected! The file " + evt.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }
