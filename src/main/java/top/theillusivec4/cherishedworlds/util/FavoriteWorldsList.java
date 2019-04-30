@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  C4
+ * Copyright (C) 2018-2019  C4
  *
  * This file is part of Cherished Worlds, a mod made for Minecraft.
  *
@@ -17,17 +17,17 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package c4.cherishedworlds.core;
+package top.theillusivec4.cherishedworlds.util;
 
-import c4.cherishedworlds.CherishedWorlds;
 import com.google.common.collect.Sets;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
+import top.theillusivec4.cherishedworlds.CherishedWorlds;
 
 import java.io.File;
 import java.util.Set;
@@ -40,20 +40,19 @@ public class FavoriteWorldsList {
 
         try {
             favorites.clear();
-            File file = new File(Loader.instance().getConfigDir(), CherishedWorlds.MODID + "/favorites.dat");
+            File file = new File(FMLPaths.CONFIGDIR.get().toString(), CherishedWorlds.MODID + "/favorites.dat");
             NBTTagCompound nbttagcompound = CompressedStreamTools.read(file);
 
             if (nbttagcompound == null) {
                 return;
             }
+            NBTTagList nbttaglist = nbttagcompound.getList("favorites", Constants.NBT.TAG_STRING);
 
-            NBTTagList nbttaglist = nbttagcompound.getTagList("favorites", Constants.NBT.TAG_STRING);
-
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                favorites.add(nbttaglist.getStringTagAt(i));
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                favorites.add(nbttaglist.getString(i));
             }
         } catch (Exception exception) {
-            CherishedWorlds.logger.error("Couldn't load favorites list", exception);
+            CherishedWorlds.LOGGER.error("Couldn't load favorites list", exception);
         }
     }
 
@@ -63,18 +62,18 @@ public class FavoriteWorldsList {
             NBTTagList nbttaglist = new NBTTagList();
 
             for (String s : favorites) {
-                nbttaglist.appendTag(new NBTTagString(s));
+                nbttaglist.add(new NBTTagString(s));
             }
             NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.setTag("favorites", nbttaglist);
-            File file = new File(Loader.instance().getConfigDir(), CherishedWorlds.MODID + "/favorites.dat");
+            nbttagcompound.put("favorites", nbttaglist);
+            File file = new File(FMLPaths.CONFIGDIR.get().toString(), CherishedWorlds.MODID + "/favorites.dat");
 
             if (!file.exists()) {
                 FileUtils.forceMkdirParent(file);
             }
             CompressedStreamTools.safeWrite(nbttagcompound, file);
         } catch (Exception exception) {
-            CherishedWorlds.logger.error("Couldn't save favorites list", exception);
+            CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
         }
     }
 

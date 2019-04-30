@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/TheIllusiveC4/CherishedWorlds/issues"
+displayURL="${mod_url}"
+logoFile="${mod_icon}"
+authors="${mod_author}"
+[[mods]]
+modId="${mod_id}"
+version="${version}"
+displayName="${mod_name}"
+description='''
+${mod_description}
+'''
+[[dependencies.cherishedworlds]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="CLIENT"
+[[dependencies.cherishedworlds]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13,1.14)"
+    ordering="NONE"
+    side="CLIENT"
