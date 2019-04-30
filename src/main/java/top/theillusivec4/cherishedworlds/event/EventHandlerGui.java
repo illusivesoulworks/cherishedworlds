@@ -121,9 +121,33 @@ public class EventHandlerGui {
                                 }
                                 FavoriteWorldsList.saveFavoritesList();
                                 refreshList(selectionList);
-                                evt.setCanceled(true);
+                                return;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onGuiMouseClicked(GuiScreenEvent.MouseClickedEvent.Post evt) {
+        GuiScreen gui = evt.getGui();
+
+        if (gui instanceof GuiWorldSelection) {
+            GuiWorldSelection worldSelect = (GuiWorldSelection)gui;
+            GuiListWorldSelection selectionList = ReflectionAccessor.getSelectionList(worldSelect);
+
+            if (selectionList != null) {
+                GuiListWorldSelectionEntry entry = selectionList.getSelectedWorld();
+
+                if (entry != null) {
+                    List<GuiButton> buttonList = ReflectionAccessor.getButtonList(gui);
+                    WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
+                    boolean isFavorite = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
+
+                    if (buttonList != null && !buttonList.isEmpty() && buttonList.size() >= 4) {
+                        buttonList.get(3).enabled = !isFavorite;
                     }
                 }
             }
@@ -195,6 +219,18 @@ public class EventHandlerGui {
                 if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s) || worldsummary.getFileName().toLowerCase(Locale.ROOT).contains(s)) {
                     entries.add(new GuiListWorldSelectionEntry(listWorldSelection, worldsummary, mc.getSaveLoader()));
                 }
+            }
+        }
+
+        GuiListWorldSelectionEntry entry = listWorldSelection.getSelectedWorld();
+
+        if (entry != null) {
+            List<GuiButton> buttonList = ReflectionAccessor.getButtonList(listWorldSelection.getGuiWorldSelection());
+            WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
+            boolean isFavorite = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
+
+            if (buttonList != null && !buttonList.isEmpty() && buttonList.size() >= 4) {
+                buttonList.get(3).enabled = !isFavorite;
             }
         }
     }

@@ -38,6 +38,10 @@ public class ReflectionAccessor {
         return ObfuscationReflectionHelper.getPrivateValue(GuiListWorldSelectionEntry.class, entry, "field_186786_g");
     }
 
+    public static List<GuiButton> getButtonList(GuiScreen guiScreen) {
+        return ObfuscationReflectionHelper.getPrivateValue(GuiScreen.class, guiScreen, "field_146292_n");
+    }
+
     public static List<GuiListWorldSelectionEntry> getWorldSelectionEntries(GuiListWorldSelection listWorld) {
         return ObfuscationReflectionHelper.getPrivateValue(GuiListExtended.class, listWorld, "field_195087_v");
     }
