@@ -20,76 +20,73 @@
 package top.theillusivec4.cherishedworlds.util;
 
 import com.google.common.collect.Sets;
+import java.io.File;
+import java.util.Set;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 import top.theillusivec4.cherishedworlds.CherishedWorlds;
 
-import java.io.File;
-import java.util.Set;
-
 public class FavoriteWorldsList {
 
-    private static final Set<String> favorites = Sets.newHashSet();
+  private static final Set<String> favorites = Sets.newHashSet();
 
-    public static void loadFavoritesList() {
+  public static void loadFavoritesList() {
 
-        try {
-            favorites.clear();
-            File file = new File(FMLPaths.CONFIGDIR.get().toString(), CherishedWorlds.MODID + "/favorites.dat");
-            NBTTagCompound nbttagcompound = CompressedStreamTools.read(file);
+    try {
+      favorites.clear();
+      File file = new File(FMLPaths.CONFIGDIR.get().toString(),
+          CherishedWorlds.MODID + "/favorites.dat");
+      CompoundNBT compound = CompressedStreamTools.read(file);
 
-            if (nbttagcompound == null) {
-                return;
-            }
-            NBTTagList nbttaglist = nbttagcompound.getList("favorites", Constants.NBT.TAG_STRING);
+      if (compound == null) {
+        return;
+      }
+      ListNBT list = compound.getList("favorites", Constants.NBT.TAG_STRING);
 
-            for (int i = 0; i < nbttaglist.size(); ++i) {
-                favorites.add(nbttaglist.getString(i));
-            }
-        } catch (Exception exception) {
-            CherishedWorlds.LOGGER.error("Couldn't load favorites list", exception);
-        }
+      for (int i = 0; i < list.size(); ++i) {
+        favorites.add(list.getString(i));
+      }
+    } catch (Exception exception) {
+      CherishedWorlds.LOGGER.error("Couldn't load favorites list", exception);
     }
+  }
 
-    public static void saveFavoritesList() {
+  public static void saveFavoritesList() {
 
-        try {
-            NBTTagList nbttaglist = new NBTTagList();
+    try {
+      ListNBT list = new ListNBT();
 
-            for (String s : favorites) {
-                nbttaglist.add(new NBTTagString(s));
-            }
-            NBTTagCompound nbttagcompound = new NBTTagCompound();
-            nbttagcompound.put("favorites", nbttaglist);
-            File file = new File(FMLPaths.CONFIGDIR.get().toString(), CherishedWorlds.MODID + "/favorites.dat");
+      for (String s : favorites) {
+        list.add(new StringNBT(s));
+      }
+      CompoundNBT compound = new CompoundNBT();
+      compound.put("favorites", list);
+      File file = new File(FMLPaths.CONFIGDIR.get().toString(),
+          CherishedWorlds.MODID + "/favorites.dat");
 
-            if (!file.exists()) {
-                FileUtils.forceMkdirParent(file);
-            }
-            CompressedStreamTools.safeWrite(nbttagcompound, file);
-        } catch (Exception exception) {
-            CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
-        }
+      if (!file.exists()) {
+        FileUtils.forceMkdirParent(file);
+      }
+      CompressedStreamTools.safeWrite(compound, file);
+    } catch (Exception exception) {
+      CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
     }
+  }
 
-    public static boolean hasFavorite() {
-        return !favorites.isEmpty();
-    }
+  public static boolean isFavorite(String fileName) {
+    return favorites.contains(fileName);
+  }
 
-    public static boolean isFavorite(String fileName) {
-        return favorites.contains(fileName);
-    }
+  public static void addFavorite(String name) {
+    favorites.add(name);
+  }
 
-    public static void addFavorite(String name) {
-        favorites.add(name);
-    }
-
-    public static void removeFavorite(String name) {
-        favorites.remove(name);
-    }
+  public static void removeFavorite(String name) {
+    favorites.remove(name);
+  }
 }

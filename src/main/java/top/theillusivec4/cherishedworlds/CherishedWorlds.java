@@ -30,15 +30,15 @@ import top.theillusivec4.cherishedworlds.event.EventHandlerGui;
 @Mod(CherishedWorlds.MODID)
 public class CherishedWorlds {
 
-    public static final String MODID = "cherishedworlds";
+  public static final String MODID = "cherishedworlds";
 
-    public static final Logger LOGGER = LogManager.getLogger();
+  public static final Logger LOGGER = LogManager.getLogger();
 
-    public CherishedWorlds() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-    }
+  public CherishedWorlds() {
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+  }
 
-    private void setupClient(final FMLClientSetupEvent evt) {
-        MinecraftForge.EVENT_BUS.register(new EventHandlerGui());
-    }
+  private void setupClient(final FMLClientSetupEvent evt) {
+    MinecraftForge.EVENT_BUS.register(new EventHandlerGui());
+  }
 }

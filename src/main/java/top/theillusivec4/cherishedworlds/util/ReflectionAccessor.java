@@ -19,34 +19,37 @@
 
 package top.theillusivec4.cherishedworlds.util;
 
-import net.minecraft.client.gui.*;
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.WorldSelectionList;
+import net.minecraft.client.gui.screen.WorldSelectionScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.Widget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class ReflectionAccessor {
 
-    @Nullable
-    public static GuiListWorldSelection getSelectionList(GuiWorldSelection worldSelection) {
-        return ObfuscationReflectionHelper.getPrivateValue(GuiWorldSelection.class, worldSelection, "field_184866_u");
-    }
+  @Nullable
+  public static WorldSelectionList getSelectionList(WorldSelectionScreen worldSelection) {
+    return ObfuscationReflectionHelper
+        .getPrivateValue(WorldSelectionScreen.class, worldSelection, "field_184866_u");
+  }
 
-    @Nullable
-    public static WorldSummary getWorldSummary(GuiListWorldSelectionEntry entry) {
-        return ObfuscationReflectionHelper.getPrivateValue(GuiListWorldSelectionEntry.class, entry, "field_186786_g");
-    }
+  @Nullable
+  public static WorldSummary getWorldSummary(WorldSelectionList.Entry entry) {
+    return ObfuscationReflectionHelper
+        .getPrivateValue(WorldSelectionList.Entry.class, entry, "field_214451_d");
+  }
 
-    public static List<GuiButton> getButtonList(GuiScreen guiScreen) {
-        return ObfuscationReflectionHelper.getPrivateValue(GuiScreen.class, guiScreen, "field_146292_n");
-    }
+  public static List<Widget> getButtonList(Screen guiScreen) {
+    return ObfuscationReflectionHelper.getPrivateValue(Screen.class, guiScreen, "field_193743_h");
+  }
 
-    public static List<GuiListWorldSelectionEntry> getWorldSelectionEntries(GuiListWorldSelection listWorld) {
-        return ObfuscationReflectionHelper.getPrivateValue(GuiListExtended.class, listWorld, "field_195087_v");
-    }
-
-    public static GuiTextField getTextField(GuiWorldSelection worldSelection) {
-        return ObfuscationReflectionHelper.getPrivateValue(GuiWorldSelection.class, worldSelection, "field_212352_g");
-    }
+  public static TextFieldWidget getTextField(WorldSelectionScreen worldSelection) {
+    return ObfuscationReflectionHelper
+        .getPrivateValue(WorldSelectionScreen.class, worldSelection, "field_212352_g");
+  }
 }
