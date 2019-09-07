@@ -44,8 +44,8 @@ public class ReflectionAccessor {
         .getPrivateValue(WorldSelectionList.Entry.class, entry, "field_214451_d");
   }
 
-  public static List<Widget> getButtonList(Screen guiScreen) {
-    return ObfuscationReflectionHelper.getPrivateValue(Screen.class, guiScreen, "field_193743_h");
+  public static Button getDeleteButton(WorldSelectionScreen worldSelection) {
+    return ObfuscationReflectionHelper.getPrivateValue(WorldSelectionScreen.class, worldSelection, "field_146642_y");
   }
 
   public static TextFieldWidget getTextField(WorldSelectionScreen worldSelection) {

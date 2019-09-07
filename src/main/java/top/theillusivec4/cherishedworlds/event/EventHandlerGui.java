@@ -112,19 +112,15 @@ public class EventHandlerGui {
     WorldSelectionList.Entry entry = listWorldSelection.getSelected();
 
     if (entry != null) {
-      List<Widget> buttonList = ReflectionAccessor
-          .getButtonList(listWorldSelection.getGuiWorldSelection());
-      modifyButton(entry, buttonList);
+      Button deleteButton = ReflectionAccessor.getDeleteButton(listWorldSelection.getGuiWorldSelection());
+      disableDeletingFavorites(entry, deleteButton);
     }
   }
 
-  private static void modifyButton(Entry entry, List<Widget> buttonList) {
+  private static void disableDeletingFavorites(Entry entry, Button deleteButton) {
     WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
     boolean isFavorite = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
-
-    if (buttonList != null && !buttonList.isEmpty() && buttonList.size() >= 4) {
-      buttonList.get(3).active = !isFavorite;
-    }
+    deleteButton.active = !isFavorite;
   }
 
   @SubscribeEvent
@@ -227,8 +223,8 @@ public class EventHandlerGui {
         WorldSelectionList.Entry entry = selectionList.getSelected();
 
         if (entry != null) {
-          List<Widget> buttonList = ReflectionAccessor.getButtonList(gui);
-          modifyButton(entry, buttonList);
+          Button deleteButton = ReflectionAccessor.getDeleteButton(worldSelect);
+          disableDeletingFavorites(entry, deleteButton);
         }
       }
     }
