@@ -135,8 +135,16 @@ public class EventHandlerClient {
                     boolean isFavored = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
 
                     if (buttonList != null && !buttonList.isEmpty() && buttonList.size() >= 7) {
-                        buttonList.get(6).enabled = !isFavored;
-                        buttonList.get(7).enabled = isFavored;
+
+                        for (GuiButton button : buttonList) {
+
+                            if (button.displayString.equals("Pin")) {
+                                button.enabled = !isFavored;
+                            } else if (button.displayString.equals("Unpin")) {
+                                button.enabled = isFavored;
+                            }
+                        }
+
                         buttonList.get(3).enabled = !isFavored;
                     }
                 }
