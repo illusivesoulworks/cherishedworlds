@@ -32,6 +32,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collections;
@@ -152,7 +153,8 @@ public class EventHandlerClient {
                             }
                         }
 
-                        buttonList.get(3).enabled = !isFavored;
+                        GuiButton deleteButton = ObfuscationReflectionHelper.getPrivateValue(GuiWorldSelection.class, worldSelect, "deleteButton", "field_146642_y");
+                        deleteButton.enabled = !isFavored;
                     }
                 }
             }

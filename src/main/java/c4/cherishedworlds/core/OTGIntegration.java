@@ -126,7 +126,8 @@ public class OTGIntegration {
               }
             }
 
-            buttonList.get(3).enabled = !isFavored;
+            GuiButton deleteButton = ObfuscationReflectionHelper.getPrivateValue(OTGGuiWorldSelection.class, worldSelect, "deleteButton");
+            deleteButton.enabled = !isFavored;
           }
         }
       }
