@@ -21,6 +21,7 @@ package c4.cherishedworlds.event;
 
 import c4.cherishedworlds.CherishedWorlds;
 import c4.cherishedworlds.core.FavoriteWorldsList;
+import c4.cherishedworlds.core.OTGIntegration;
 import c4.cherishedworlds.core.ReflectionAccessor;
 import com.google.common.collect.Lists;
 import net.minecraft.client.AnvilConverterException;
@@ -39,13 +40,15 @@ import java.util.List;
 
 public class EventHandlerClient {
 
-    private static final ResourceLocation STAR_ICON = new ResourceLocation(CherishedWorlds.MODID, "textures/gui/staricon.png");
+    public static final ResourceLocation STAR_ICON = new ResourceLocation(CherishedWorlds.MODID, "textures/gui/staricon.png");
 
     @SubscribeEvent
     public void onGuiDrawScreen(GuiScreenEvent.DrawScreenEvent.Post evt) {
         GuiScreen gui = evt.getGui();
 
-        if (gui instanceof GuiWorldSelection) {
+        if (CherishedWorlds.isOtgLoaded) {
+          OTGIntegration.drawOtg(evt);
+        } else if (gui instanceof GuiWorldSelection) {
             GuiWorldSelection worldSelect = (GuiWorldSelection)gui;
 
             if (FavoriteWorldsList.hasFavorite()) {
@@ -81,7 +84,9 @@ public class EventHandlerClient {
     public void onGuiButtonClick(GuiScreenEvent.ActionPerformedEvent evt) {
         GuiScreen gui = evt.getGui();
 
-        if (gui instanceof GuiWorldSelection) {
+        if (CherishedWorlds.isOtgLoaded) {
+          OTGIntegration.buttonClickOtg(evt);
+        } else if (gui instanceof GuiWorldSelection) {
             GuiWorldSelection worldSelect = (GuiWorldSelection)gui;
 
             if (evt.getButton().id == 6) {
@@ -122,7 +127,9 @@ public class EventHandlerClient {
     public void onGuiMouseClick(GuiScreenEvent.MouseInputEvent.Post evt) {
         GuiScreen gui = evt.getGui();
 
-        if (gui instanceof GuiWorldSelection) {
+        if (CherishedWorlds.isOtgLoaded) {
+          OTGIntegration.mouseClickOtg(evt);
+        } else if (gui instanceof GuiWorldSelection) {
             GuiWorldSelection worldSelect = (GuiWorldSelection)gui;
             GuiListWorldSelection selectionList = ReflectionAccessor.getSelectionList(worldSelect);
 
@@ -156,7 +163,9 @@ public class EventHandlerClient {
     public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
         GuiScreen gui = evt.getGui();
 
-        if (gui instanceof GuiWorldSelection) {
+        if (CherishedWorlds.isOtgLoaded) {
+            OTGIntegration.initOtg(evt);
+        } else if (gui instanceof GuiWorldSelection) {
             GuiWorldSelection worldSelect = (GuiWorldSelection)gui;
             List<GuiButton> buttonList = evt.getButtonList();
             int width = worldSelect.width;

@@ -22,6 +22,7 @@ package c4.cherishedworlds;
 import c4.cherishedworlds.event.EventHandlerClient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
@@ -43,6 +44,7 @@ public class CherishedWorlds {
     public static final String NAME = "Cherished Worlds";
 
     public static Logger logger;
+    public static boolean isOtgLoaded = false;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent evt)
@@ -53,6 +55,10 @@ public class CherishedWorlds {
     @EventHandler
     public void init(FMLInitializationEvent evt) {
         MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
+
+        if (Loader.isModLoaded("openterraingenerator")) {
+            isOtgLoaded = true;
+        }
     }
 
     @EventHandler

@@ -2,12 +2,15 @@ buildscript {
     repositories {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "com.wynprice.cursemaven:CurseMaven:2.1.1"
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: "com.wynprice.cursemaven"
 
 version = "${version_minecraft}-${version_mod}"
 group = "${mod_group}.${mod_id}"
@@ -25,6 +28,10 @@ minecraft {
     replace '@VERSION@', project.version
     replace '@FINGERPRINT@', project.findProperty('signSHA1')
     replaceIn("${mod_class}.java")
+}
+
+dependencies {
+    deobfProvided "curse.maven:open-terrain-generator:2835526"
 }
 
 sourceSets {
