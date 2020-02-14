@@ -34,7 +34,6 @@ import net.minecraft.client.gui.screen.WorldSelectionList;
 import net.minecraft.client.gui.screen.WorldSelectionList.Entry;
 import net.minecraft.client.gui.screen.WorldSelectionScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -42,7 +41,7 @@ import net.minecraft.world.storage.SaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.gui.GuiUtils;
 import top.theillusivec4.cherishedworlds.CherishedWorlds;
 import top.theillusivec4.cherishedworlds.util.FavoriteWorldsList;
 import top.theillusivec4.cherishedworlds.util.ReflectionAccessor;
@@ -241,7 +240,7 @@ public class EventHandlerGui {
 
       if (selectionList != null) {
         FavoriteWorldsList.loadFavoritesList();
-        textField.func_212954_a((s) -> refreshList(selectionList, () -> s));
+        textField.setResponder((s) -> refreshList(selectionList, () -> s));
         refreshList(selectionList);
       }
     }

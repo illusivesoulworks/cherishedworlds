@@ -62,7 +62,7 @@ public class FavoriteWorldsList {
       ListNBT list = new ListNBT();
 
       for (String s : favorites) {
-        list.add(new StringNBT(s));
+        list.add(StringNBT.valueOf(s));
       }
       CompoundNBT compound = new CompoundNBT();
       compound.put("favorites", list);
