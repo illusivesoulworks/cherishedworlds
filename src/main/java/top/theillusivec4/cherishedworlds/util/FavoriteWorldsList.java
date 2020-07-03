@@ -72,7 +72,7 @@ public class FavoriteWorldsList {
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
-      CompressedStreamTools.safeWrite(compound, file);
+      CompressedStreamTools.write(compound, file);
     } catch (Exception exception) {
       CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
     }
