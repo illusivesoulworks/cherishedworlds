@@ -17,21 +17,18 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.util;
+package top.theillusivec4.cherishedworlds.core;
 
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.util.Set;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.StringTag;
 import org.apache.commons.io.FileUtils;
-import top.theillusivec4.cherishedworlds.CherishedWorlds;
 
-public class FavoriteWorldsList {
+public class FavoriteWorlds {
 
   private static final Set<String> favorites = Sets.newHashSet();
 
@@ -39,14 +36,14 @@ public class FavoriteWorldsList {
 
     try {
       favorites.clear();
-      File file = new File(FMLPaths.CONFIGDIR.get().toString(),
+      File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
           CherishedWorlds.MODID + "/favorites.dat");
-      CompoundNBT compound = CompressedStreamTools.read(file);
+      CompoundTag compound = NbtIo.read(file);
 
       if (compound == null) {
         return;
       }
-      ListNBT list = compound.getList("favorites", Constants.NBT.TAG_STRING);
+      ListTag list = compound.getList("favorites", 8);
 
       for (int i = 0; i < list.size(); ++i) {
         favorites.add(list.getString(i));
@@ -59,20 +56,20 @@ public class FavoriteWorldsList {
   public static void saveFavoritesList() {
 
     try {
-      ListNBT list = new ListNBT();
+      ListTag list = new ListTag();
 
       for (String s : favorites) {
-        list.add(StringNBT.valueOf(s));
+        list.add(StringTag.of(s));
       }
-      CompoundNBT compound = new CompoundNBT();
+      CompoundTag compound = new CompoundTag();
       compound.put("favorites", list);
-      File file = new File(FMLPaths.CONFIGDIR.get().toString(),
+      File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
           CherishedWorlds.MODID + "/favorites.dat");
 
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
-      CompressedStreamTools.write(compound, file);
+      NbtIo.write(compound, file);
     } catch (Exception exception) {
       CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
     }

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "cherishedworlds",
+  "version": "${version}",
+  "name": "Cherished Worlds",
+  "description": "Favorite/pin/bookmark certain worlds, which will always be at the top of the list and cannot be deleted.",
+  "authors": ["C4"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/cherished-worlds-fabric",
+    "sources": "https://github.com/TheIllusiveC4/CherishedWorlds",
+    "issues": "https://github.com/TheIllusiveC4/CherishedWorlds/issues"
+  },
+  "license": "LGPLv3.0",
+  "icon": "assets/cherishedworlds/cherishedworlds_icon.png",
+  "environment": "client",
+  "entrypoints": {},
+  "mixins": [
+    "cherishedworlds.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.16.x"
+  }
+}
