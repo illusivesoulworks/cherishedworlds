@@ -42,7 +42,6 @@ import net.minecraft.world.storage.SaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.gui.GuiUtils;
 import top.theillusivec4.cherishedworlds.CherishedWorlds;
 import top.theillusivec4.cherishedworlds.util.FavoriteWorldsList;
 import top.theillusivec4.cherishedworlds.util.ReflectionAccessor;
@@ -74,7 +73,7 @@ public class GuiEventHandler {
       return;
     }
 
-    List<WorldSelectionList.Entry> entries = listWorldSelection.func_231039_at__();
+    List<WorldSelectionList.Entry> entries = listWorldSelection.getEventListeners();
     entries.clear();
     Iterator<WorldSummary> iter = list.listIterator();
     List<WorldSummary> favorites = Lists.newArrayList();
@@ -95,8 +94,7 @@ public class GuiEventHandler {
 
       if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
           || worldsummary.getFileName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(
-            listWorldSelection.new Entry(listWorldSelection, worldsummary, mc.getSaveLoader()));
+        entries.add(listWorldSelection.new Entry(listWorldSelection, worldsummary));
       }
     }
 
@@ -104,12 +102,11 @@ public class GuiEventHandler {
 
       if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
           || worldsummary.getFileName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(
-            listWorldSelection.new Entry(listWorldSelection, worldsummary, mc.getSaveLoader()));
+        entries.add(listWorldSelection.new Entry(listWorldSelection, worldsummary));
       }
     }
 
-    WorldSelectionList.Entry entry = listWorldSelection.func_230958_g_();
+    WorldSelectionList.Entry entry = listWorldSelection.getSelected();
 
     if (entry != null) {
       Button deleteButton = ReflectionAccessor
@@ -121,7 +118,7 @@ public class GuiEventHandler {
   private static void disableDeletingFavorites(Entry entry, Button deleteButton) {
     WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
     boolean isFavorite = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
-    deleteButton.field_230693_o_ = !isFavorite;
+    deleteButton.active = !isFavorite;
   }
 
   @SubscribeEvent
@@ -134,8 +131,8 @@ public class GuiEventHandler {
 
       if (selectionList != null) {
 
-        for (int i = 0; i < selectionList.func_231039_at__().size(); i++) {
-          WorldSelectionList.Entry entry = selectionList.func_231039_at__().get(i);
+        for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
+          WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
 
           if (entry != null) {
             WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
@@ -144,12 +141,12 @@ public class GuiEventHandler {
               boolean isFavorite = FavoriteWorldsList.isFavorite(summary.getFileName());
               ResourceLocation icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
               int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
-                  .func_230966_l_());
-              int x = evt.getGui().field_230708_k_ / 2 - 148;
+                  .getScrollAmount());
+              int x = evt.getGui().width / 2 - 148;
 
               if (top < (selectionList.getBottom() - 8) && top > selectionList.getTop()) {
                 Minecraft.getInstance().getTextureManager().bindTexture(icon);
-                AbstractGui.func_238463_a_(evt.getMatrixStack(), x, top, 0, 0, 9, 9, 9, 9);
+                AbstractGui.blit(evt.getMatrixStack(), x, top, 0, 0, 9, 9, 9, 9);
               }
               int mouseX = evt.getMouseX();
               int mouseY = evt.getMouseY();
@@ -158,10 +155,7 @@ public class GuiEventHandler {
                 TranslationTextComponent component = new TranslationTextComponent(
                     "selectWorld." + CherishedWorlds.MODID + "." + (isFavorite ? "unfavorite"
                         : "favorite"));
-                GuiUtils
-                    .drawHoveringText(evt.getMatrixStack(), Collections.singletonList(component),
-                        mouseX, mouseY, gui.field_230708_k_, gui.field_230709_l_, -1,
-                        Minecraft.getInstance().fontRenderer);
+                gui.renderTooltip(evt.getMatrixStack(), component, mouseX, mouseY);
               }
             }
           }
@@ -180,8 +174,8 @@ public class GuiEventHandler {
 
       if (selectionList != null) {
 
-        for (int i = 0; i < selectionList.func_231039_at__().size(); i++) {
-          WorldSelectionList.Entry entry = selectionList.func_231039_at__().get(i);
+        for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
+          WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
 
           if (entry != null) {
             WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
@@ -189,8 +183,8 @@ public class GuiEventHandler {
             if (summary != null) {
               boolean isFavorite = FavoriteWorldsList.isFavorite(summary.getFileName());
               int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
-                  .func_230966_l_());
-              int x = evt.getGui().field_230708_k_ / 2 - 148;
+                  .getScrollAmount());
+              int x = evt.getGui().width / 2 - 148;
               double mouseX = evt.getMouseX();
               double mouseY = evt.getMouseY();
 
@@ -222,7 +216,7 @@ public class GuiEventHandler {
       WorldSelectionList selectionList = ReflectionAccessor.getSelectionList(worldSelect);
 
       if (selectionList != null) {
-        WorldSelectionList.Entry entry = selectionList.func_230958_g_();
+        WorldSelectionList.Entry entry = selectionList.getSelected();
 
         if (entry != null) {
           Button deleteButton = ReflectionAccessor.getDeleteButton(worldSelect);
