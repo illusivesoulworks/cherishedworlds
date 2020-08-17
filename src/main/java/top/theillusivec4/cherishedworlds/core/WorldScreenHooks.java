@@ -187,7 +187,7 @@ public class WorldScreenHooks {
 
       if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
           || worldsummary.getName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(worldList.new Entry(worldList, worldsummary, mc.getLevelStorage()));
+        entries.add(worldList.new Entry(worldList, worldsummary));
       }
     }
 
@@ -195,7 +195,7 @@ public class WorldScreenHooks {
 
       if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
           || worldsummary.getName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(worldList.new Entry(worldList, worldsummary, mc.getLevelStorage()));
+        entries.add(worldList.new Entry(worldList, worldsummary));
       }
     }
 

@@ -37,6 +37,6 @@ public class CherishedWorldsImpl implements CherishedWorlds {
 
   @Override
   public File getConfigDir() {
-    return FabricLoader.getInstance().getConfigDirectory();
+    return FabricLoader.getInstance().getConfigDir().toFile();
   }
 }
