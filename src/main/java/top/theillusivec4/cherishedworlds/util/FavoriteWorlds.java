@@ -19,8 +19,8 @@
 
 package top.theillusivec4.cherishedworlds.util;
 
-import com.google.common.collect.Sets;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -29,18 +29,18 @@ import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
-import top.theillusivec4.cherishedworlds.CherishedWorlds;
+import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 
-public class FavoriteWorldsList {
+public class FavoriteWorlds {
 
-  private static final Set<String> favorites = Sets.newHashSet();
+  private static final Set<String> favorites = new HashSet<>();
 
-  public static void loadFavoritesList() {
+  public static void load() {
 
     try {
       favorites.clear();
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
-          CherishedWorlds.MODID + "/favorites.dat");
+          CherishedWorldsMod.MODID + "/favorites.dat");
       CompoundNBT compound = CompressedStreamTools.read(file);
 
       if (compound == null) {
@@ -52,11 +52,11 @@ public class FavoriteWorldsList {
         favorites.add(list.getString(i));
       }
     } catch (Exception exception) {
-      CherishedWorlds.LOGGER.error("Couldn't load favorites list", exception);
+      CherishedWorldsMod.LOGGER.error("Couldn't load favorites list", exception);
     }
   }
 
-  public static void saveFavoritesList() {
+  public static void save() {
 
     try {
       ListNBT list = new ListNBT();
@@ -67,26 +67,26 @@ public class FavoriteWorldsList {
       CompoundNBT compound = new CompoundNBT();
       compound.put("favorites", list);
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
-          CherishedWorlds.MODID + "/favorites.dat");
+          CherishedWorldsMod.MODID + "/favorites.dat");
 
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
       CompressedStreamTools.write(compound, file);
     } catch (Exception exception) {
-      CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
+      CherishedWorldsMod.LOGGER.error("Couldn't save favorites list", exception);
     }
   }
 
-  public static boolean isFavorite(String fileName) {
+  public static boolean contains(String fileName) {
     return favorites.contains(fileName);
   }
 
-  public static void addFavorite(String name) {
+  public static void add(String name) {
     favorites.add(name);
   }
 
-  public static void removeFavorite(String name) {
+  public static void remove(String name) {
     favorites.remove(name);
   }
 }

@@ -19,18 +19,15 @@
 
 package top.theillusivec4.cherishedworlds.util;
 
-import java.util.List;
 import javax.annotation.Nullable;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.WorldSelectionList;
 import net.minecraft.client.gui.screen.WorldSelectionScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-public class ReflectionAccessor {
+public class Reflector {
 
   @Nullable
   public static WorldSelectionList getSelectionList(WorldSelectionScreen worldSelection) {
@@ -45,7 +42,8 @@ public class ReflectionAccessor {
   }
 
   public static Button getDeleteButton(WorldSelectionScreen worldSelection) {
-    return ObfuscationReflectionHelper.getPrivateValue(WorldSelectionScreen.class, worldSelection, "field_146642_y");
+    return ObfuscationReflectionHelper
+        .getPrivateValue(WorldSelectionScreen.class, worldSelection, "field_146642_y");
   }
 
   public static TextFieldWidget getTextField(WorldSelectionScreen worldSelection) {

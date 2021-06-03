@@ -42,23 +42,24 @@ import net.minecraft.world.storage.SaveFormat;
 import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import top.theillusivec4.cherishedworlds.CherishedWorlds;
-import top.theillusivec4.cherishedworlds.util.FavoriteWorldsList;
-import top.theillusivec4.cherishedworlds.util.ReflectionAccessor;
+import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
+import top.theillusivec4.cherishedworlds.util.FavoriteWorlds;
+import top.theillusivec4.cherishedworlds.util.Reflector;
 
-public class GuiEventHandler {
+@SuppressWarnings("unused")
+public class GuiEventsListener {
 
-  private static final ResourceLocation STAR_ICON = new ResourceLocation(CherishedWorlds.MODID,
+  private static final ResourceLocation STAR_ICON = new ResourceLocation(CherishedWorldsMod.MODID,
       "textures/gui/staricon.png");
   private static final ResourceLocation EMPTY_STAR_ICON = new ResourceLocation(
-      CherishedWorlds.MODID, "textures/gui/emptystaricon.png");
+      CherishedWorldsMod.MODID, "textures/gui/emptystaricon.png");
 
   private static void refreshList(WorldSelectionList listWorldSelection) {
     refreshList(listWorldSelection, null);
   }
 
   private static void refreshList(WorldSelectionList listWorldSelection,
-      Supplier<String> supplier) {
+                                  Supplier<String> supplier) {
     Minecraft mc = Minecraft.getInstance();
     SaveFormat saveformat = mc.getSaveLoader();
     List<WorldSummary> list;
@@ -66,13 +67,12 @@ public class GuiEventHandler {
     try {
       list = saveformat.getSaveList();
     } catch (AnvilConverterException anvilconverterexception) {
-      CherishedWorlds.LOGGER.error("Couldn't load level list", anvilconverterexception);
+      CherishedWorldsMod.LOGGER.error("Couldn't load level list", anvilconverterexception);
       mc.displayGuiScreen(
           new ErrorScreen(new TranslationTextComponent("selectWorld.unable_to_load"),
               new StringTextComponent(anvilconverterexception.getMessage())));
       return;
     }
-
     List<WorldSelectionList.Entry> entries = listWorldSelection.getEventListeners();
     entries.clear();
     Iterator<WorldSummary> iter = list.listIterator();
@@ -81,7 +81,7 @@ public class GuiEventHandler {
     while (iter.hasNext()) {
       WorldSummary summ = iter.next();
 
-      if (FavoriteWorldsList.isFavorite(summ.getFileName())) {
+      if (FavoriteWorlds.contains(summ.getFileName())) {
         favorites.add(summ);
         iter.remove();
       }
@@ -105,19 +105,18 @@ public class GuiEventHandler {
         entries.add(listWorldSelection.new Entry(listWorldSelection, worldsummary));
       }
     }
-
     WorldSelectionList.Entry entry = listWorldSelection.getSelected();
 
     if (entry != null) {
-      Button deleteButton = ReflectionAccessor
+      Button deleteButton = Reflector
           .getDeleteButton(listWorldSelection.getGuiWorldSelection());
       disableDeletingFavorites(entry, deleteButton);
     }
   }
 
   private static void disableDeletingFavorites(Entry entry, Button deleteButton) {
-    WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
-    boolean isFavorite = summary != null && FavoriteWorldsList.isFavorite(summary.getFileName());
+    WorldSummary summary = Reflector.getWorldSummary(entry);
+    boolean isFavorite = summary != null && FavoriteWorlds.contains(summary.getFileName());
     deleteButton.active = !isFavorite;
   }
 
@@ -127,7 +126,7 @@ public class GuiEventHandler {
 
     if (gui instanceof WorldSelectionScreen) {
       WorldSelectionScreen worldSelect = (WorldSelectionScreen) gui;
-      WorldSelectionList selectionList = ReflectionAccessor.getSelectionList(worldSelect);
+      WorldSelectionList selectionList = Reflector.getSelectionList(worldSelect);
 
       if (selectionList != null) {
 
@@ -135,10 +134,10 @@ public class GuiEventHandler {
           WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
 
           if (entry != null) {
-            WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
+            WorldSummary summary = Reflector.getWorldSummary(entry);
 
             if (summary != null) {
-              boolean isFavorite = FavoriteWorldsList.isFavorite(summary.getFileName());
+              boolean isFavorite = FavoriteWorlds.contains(summary.getFileName());
               ResourceLocation icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
               int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
                   .getScrollAmount());
@@ -153,7 +152,7 @@ public class GuiEventHandler {
 
               if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
                 TranslationTextComponent component = new TranslationTextComponent(
-                    "selectWorld." + CherishedWorlds.MODID + "." + (isFavorite ? "unfavorite"
+                    "selectWorld." + CherishedWorldsMod.MODID + "." + (isFavorite ? "unfavorite"
                         : "favorite"));
                 gui.renderTooltip(evt.getMatrixStack(), component, mouseX, mouseY);
               }
@@ -170,7 +169,7 @@ public class GuiEventHandler {
 
     if (gui instanceof WorldSelectionScreen) {
       WorldSelectionScreen worldSelect = (WorldSelectionScreen) gui;
-      WorldSelectionList selectionList = ReflectionAccessor.getSelectionList(worldSelect);
+      WorldSelectionList selectionList = Reflector.getSelectionList(worldSelect);
 
       if (selectionList != null) {
 
@@ -178,10 +177,10 @@ public class GuiEventHandler {
           WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
 
           if (entry != null) {
-            WorldSummary summary = ReflectionAccessor.getWorldSummary(entry);
+            WorldSummary summary = Reflector.getWorldSummary(entry);
 
             if (summary != null) {
-              boolean isFavorite = FavoriteWorldsList.isFavorite(summary.getFileName());
+              boolean isFavorite = FavoriteWorlds.contains(summary.getFileName());
               int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
                   .getScrollAmount());
               int x = evt.getGui().width / 2 - 148;
@@ -192,11 +191,11 @@ public class GuiEventHandler {
                 String s = summary.getFileName();
 
                 if (isFavorite) {
-                  FavoriteWorldsList.removeFavorite(s);
+                  FavoriteWorlds.remove(s);
                 } else {
-                  FavoriteWorldsList.addFavorite(s);
+                  FavoriteWorlds.add(s);
                 }
-                FavoriteWorldsList.saveFavoritesList();
+                FavoriteWorlds.save();
                 refreshList(selectionList);
                 return;
               }
@@ -213,13 +212,13 @@ public class GuiEventHandler {
 
     if (gui instanceof WorldSelectionScreen) {
       WorldSelectionScreen worldSelect = (WorldSelectionScreen) gui;
-      WorldSelectionList selectionList = ReflectionAccessor.getSelectionList(worldSelect);
+      WorldSelectionList selectionList = Reflector.getSelectionList(worldSelect);
 
       if (selectionList != null) {
         WorldSelectionList.Entry entry = selectionList.getSelected();
 
         if (entry != null) {
-          Button deleteButton = ReflectionAccessor.getDeleteButton(worldSelect);
+          Button deleteButton = Reflector.getDeleteButton(worldSelect);
           disableDeletingFavorites(entry, deleteButton);
         }
       }
@@ -232,11 +231,11 @@ public class GuiEventHandler {
 
     if (gui instanceof WorldSelectionScreen) {
       WorldSelectionScreen worldSelect = (WorldSelectionScreen) gui;
-      WorldSelectionList selectionList = ReflectionAccessor.getSelectionList(worldSelect);
-      TextFieldWidget textField = ReflectionAccessor.getTextField(worldSelect);
+      WorldSelectionList selectionList = Reflector.getSelectionList(worldSelect);
+      TextFieldWidget textField = Reflector.getTextField(worldSelect);
 
       if (selectionList != null) {
-        FavoriteWorldsList.loadFavoritesList();
+        FavoriteWorlds.load();
         textField.setResponder((s) -> refreshList(selectionList, () -> s));
         refreshList(selectionList);
       }

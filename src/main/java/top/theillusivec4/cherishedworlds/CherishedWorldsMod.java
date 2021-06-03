@@ -29,22 +29,21 @@ import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.cherishedworlds.event.GuiEventHandler;
+import top.theillusivec4.cherishedworlds.event.GuiEventsListener;
 
-@Mod(CherishedWorlds.MODID)
-public class CherishedWorlds {
+@Mod(CherishedWorldsMod.MODID)
+public class CherishedWorldsMod {
 
   public static final String MODID = "cherishedworlds";
-
   public static final Logger LOGGER = LogManager.getLogger();
 
-  public CherishedWorlds() {
+  public CherishedWorldsMod() {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
     ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST,
         () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
   }
 
   private void setupClient(final FMLClientSetupEvent evt) {
-    MinecraftForge.EVENT_BUS.register(new GuiEventHandler());
+    MinecraftForge.EVENT_BUS.register(new GuiEventsListener());
   }
 }
