@@ -29,7 +29,7 @@ import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.cherishedworlds.event.GuiEventsListener;
+import top.theillusivec4.cherishedworlds.client.GuiEventsListener;
 
 @Mod(CherishedWorldsMod.MODID)
 public class CherishedWorldsMod {

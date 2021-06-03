@@ -17,7 +17,7 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.event;
+package top.theillusivec4.cherishedworlds.client;
 
 import com.google.common.collect.Lists;
 import java.util.Collections;
@@ -43,8 +43,6 @@ import net.minecraft.world.storage.WorldSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
-import top.theillusivec4.cherishedworlds.util.FavoriteWorlds;
-import top.theillusivec4.cherishedworlds.util.Reflector;
 
 @SuppressWarnings("unused")
 public class GuiEventsListener {

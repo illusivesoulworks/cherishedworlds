@@ -17,7 +17,7 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.util;
+package top.theillusivec4.cherishedworlds.client;
 
 import javax.annotation.Nullable;
 import net.minecraft.client.gui.screen.WorldSelectionList;

@@ -17,7 +17,7 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.util;
+package top.theillusivec4.cherishedworlds.client;
 
 import java.io.File;
 import java.util.HashSet;
