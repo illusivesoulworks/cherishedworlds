@@ -29,12 +29,13 @@ import net.minecraftforge.fml.network.FMLNetworkConstants;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.theillusivec4.cherishedworlds.client.GuiEventsListener;
+import top.theillusivec4.cherishedworlds.client.ScreenEventsListener;
+import top.theillusivec4.cherishedworlds.client.favorites.FavoritesList;
 
-@Mod(CherishedWorldsMod.MODID)
+@Mod(CherishedWorldsMod.MOD_ID)
 public class CherishedWorldsMod {
 
-  public static final String MODID = "cherishedworlds";
+  public static final String MOD_ID = "cherishedworlds";
   public static final Logger LOGGER = LogManager.getLogger();
 
   public CherishedWorldsMod() {
@@ -44,6 +45,7 @@ public class CherishedWorldsMod {
   }
 
   private void setupClient(final FMLClientSetupEvent evt) {
-    MinecraftForge.EVENT_BUS.register(new GuiEventsListener());
+    FavoritesList.load();
+    MinecraftForge.EVENT_BUS.register(new ScreenEventsListener());
   }
 }

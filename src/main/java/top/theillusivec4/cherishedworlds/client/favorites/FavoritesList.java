@@ -17,7 +17,7 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.client;
+package top.theillusivec4.cherishedworlds.client.favorites;
 
 import java.io.File;
 import java.util.HashSet;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 
-public class FavoriteWorlds {
+public class FavoritesList {
 
   private static final Set<String> favorites = new HashSet<>();
 
@@ -40,7 +40,7 @@ public class FavoriteWorlds {
     try {
       favorites.clear();
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
-          CherishedWorldsMod.MODID + "/favorites.dat");
+          CherishedWorldsMod.MOD_ID + "/favorites.dat");
       CompoundNBT compound = CompressedStreamTools.read(file);
 
       if (compound == null) {
@@ -67,7 +67,7 @@ public class FavoriteWorlds {
       CompoundNBT compound = new CompoundNBT();
       compound.put("favorites", list);
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
-          CherishedWorldsMod.MODID + "/favorites.dat");
+          CherishedWorldsMod.MOD_ID + "/favorites.dat");
 
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
