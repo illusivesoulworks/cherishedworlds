@@ -33,8 +33,7 @@ import top.theillusivec4.cherishedworlds.core.WorldScreenHooks;
 public class MouseMixin {
 
   @Inject(at = @At("HEAD"), method = "method_1611([ZDDI)V")
-  public void _cherishedworlds_preMouseClick(boolean[] unused, double mouseX, double mouseY, int button, CallbackInfo cb) {
-    Screen screen = MinecraftClient.getInstance().currentScreen;
+  private static void _cherishedworlds_preMouseClick(boolean[] unused, Screen screen, double mouseX, double mouseY, int button, CallbackInfo cb) {
 
     if (screen instanceof SelectWorldScreen) {
       WorldScreenHooks.checkMouseClick((SelectWorldScreen) screen, mouseX, mouseY);
@@ -42,7 +41,7 @@ public class MouseMixin {
   }
 
   @Inject(at = @At("TAIL"), method = "method_1611([ZDDI)V")
-  public void _cherishedworlds_postMouseClick(CallbackInfo cb) {
+  private static void _cherishedworlds_postMouseClick(CallbackInfo cb) {
     Screen screen = MinecraftClient.getInstance().currentScreen;
 
     if (screen instanceof SelectWorldScreen) {

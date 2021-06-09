@@ -19,6 +19,7 @@
 
 package top.theillusivec4.cherishedworlds.core;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -81,7 +82,7 @@ public class WorldScreenHooks {
 
             if (top < (accessor.getBottom(selectionList) - 8) && top > accessor
                 .getTop(selectionList)) {
-              MinecraftClient.getInstance().getTextureManager().bindTexture(icon);
+              RenderSystem.setShaderTexture(0, icon);
               DrawableHelper.drawTexture(matrices, x, top, 0, 0, 9, 9, 9, 9);
             }
 

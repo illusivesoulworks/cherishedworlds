@@ -1,10 +1,10 @@
 plugins {
-    id 'fabric-loom' version '0.5-SNAPSHOT'
+    id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -26,23 +26,18 @@ dependencies {
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand 'version': project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 16
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set("sources")
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
 }
 
 sourceSets {
@@ -60,7 +55,7 @@ curseforge {
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('docs/CHANGELOG.md')
-        addGameVersion "Java 8"
+        addGameVersion "Java 16"
         addGameVersion "Fabric"
         addGameVersion project.minecraft_version
         addArtifact(sourcesJar)

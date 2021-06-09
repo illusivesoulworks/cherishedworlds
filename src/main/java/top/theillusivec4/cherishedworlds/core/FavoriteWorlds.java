@@ -22,10 +22,10 @@ package top.theillusivec4.cherishedworlds.core;
 import com.google.common.collect.Sets;
 import java.io.File;
 import java.util.Set;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import org.apache.commons.io.FileUtils;
 
 public class FavoriteWorlds {
@@ -38,12 +38,12 @@ public class FavoriteWorlds {
       favorites.clear();
       File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
           CherishedWorlds.MODID + "/favorites.dat");
-      CompoundTag compound = NbtIo.read(file);
+      NbtCompound compound = NbtIo.read(file);
 
       if (compound == null) {
         return;
       }
-      ListTag list = compound.getList("favorites", 8);
+      NbtList list = compound.getList("favorites", 8);
 
       for (int i = 0; i < list.size(); ++i) {
         favorites.add(list.getString(i));
@@ -56,12 +56,12 @@ public class FavoriteWorlds {
   public static void saveFavoritesList() {
 
     try {
-      ListTag list = new ListTag();
+      NbtList list = new NbtList();
 
       for (String s : favorites) {
-        list.add(StringTag.of(s));
+        list.add(NbtString.of(s));
       }
-      CompoundTag compound = new CompoundTag();
+      NbtCompound compound = new NbtCompound();
       compound.put("favorites", list);
       File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
           CherishedWorlds.MODID + "/favorites.dat");
