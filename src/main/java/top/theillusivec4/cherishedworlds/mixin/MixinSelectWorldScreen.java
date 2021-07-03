@@ -32,13 +32,13 @@ public class MixinSelectWorldScreen {
 
   @SuppressWarnings("ConstantConditions")
   @Inject(at = @At("TAIL"), method = "init")
-  public void _cherishedworlds_init(CallbackInfo cb) {
+  public void cherishedworlds$init(CallbackInfo cb) {
     FavoriteWorlds.INSTANCE.init((SelectWorldScreen) (Object) this);
   }
 
   @SuppressWarnings("ConstantConditions")
   @Inject(at = @At("TAIL"), method = "render")
-  public void _cherishedworlds_render(MatrixStack matrices, int mouseX, int mouseY, float delta,
+  public void cherishedworlds$render(MatrixStack matrices, int mouseX, int mouseY, float delta,
       CallbackInfo cb) {
     FavoriteWorlds.INSTANCE.render((SelectWorldScreen) (Object) this, matrices, mouseX, mouseY);
   }

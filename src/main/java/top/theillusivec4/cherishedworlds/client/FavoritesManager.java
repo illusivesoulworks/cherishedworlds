@@ -1,7 +1,11 @@
 package top.theillusivec4.cherishedworlds.client;
 
+import java.util.Collections;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 
@@ -19,4 +23,25 @@ public interface FavoritesManager<T extends Screen> {
   void click(T screen, double mouseX, double mouseY);
 
   void clicked(T screen);
+
+  int getOffset();
+
+  default void renderIcon(T screen, MatrixStack matrices, int mouseX, int mouseY, double scrollAmount,
+                      int index, int topOffset, int bottomOffset, boolean isFavorite) {
+    Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
+    int top = (int) (topOffset + 15 + 36 * index - scrollAmount);
+    int x = screen.width / 2 - getOffset();
+
+    if (top < (bottomOffset - 8) && top > topOffset) {
+      MinecraftClient.getInstance().getTextureManager().bindTexture(icon);
+      DrawableHelper.drawTexture(matrices, x, top, 0, 0, 9, 9, 9, 9);
+    }
+
+    if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
+      TranslatableText component = new TranslatableText(
+          "selectWorld." + CherishedWorldsMod.MOD_ID + "." +
+              (isFavorite ? "unfavorite" : "favorite"));
+      screen.renderTooltip(matrices, Collections.singletonList(component), mouseX, mouseY);
+    }
+  }
 }

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.FatalErrorScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
@@ -35,7 +34,6 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.world.level.storage.LevelSummary;
@@ -78,22 +76,8 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
           if (summary != null) {
             AccessorEntryListWidget accessorWidget = ((AccessorEntryListWidget) selectionList);
             boolean isFavorite = FavoritesList.contains(summary.getName());
-            Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
-            int top = (int) (accessorWidget.getTop() + 15 + 36 * i - selectionList
-                .getScrollAmount());
-            int x = screen.width / 2 - 148;
-
-            if (top < (accessorWidget.getBottom() - 8) && top > accessorWidget.getTop()) {
-              MinecraftClient.getInstance().getTextureManager().bindTexture(icon);
-              DrawableHelper.drawTexture(matrices, x, top, 0, 0, 9, 9, 9, 9);
-            }
-
-            if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-              TranslatableText component = new TranslatableText(
-                  "selectWorld." + CherishedWorldsMod.MOD_ID + "." +
-                      (isFavorite ? "unfavorite" : "favorite"));
-              screen.renderTooltip(matrices, Collections.singletonList(component), mouseX, mouseY);
-            }
+            renderIcon(screen, matrices, mouseX, mouseY, selectionList.getScrollAmount(), i,
+                accessorWidget.getTop(), accessorWidget.getBottom(), isFavorite);
           }
         }
       }
@@ -117,7 +101,7 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
             boolean isFavorite = FavoritesList.contains(summary.getName());
             int top = (int) (((AccessorEntryListWidget) worldList).getTop() + 15 + 36 * i -
                 worldList.getScrollAmount());
-            int x = screen.width / 2 - 148;
+            int x = screen.width / 2 - getOffset();
 
             if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
               String s = summary.getName();
@@ -150,6 +134,11 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
         disableDeletingFavorites(entry, deleteButton);
       }
     }
+  }
+
+  @Override
+  public int getOffset() {
+    return 148;
   }
 
   private static void refreshList(WorldListWidget worldList) {
