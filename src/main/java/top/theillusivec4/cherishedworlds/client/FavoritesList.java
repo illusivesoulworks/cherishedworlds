@@ -17,27 +17,29 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.core;
+package top.theillusivec4.cherishedworlds.client;
 
-import com.google.common.collect.Sets;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import org.apache.commons.io.FileUtils;
+import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 
-public class FavoriteWorlds {
+public class FavoritesList {
 
-  private static final Set<String> favorites = Sets.newHashSet();
+  private static final Set<String> FAVORITES = new HashSet<>();
 
-  public static void loadFavoritesList() {
+  public static void load() {
 
     try {
-      favorites.clear();
-      File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
-          CherishedWorlds.MODID + "/favorites.dat");
+      FAVORITES.clear();
+      File file = new File(FabricLoader.getInstance().getConfigDir().toString(),
+          CherishedWorldsMod.MOD_ID + "/favorites.dat");
       NbtCompound compound = NbtIo.read(file);
 
       if (compound == null) {
@@ -46,44 +48,44 @@ public class FavoriteWorlds {
       NbtList list = compound.getList("favorites", 8);
 
       for (int i = 0; i < list.size(); ++i) {
-        favorites.add(list.getString(i));
+        FAVORITES.add(list.getString(i));
       }
     } catch (Exception exception) {
-      CherishedWorlds.LOGGER.error("Couldn't load favorites list", exception);
+      CherishedWorldsMod.LOGGER.error("Couldn't load favorites list", exception);
     }
   }
 
-  public static void saveFavoritesList() {
+  public static void save() {
 
     try {
       NbtList list = new NbtList();
 
-      for (String s : favorites) {
+      for (String s : FAVORITES) {
         list.add(NbtString.of(s));
       }
       NbtCompound compound = new NbtCompound();
       compound.put("favorites", list);
-      File file = new File(CherishedWorlds.getInstance().getConfigDir().toString(),
-          CherishedWorlds.MODID + "/favorites.dat");
+      File file = new File(FabricLoader.getInstance().getConfigDir().toString(),
+          CherishedWorldsMod.MOD_ID + "/favorites.dat");
 
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
       NbtIo.write(compound, file);
     } catch (Exception exception) {
-      CherishedWorlds.LOGGER.error("Couldn't save favorites list", exception);
+      CherishedWorldsMod.LOGGER.error("Couldn't save favorites list", exception);
     }
   }
 
-  public static boolean isFavorite(String fileName) {
-    return favorites.contains(fileName);
+  public static boolean contains(String fileName) {
+    return FAVORITES.contains(fileName);
   }
 
-  public static void addFavorite(String name) {
-    favorites.add(name);
+  public static void add(String name) {
+    FAVORITES.add(name);
   }
 
-  public static void removeFavorite(String name) {
-    favorites.remove(name);
+  public static void remove(String name) {
+    FAVORITES.remove(name);
   }
 }

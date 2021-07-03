@@ -17,9 +17,8 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.core;
+package top.theillusivec4.cherishedworlds.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.FatalErrorScreen;
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
@@ -36,34 +34,35 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.world.level.storage.LevelSummary;
+import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
+import top.theillusivec4.cherishedworlds.mixin.AccessorEntryListWidget;
+import top.theillusivec4.cherishedworlds.mixin.AccessorSelectWorldScreen;
+import top.theillusivec4.cherishedworlds.mixin.AccessorWorldListEntry;
 
-public class WorldScreenHooks {
+public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
 
-  private static final Identifier STAR_ICON = new Identifier(CherishedWorlds.MODID,
-      "textures/gui/staricon.png");
-  private static final Identifier EMPTY_STAR_ICON = new Identifier(CherishedWorlds.MODID,
-      "textures/gui/emptystaricon.png");
+  public static FavoriteWorlds INSTANCE = new FavoriteWorlds();
 
-  public static void init(SelectWorldScreen screen) {
-    WorldListWidget selectionList = CherishedWorlds.getInstance().getAccessor()
-        .getWorldList(screen);
-    TextFieldWidget textField = CherishedWorlds.getInstance().getAccessor().getTextField(screen);
+  @Override
+  public void init(SelectWorldScreen screen) {
+    AccessorSelectWorldScreen accessor = ((AccessorSelectWorldScreen) screen);
+    WorldListWidget selectionList = accessor.getLevelList();
+    TextFieldWidget textField = accessor.getSearchBox();
 
     if (selectionList != null) {
-      FavoriteWorlds.loadFavoritesList();
+      FavoritesList.load();
       textField.setChangedListener((s) -> refreshList(selectionList, () -> s));
       refreshList(selectionList);
     }
   }
 
-  public static void render(SelectWorldScreen screen, MatrixStack matrices, int mouseX,
-      int mouseY) {
-    Accessor accessor = CherishedWorlds.getInstance().getAccessor();
-    WorldListWidget selectionList = accessor.getWorldList(screen);
+  @Override
+  public void render(SelectWorldScreen screen, MatrixStack matrices, int mouseX, int mouseY) {
+    AccessorSelectWorldScreen accessor = ((AccessorSelectWorldScreen) screen);
+    WorldListWidget selectionList = accessor.getLevelList();
 
     if (selectionList != null) {
 
@@ -71,36 +70,24 @@ public class WorldScreenHooks {
         WorldListWidget.Entry entry = selectionList.children().get(i);
 
         if (entry != null) {
-          LevelSummary summary = accessor.getWorldSummary(entry);
+          AccessorWorldListEntry accessorEntry = ((AccessorWorldListEntry) (Object) entry);
+          LevelSummary summary = accessorEntry.getLevel();
 
           if (summary != null) {
-            boolean isFavorite = FavoriteWorlds.isFavorite(summary.getName());
-            Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
-            int top = (int) (accessor.getTop(selectionList) + 15 + 36 * i - selectionList
-                .getScrollAmount());
-            int x = screen.width / 2 - 148;
-
-            if (top < (accessor.getBottom(selectionList) - 8) && top > accessor
-                .getTop(selectionList)) {
-              RenderSystem.setShaderTexture(0, icon);
-              DrawableHelper.drawTexture(matrices, x, top, 0, 0, 9, 9, 9, 9);
-            }
-
-            if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-              TranslatableText component = new TranslatableText(
-                  "selectWorld." + CherishedWorlds.MODID + "." + (isFavorite ? "unfavorite"
-                      : "favorite"));
-              screen.renderTooltip(matrices, Collections.singletonList(component), mouseX, mouseY);
-            }
+            AccessorEntryListWidget accessorWidget = ((AccessorEntryListWidget) selectionList);
+            boolean isFavorite = FavoritesList.contains(summary.getName());
+            renderIcon(screen, matrices, mouseX, mouseY, selectionList.getScrollAmount(), i,
+                accessorWidget.getTop(), accessorWidget.getBottom(), isFavorite);
           }
         }
       }
     }
   }
 
-  public static void checkMouseClick(SelectWorldScreen screen, double mouseX, double mouseY) {
-    Accessor accessor = CherishedWorlds.getInstance().getAccessor();
-    WorldListWidget worldList = accessor.getWorldList(screen);
+  @Override
+  public void click(SelectWorldScreen screen, double mouseX, double mouseY) {
+    AccessorSelectWorldScreen accessor = (AccessorSelectWorldScreen) screen;
+    WorldListWidget worldList = accessor.getLevelList();
 
     if (worldList != null) {
 
@@ -108,23 +95,23 @@ public class WorldScreenHooks {
         WorldListWidget.Entry entry = worldList.children().get(i);
 
         if (entry != null) {
-          LevelSummary summary = accessor.getWorldSummary(entry);
+          LevelSummary summary = ((AccessorWorldListEntry) (Object) entry).getLevel();
 
           if (summary != null) {
-            boolean isFavorite = FavoriteWorlds.isFavorite(summary.getName());
-            int top = (int) (accessor.getTop(worldList) + 15 + 36 * i - worldList
-                .getScrollAmount());
-            int x = screen.width / 2 - 148;
+            boolean isFavorite = FavoritesList.contains(summary.getName());
+            int top = (int) (((AccessorEntryListWidget) worldList).getTop() + 15 + 36 * i -
+                worldList.getScrollAmount());
+            int x = screen.width / 2 - getOffset();
 
             if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
               String s = summary.getName();
 
               if (isFavorite) {
-                FavoriteWorlds.removeFavorite(s);
+                FavoritesList.remove(s);
               } else {
-                FavoriteWorlds.addFavorite(s);
+                FavoritesList.add(s);
               }
-              FavoriteWorlds.saveFavoritesList();
+              FavoritesList.save();
               refreshList(worldList);
               return;
             }
@@ -134,19 +121,24 @@ public class WorldScreenHooks {
     }
   }
 
-  public static void disableDeleteButton(SelectWorldScreen screen) {
-    WorldListWidget selectionList = CherishedWorlds.getInstance().getAccessor()
-        .getWorldList(screen);
+  @Override
+  public void clicked(SelectWorldScreen screen) {
+    AccessorSelectWorldScreen accessor = ((AccessorSelectWorldScreen) screen);
+    WorldListWidget selectionList = accessor.getLevelList();
 
     if (selectionList != null) {
       WorldListWidget.Entry entry = selectionList.getSelected();
 
       if (entry != null) {
-        ButtonWidget deleteButton = CherishedWorlds.getInstance().getAccessor()
-            .getDeleteButton(screen);
+        ButtonWidget deleteButton = accessor.getDeleteButton();
         disableDeletingFavorites(entry, deleteButton);
       }
     }
+  }
+
+  @Override
+  public int getOffset() {
+    return 148;
   }
 
   private static void refreshList(WorldListWidget worldList) {
@@ -161,7 +153,7 @@ public class WorldScreenHooks {
     try {
       list = saveformat.getLevelList();
     } catch (LevelStorageException saveexception) {
-      CherishedWorlds.LOGGER.error("Couldn't load level list", saveexception);
+      CherishedWorldsMod.LOGGER.error("Couldn't load level list", saveexception);
       mc.openScreen(new FatalErrorScreen(new TranslatableText("selectWorld.unable_to_load"),
           new LiteralText(saveexception.getMessage())));
       return;
@@ -175,7 +167,7 @@ public class WorldScreenHooks {
     while (iter.hasNext()) {
       LevelSummary summ = iter.next();
 
-      if (FavoriteWorlds.isFavorite(summ.getName())) {
+      if (FavoritesList.contains(summ.getName())) {
         favorites.add(summ);
         iter.remove();
       }
@@ -203,16 +195,16 @@ public class WorldScreenHooks {
     WorldListWidget.Entry entry = worldList.getSelected();
 
     if (entry != null) {
-      ButtonWidget deleteButton = CherishedWorlds.getInstance().getAccessor()
-          .getDeleteButton(worldList.getParent());
+      ButtonWidget deleteButton =
+          ((AccessorSelectWorldScreen) worldList.getParent()).getDeleteButton();
       disableDeletingFavorites(entry, deleteButton);
     }
   }
 
   private static void disableDeletingFavorites(WorldListWidget.Entry entry,
-      ButtonWidget deleteButton) {
-    LevelSummary summary = CherishedWorlds.getInstance().getAccessor().getWorldSummary(entry);
-    boolean isFavorite = summary != null && FavoriteWorlds.isFavorite(summary.getName());
+                                               ButtonWidget deleteButton) {
+    LevelSummary summary = ((AccessorWorldListEntry) (Object) entry).getLevel();
+    boolean isFavorite = summary != null && FavoritesList.contains(summary.getName());
     deleteButton.active = !isFavorite;
   }
 }

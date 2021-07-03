@@ -17,23 +17,18 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.core;
+package top.theillusivec4.cherishedworlds.mixin;
 
-import java.io.File;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import top.theillusivec4.cherishedworlds.loader.impl.CherishedWorldsImpl;
+import net.minecraft.client.gui.widget.EntryListWidget;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public interface CherishedWorlds {
+@Mixin(EntryListWidget.class)
+public interface AccessorEntryListWidget {
 
-  static CherishedWorlds getInstance() {
-    return CherishedWorldsImpl.INSTANCE;
-  }
+  @Accessor
+  int getTop();
 
-  String MODID = "cherishedworlds";
-  Logger LOGGER = LogManager.getLogger();
-
-  Accessor getAccessor();
-
-  File getConfigDir();
+  @Accessor
+  int getBottom();
 }

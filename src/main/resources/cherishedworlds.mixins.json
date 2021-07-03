@@ -1,15 +1,21 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "top.theillusivec4.cherishedworlds.loader.mixin",
+  "package": "top.theillusivec4.cherishedworlds.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [],
   "client": [
-    "MouseMixin",
-    "SelectWorldScreenAccessor",
-    "SelectWorldScreenMixin",
-    "WorldListEntryAccessor",
-    "EntryListWidgetAccessor"
+    "AccessorEntryListWidget",
+    "AccessorMultiplayerScreen",
+    "AccessorMultiplayerServerListWidgetEntry",
+    "AccessorSelectWorldScreen",
+    "AccessorWorldListEntry",
+    "MixinAddServerScreen",
+    "MixinMouse",
+    "MixinMultiplayerScreen",
+    "MixinMultiplayerServerListWidget",
+    "MixinMultiplayerServerListWidgetEntry",
+    "MixinSelectWorldScreen"
   ],
   "server": [],
   "injectors": {
