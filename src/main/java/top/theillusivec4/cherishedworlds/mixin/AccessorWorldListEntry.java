@@ -17,26 +17,16 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.loader.impl;
+package top.theillusivec4.cherishedworlds.mixin;
 
-import java.io.File;
-import net.fabricmc.loader.api.FabricLoader;
-import top.theillusivec4.cherishedworlds.core.Accessor;
-import top.theillusivec4.cherishedworlds.core.CherishedWorlds;
+import net.minecraft.client.gui.screen.world.WorldListWidget;
+import net.minecraft.world.level.storage.LevelSummary;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public class CherishedWorldsImpl implements CherishedWorlds {
+@Mixin(WorldListWidget.Entry.class)
+public interface AccessorWorldListEntry {
 
-  public static CherishedWorlds INSTANCE = new CherishedWorldsImpl();
-
-  private final Accessor accessor = new AccessorImpl();
-
-  @Override
-  public Accessor getAccessor() {
-    return accessor;
-  }
-
-  @Override
-  public File getConfigDir() {
-    return FabricLoader.getInstance().getConfigDir().toFile();
-  }
+  @Accessor
+  LevelSummary getLevel();
 }

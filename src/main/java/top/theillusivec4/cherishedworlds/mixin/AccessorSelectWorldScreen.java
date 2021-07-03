@@ -17,25 +17,24 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.core;
+package top.theillusivec4.cherishedworlds.mixin;
 
 import net.minecraft.client.gui.screen.world.SelectWorldScreen;
 import net.minecraft.client.gui.screen.world.WorldListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.world.level.storage.LevelSummary;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public interface Accessor {
+@Mixin(SelectWorldScreen.class)
+public interface AccessorSelectWorldScreen {
 
-  WorldListWidget getWorldList(SelectWorldScreen screen);
+  @Accessor
+  WorldListWidget getLevelList();
 
-  LevelSummary getWorldSummary(WorldListWidget.Entry entry);
+  @Accessor
+  ButtonWidget getDeleteButton();
 
-  ButtonWidget getDeleteButton(SelectWorldScreen screen);
-
-  TextFieldWidget getTextField(SelectWorldScreen screen);
-
-  int getTop(WorldListWidget worldList);
-
-  int getBottom(WorldListWidget worldList);
+  @Accessor
+  TextFieldWidget getSearchBox();
 }

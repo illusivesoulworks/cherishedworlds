@@ -17,7 +17,7 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package top.theillusivec4.cherishedworlds.loader.mixin;
+package top.theillusivec4.cherishedworlds.mixin;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
@@ -27,17 +27,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import top.theillusivec4.cherishedworlds.core.WorldScreenHooks;
+import top.theillusivec4.cherishedworlds.client.FavoriteWorlds;
 
 @Mixin(Mouse.class)
-public class MouseMixin {
+public class MixinMouse {
 
   @Inject(at = @At("HEAD"), method = "method_1611([ZDDI)V")
   public void _cherishedworlds_preMouseClick(boolean[] unused, double mouseX, double mouseY, int button, CallbackInfo cb) {
     Screen screen = MinecraftClient.getInstance().currentScreen;
 
     if (screen instanceof SelectWorldScreen) {
-      WorldScreenHooks.checkMouseClick((SelectWorldScreen) screen, mouseX, mouseY);
+      FavoriteWorlds.INSTANCE.click((SelectWorldScreen) screen, mouseX, mouseY);
     }
   }
 
@@ -46,7 +46,7 @@ public class MouseMixin {
     Screen screen = MinecraftClient.getInstance().currentScreen;
 
     if (screen instanceof SelectWorldScreen) {
-      WorldScreenHooks.disableDeleteButton((SelectWorldScreen) screen);
+      FavoriteWorlds.INSTANCE.clicked((SelectWorldScreen) screen);
     }
   }
 }
