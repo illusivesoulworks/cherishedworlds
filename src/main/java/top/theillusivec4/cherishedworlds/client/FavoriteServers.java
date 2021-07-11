@@ -18,6 +18,7 @@ public class FavoriteServers implements FavoritesManager<MultiplayerScreen> {
         ((AccessorMultiplayerScreen) screen).getServerListWidget();
 
     if (serverListWidget != null) {
+      FavoritesList.load();
       serverListWidget.setServers(screen.getServerList());
     }
   }
