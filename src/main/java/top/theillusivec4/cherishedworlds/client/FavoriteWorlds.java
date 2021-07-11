@@ -127,7 +127,7 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
     WorldListWidget selectionList = accessor.getLevelList();
 
     if (selectionList != null) {
-      WorldListWidget.Entry entry = selectionList.getSelected();
+      WorldListWidget.Entry entry = selectionList.getSelectedOrNull();
 
       if (entry != null) {
         ButtonWidget deleteButton = accessor.getDeleteButton();
@@ -154,7 +154,7 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
       list = saveformat.getLevelList();
     } catch (LevelStorageException saveexception) {
       CherishedWorldsMod.LOGGER.error("Couldn't load level list", saveexception);
-      mc.openScreen(new FatalErrorScreen(new TranslatableText("selectWorld.unable_to_load"),
+      mc.setScreen(new FatalErrorScreen(new TranslatableText("selectWorld.unable_to_load"),
           new LiteralText(saveexception.getMessage())));
       return;
     }
@@ -192,7 +192,7 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
       }
     }
 
-    WorldListWidget.Entry entry = worldList.getSelected();
+    WorldListWidget.Entry entry = worldList.getSelectedOrNull();
 
     if (entry != null) {
       ButtonWidget deleteButton =

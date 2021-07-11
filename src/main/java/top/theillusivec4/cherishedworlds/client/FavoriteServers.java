@@ -18,6 +18,7 @@ public class FavoriteServers implements FavoritesManager<MultiplayerScreen> {
         ((AccessorMultiplayerScreen) screen).getServerListWidget();
 
     if (serverListWidget != null) {
+      FavoritesList.load();
       serverListWidget.setServers(screen.getServerList());
     }
   }
@@ -70,7 +71,7 @@ public class FavoriteServers implements FavoritesManager<MultiplayerScreen> {
             }
             FavoritesList.save();
             serverListWidget.setServers(screen.getServerList());
-            MultiplayerServerListWidget.Entry selected = serverListWidget.getSelected();
+            MultiplayerServerListWidget.Entry selected = serverListWidget.getSelectedOrNull();
 
             if (selected instanceof MultiplayerServerListWidget.ServerEntry) {
               disableDeletion((MultiplayerServerListWidget.ServerEntry) selected,

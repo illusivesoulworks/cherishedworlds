@@ -37,7 +37,7 @@ public class MixinMultiplayerScreen {
 
   @Inject(at = @At("TAIL"), method = "updateButtonActivationStates")
   private void cherishedworlds$updateButtonActivationStates(CallbackInfo ci) {
-    MultiplayerServerListWidget.Entry entry = this.serverListWidget.getSelected();
+    MultiplayerServerListWidget.Entry entry = this.serverListWidget.getSelectedOrNull();
 
     if (entry instanceof MultiplayerServerListWidget.ServerEntry) {
       ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry) entry).getServer();
