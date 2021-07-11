@@ -57,7 +57,9 @@ curseforge {
         changelog = file('docs/CHANGELOG.md')
         addGameVersion "Java 16"
         addGameVersion "Fabric"
-        addGameVersion project.minecraft_version
+        "${curse_versions}".split(',').each {
+            addGameVersion "${it}"
+        }
         addArtifact(sourcesJar)
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
 
