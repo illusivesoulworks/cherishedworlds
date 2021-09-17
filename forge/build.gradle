@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
         maven { url 'https://plugins.gradle.org/m2/' }
         maven {
             url "https://repo.spongepowered.org/repository/maven-public/"
@@ -12,12 +13,13 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: '1.4.0'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'org.spongepowered.mixin'
-apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = "${mod_version}"
 group = "top.theillusivec4.cherishedworlds"
@@ -26,7 +28,7 @@ archivesBaseName = "cherishedworlds-forge"
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'parchment', version: '2021.09.05-1.17.1'
 
     runs {
         client {
