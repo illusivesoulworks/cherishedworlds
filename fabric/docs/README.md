@@ -1,0 +1,5 @@
+# Cherished Worlds [![](http://cf.way2muchnoise.eu/versions/cherished-worlds-fabric.svg)](https://www.curseforge.com/minecraft/mc-mods/cherished-worlds-fabric) [![](http://cf.way2muchnoise.eu/short_cherished-worlds-fabric_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/cherished-worlds-fabric/files) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg?&style=flat-square)](https://www.gnu.org/licenses/lgpl-3.0) [![](https://img.shields.io/discord/500852157503766538.svg?color=green&label=Discord&style=flat-square)](https://discord.gg/JWgrdwt)
+
+Cherished Worlds is a mod that adds the ability to favorite/pin/bookmark certain worlds. Favoriting worlds will force them to always show up at the top of the world selection list and removes the ability to delete them until they are unfavorited. Players can favorite as many worlds as they want. If there are multiple, favorited worlds will order themselves by last played date like regular worlds.
+
+**This mod is client-side only.**

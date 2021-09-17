@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "top.theillusivec4.cherishedworlds.mixin.core",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "cherishedworlds.refmap.json",
+  "client": [
+    "AddServerScreenMixin",
+    "MultiplayerScreenAccessor",
+    "MultiplayerScreenMixin",
+    "ServerSelectionListMixin",
+    "ServerSelectionListNormalEntryAccessor",
+    "ServerSelectionListNormalEntryMixin",
+    "WorldSelectionListEntryAccessor",
+    "WorldSelectionScreenAccessor"
+  ],
+  "minVersion": "0.8"
+}
