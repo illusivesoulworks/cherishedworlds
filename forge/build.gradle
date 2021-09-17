@@ -20,8 +20,8 @@ apply plugin: 'org.spongepowered.mixin'
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/Forge-Class-Remapper/main/classremapper.gradle'
 
 version = "${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_id}-forge"
+group = "top.theillusivec4.cherishedworlds"
+archivesBaseName = "cherishedworlds-forge"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
@@ -32,7 +32,7 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=cherishedworlds.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.disableRefMap', 'true'
@@ -47,7 +47,7 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
-            arg "-mixin.config=" + "${mod_id}".toString() + ".mixins.json"
+            arg "-mixin.config=cherishedworlds.mixins.json"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.disableRefMap', 'true'
@@ -62,13 +62,29 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
+    add sourceSets.main, "cherishedworlds.refmap.json"
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+}
+
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
+    //Copy it into the build dir
+    it.from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
+        expand 'version': version, 'mc_version': minecraft_version_range, 'forge_version': forge_version_range, "loader_version": loader_version_range
+    }
+    it.into "$buildDir/resources/main/"
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
 }
 
 sourceSets {
@@ -81,14 +97,14 @@ sourceSets {
 
 jar {
     manifest {
-        attributes(["Specification-Title"     : "${mod_name}",
-                    "Specification-Vendor"    : "${mod_author}",
-                    "Specification-Version"   : "${getArchiveVersion()}",
-                    "Implementation-Title"    : "${mod_name}",
+        attributes(["Specification-Title"     : "Cherished Worlds",
+                    "Specification-Vendor"    : "C4",
+                    "Specification-Version"   : "1",
+                    "Implementation-Title"    : "Cherished Worlds",
                     "Implementation-Version"  : "${getArchiveVersion()}",
-                    "Implementation-Vendor"   : "${mod_author}",
+                    "Implementation-Vendor"   : "C4",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                    "MixinConfigs"            : "${mod_id}.mixins.json"],)
+                    "MixinConfigs"            : "cherishedworlds.mixins.json"],)
     }
 }
 
@@ -107,7 +123,7 @@ curseforge {
 
     project {
         apiKey = findProperty('curseKey') ?: 0
-        id = "${curse_id}"
+        id = "308240"
         releaseType = "${curse_release}"
         changelogType = 'markdown'
         changelog = file('CHANGELOG.md')

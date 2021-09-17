@@ -19,16 +19,16 @@ public abstract class ServerSelectionListMixin {
 
   @Shadow
   @Final
-  private JoinMultiplayerScreen owner;
+  private JoinMultiplayerScreen screen;
 
   @Shadow
   @Final
-  private List<ServerSelectionList.OnlineServerEntry> serverListInternet;
+  private List<ServerSelectionList.OnlineServerEntry> onlineServers;
 
   @SuppressWarnings("ConstantConditions")
   @Inject(at = @At("HEAD"), method = "updateOnlineServers", cancellable = true)
   private void _cherishedworlds_updateServers(ServerList serverList, CallbackInfo ci) {
-    this.serverListInternet.clear();
+    this.onlineServers.clear();
     List<ServerSelectionList.OnlineServerEntry> favorites = new ArrayList<>();
     List<ServerSelectionList.OnlineServerEntry> others = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public abstract class ServerSelectionListMixin {
       ServerData data = serverList.get(i);
       ServerSelectionList.OnlineServerEntry entry =
           ServerSelectionListNormalEntryAccessor
-              .cherishedworlds$createEntry((ServerSelectionList) (Object) this, this.owner, data);
+              .cherishedworlds$createEntry((ServerSelectionList) (Object) this, this.screen, data);
 
       if (FavoritesList.contains(data.name + data.ip)) {
         favorites.add(entry);
@@ -44,11 +44,11 @@ public abstract class ServerSelectionListMixin {
         others.add(entry);
       }
     }
-    this.serverListInternet.addAll(favorites);
-    this.serverListInternet.addAll(others);
+    this.onlineServers.addAll(favorites);
+    this.onlineServers.addAll(others);
 
-    for (int i = 0; i < this.serverListInternet.size(); i++) {
-      serverList.replace(i, this.serverListInternet.get(i).getServerData());
+    for (int i = 0; i < this.onlineServers.size(); i++) {
+      serverList.replace(i, this.onlineServers.get(i).getServerData());
     }
     this.setList();
     serverList.save();

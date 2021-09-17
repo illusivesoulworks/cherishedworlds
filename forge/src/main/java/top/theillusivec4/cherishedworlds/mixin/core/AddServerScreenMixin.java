@@ -18,9 +18,9 @@ public class AddServerScreenMixin {
   @Final
   private ServerData serverData;
   @Shadow
-  private EditBox textFieldServerAddress;
+  private EditBox ipEdit;
   @Shadow
-  private EditBox textFieldServerName;
+  private EditBox nameEdit;
 
   @Inject(at = @At("HEAD"), method = "onButtonServerAddPressed")
   private void cherishedworlds$onButtonServerAddPressed(CallbackInfo ci) {
@@ -28,7 +28,7 @@ public class AddServerScreenMixin {
 
     if (FavoritesList.contains(key)) {
       FavoritesList.remove(key);
-      FavoritesList.add(this.textFieldServerName.getValue() + this.textFieldServerAddress.getValue());
+      FavoritesList.add(this.nameEdit.getValue() + this.ipEdit.getValue());
     }
   }
 }

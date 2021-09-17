@@ -15,18 +15,18 @@ import top.theillusivec4.cherishedworlds.client.favorites.FavoritesList;
 public class MultiplayerScreenMixin {
 
   @Shadow
-  protected ServerSelectionList serverListSelector;
+  protected ServerSelectionList serverSelectionList;
 
   @Shadow
-  private Button btnDeleteServer;
+  private Button deleteButton;
 
   @Inject(at = @At("TAIL"), method = "onSelectedChange")
   private void _cherishedworlds_initButtons(CallbackInfo ci) {
-    ServerSelectionList.Entry entry = this.serverListSelector.getSelected();
+    ServerSelectionList.Entry entry = this.serverSelectionList.getSelected();
 
     if (entry instanceof ServerSelectionList.OnlineServerEntry) {
       ServerData data = ((ServerSelectionList.OnlineServerEntry) entry).getServerData();
-      this.btnDeleteServer.active = !FavoritesList.contains(data.name + data.ip);
+      this.deleteButton.active = !FavoritesList.contains(data.name + data.ip);
     }
   }
 }

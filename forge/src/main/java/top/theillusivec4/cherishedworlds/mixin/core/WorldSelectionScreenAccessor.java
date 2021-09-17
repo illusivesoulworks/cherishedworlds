@@ -14,8 +14,8 @@ public interface WorldSelectionScreenAccessor {
   Button getDeleteButton();
 
   @Accessor
-  EditBox getSearchField();
+  EditBox getSearchBox();
 
   @Accessor
-  WorldSelectionList getSelectionList();
+  WorldSelectionList getList();
 }

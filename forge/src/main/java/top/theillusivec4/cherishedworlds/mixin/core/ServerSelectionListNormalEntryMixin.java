@@ -17,12 +17,12 @@ public class ServerSelectionListNormalEntryMixin {
 
   @Shadow
   @Final
-  private JoinMultiplayerScreen owner;
+  private JoinMultiplayerScreen screen;
 
   @Inject(at = @At("HEAD"), method = "swap", cancellable = true)
   private void cherishedworld$swapServers(int pos1, int pos2, CallbackInfo ci) {
 
-    if (MixinHooks.isNotValidSwap(this.owner.getServers(), pos1, pos2)) {
+    if (MixinHooks.isNotValidSwap(this.screen.getServers(), pos1, pos2)) {
       CherishedWorldsMod.LOGGER.info("invalid swap");
       ci.cancel();
     }

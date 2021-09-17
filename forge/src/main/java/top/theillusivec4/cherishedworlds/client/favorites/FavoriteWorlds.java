@@ -23,17 +23,15 @@ import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionListEntryAccessor;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionScreenAccessor;
 
-import net.minecraft.client.gui.screens.worldselection.WorldSelectionList.WorldListEntry;
-
 public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
 
   @Override
   public void init(SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
-    WorldSelectionList selectionList = accessor.getSelectionList();
+    WorldSelectionList selectionList = accessor.getList();
 
     if (selectionList != null) {
-      EditBox textField = accessor.getSearchField();
+      EditBox textField = accessor.getSearchBox();
 
       if (textField != null) {
         textField.setResponder((s) -> refreshList(selectionList, () -> s));
@@ -46,7 +44,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
   @Override
   public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
-    WorldSelectionList selectionList = accessor.getSelectionList();
+    WorldSelectionList selectionList = accessor.getList();
 
     if (selectionList != null) {
 
@@ -72,7 +70,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
   @Override
   public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
-    WorldSelectionList selectionList = accessor.getSelectionList();
+    WorldSelectionList selectionList = accessor.getList();
 
     if (selectionList != null) {
 
@@ -114,7 +112,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
   @Override
   public void clicked(SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
-    WorldSelectionList selectionList = accessor.getSelectionList();
+    WorldSelectionList selectionList = accessor.getList();
 
     if (selectionList != null) {
       WorldSelectionList.WorldListEntry entry = selectionList.getSelected();

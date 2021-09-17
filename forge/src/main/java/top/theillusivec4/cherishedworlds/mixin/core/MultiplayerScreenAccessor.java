@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(JoinMultiplayerScreen.class)
 public interface MultiplayerScreenAccessor {
 
-  @Accessor(value = "serverListSelector")
+  @Accessor(value = "serverSelectionList")
   ServerSelectionList getSelectionList();
 
-  @Accessor(value = "btnDeleteServer")
+  @Accessor
   Button getDeleteButton();
 }
