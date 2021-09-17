@@ -24,7 +24,7 @@ body:
   attributes:
     label: What happened?
     description: Also tell us, what did you expect to happen?
-    placeholder: Explain what you've observed.
+    placeholder: A bug happened and I didn't expect that!
   validations:
     required: true
 - type: textarea
@@ -32,7 +32,12 @@ body:
   attributes:
     label: How do you trigger this bug?
     description: Please make sure to remove all unnecessary mods first.
-    placeholder: Walk through it step by step.
+    placeholder: A step by step walkthrough to trigger the bug.
+    value: |
+      1.
+      2.
+      3.
+      ...
   validations:
     required: true
 - type: dropdown
@@ -49,10 +54,16 @@ body:
   id: loader-version
   attributes:
     label: Loader Version
-    description: Which version of the above loader are you using? If using Fabric, also include the Fabric API version if applicable.
-    placeholder: Enter the loader version.
+    description: Which version of the above loader are you using?
+    placeholder: Forge - 37.0.65 or Fabric - 0.7.4
   validations:
     required: true
+- type: input
+  id: fabric-api-version
+  attributes:
+    label: Fabric API Version
+    description: If you're using Fabric, which version of the Fabric API are you using? Enter "N/A" if you are not using it.
+    placeholder: Fabric API 0.40.1
 - type: input
   id: mod-version
   attributes:
@@ -61,3 +72,14 @@ body:
     placeholder: Enter the mod version.
   validations:
     required: true
+- type: textarea
+  id: logs
+  attributes:
+    label: Relevant Log Outputs
+    description: |
+      Please share any relevant log outputs using a paste site:
+      » GitHub Gist
+      » Paste.gg
+      » Paste.ee
+      » Pastebin.com
+      » Hastebin.com
