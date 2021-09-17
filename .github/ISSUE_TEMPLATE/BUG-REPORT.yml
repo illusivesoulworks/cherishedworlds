@@ -55,21 +55,24 @@ body:
   attributes:
     label: Loader Version
     description: Which version of the above loader are you using?
-    placeholder: Example: Forge - 37.0.65 or Fabric - 0.7.4
+    placeholder: |
+      Example: Forge - 37.0.65 or Fabric - 0.7.4
   validations:
     required: true
 - type: input
   id: fabric-api-version
   attributes:
     label: Fabric API Version
-    description: If you're using Fabric, which version of the Fabric API are you using? Enter "N/A" if you are not using it.
-    placeholder: Example: Fabric API 0.40.1
+    description: If you're using Fabric, which version of the Fabric API are you using? Leave blank if you're not using it.
+    placeholder: |
+      Example: Fabric API 0.40.1
 - type: input
   id: mod-version
   attributes:
     label: Mod Version
     description: What version of the mod are you using?
-    placeholder: Example: Cherished Worlds 1.17.1-5.1.1.0
+    placeholder: |
+      Example: Cherished Worlds 1.17.1-5.1.1.0
   validations:
     required: true
 - type: textarea
