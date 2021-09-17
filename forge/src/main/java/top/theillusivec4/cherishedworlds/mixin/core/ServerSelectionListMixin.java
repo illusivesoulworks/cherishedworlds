@@ -67,11 +67,11 @@ public abstract class ServerSelectionListMixin {
     for (int i = 0; i < this.onlineServers.size(); i++) {
       serverList.replace(i, this.onlineServers.get(i).getServerData());
     }
-    this.setList();
+    this.refreshEntries();
     serverList.save();
     ci.cancel();
   }
 
   @Shadow
-  abstract void setList();
+  abstract void refreshEntries();
 }
