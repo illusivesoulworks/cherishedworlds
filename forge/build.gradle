@@ -66,22 +66,23 @@ mixin {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${version_forge}"
+    minecraft "net.minecraftforge:forge:${forge_version}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
 def replaceResources = tasks.register("replaceResources", Copy) {
     it.outputs.upToDateWhen { false }
-    //Copy it into the build dir
+
     it.from(sourceSets.main.resources) {
         include "META-INF/mods.toml"
-        expand 'version': version, 'mc_version': minecraft_version_range, 'forge_version': forge_version_range, "loader_version": loader_version_range
+        expand 'version': version, 'mc_version_range': mc_version_range, 'forge_version_range': forge_version_range, "loader_version": loader_version
     }
     it.into "$buildDir/resources/main/"
 }
 
 processResources {
+    from("CHANGELOG.md")
     duplicatesStrategy(DuplicatesStrategy.FAIL)
     exclude('META-INF/mods.toml')
     configure { finalizedBy(replaceResources) }

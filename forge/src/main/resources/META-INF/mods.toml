@@ -16,12 +16,12 @@ Favorite/pin/bookmark certain worlds, which will always be at the top of the lis
 [[dependencies.cherishedworlds]]
     modId="forge"
     mandatory=true
-    versionRange="${forge_version}"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="CLIENT"
 [[dependencies.cherishedworlds]]
     modId="minecraft"
     mandatory=true
-    versionRange="${mc_version}"
+    versionRange="${mc_version_range}"
     ordering="NONE"
     side="CLIENT"
