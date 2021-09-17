@@ -4,6 +4,7 @@ title: "[Bug]: "
 labels: ["bug", "triage"]
 assignees:
  - TheIllusiveC4
+body: 
 - type: markdown
     attributes:
       value: |
