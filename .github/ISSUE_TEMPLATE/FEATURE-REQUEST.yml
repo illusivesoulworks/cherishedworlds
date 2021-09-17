@@ -1,7 +1,7 @@
 name: Feature Request
 description: Make a suggestion for a new feature or improvements to existing ones
 title: "[Feature]: "
-labels: ["enhancement", "triage"]
+labels: ["type: enhancement", "status: triage"]
 assignees:
  - TheIllusiveC4
 body: 
