@@ -1,7 +1,7 @@
 name: Bug Report
 description: Create a report for bugs, crashes, and other unintended behavior
 title: "[Bug]: "
-labels: ["bug", "triage"]
+labels: ["type: bug", "status: triage"]
 assignees:
  - TheIllusiveC4
 body: 
