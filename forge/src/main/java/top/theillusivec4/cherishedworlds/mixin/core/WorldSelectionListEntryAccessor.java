@@ -1,13 +1,13 @@
 package top.theillusivec4.cherishedworlds.mixin.core;
 
-import net.minecraft.client.gui.screen.WorldSelectionList;
-import net.minecraft.world.storage.WorldSummary;
+import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
+import net.minecraft.world.level.storage.LevelSummary;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(WorldSelectionList.Entry.class)
+@Mixin(WorldSelectionList.WorldListEntry.class)
 public interface WorldSelectionListEntryAccessor {
 
-  @Accessor(value = "field_214451_d")
-  WorldSummary getWorldSummary();
+  @Accessor(value = "summary")
+  LevelSummary getWorldSummary();
 }

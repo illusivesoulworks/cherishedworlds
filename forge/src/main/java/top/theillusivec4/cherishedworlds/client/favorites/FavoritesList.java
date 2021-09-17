@@ -22,10 +22,10 @@ package top.theillusivec4.cherishedworlds.client.favorites;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
@@ -41,12 +41,12 @@ public class FavoritesList {
       favorites.clear();
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
           CherishedWorldsMod.MOD_ID + "/favorites.dat");
-      CompoundNBT compound = CompressedStreamTools.read(file);
+      CompoundTag compound = NbtIo.read(file);
 
       if (compound == null) {
         return;
       }
-      ListNBT list = compound.getList("favorites", Constants.NBT.TAG_STRING);
+      ListTag list = compound.getList("favorites", Constants.NBT.TAG_STRING);
 
       for (int i = 0; i < list.size(); ++i) {
         favorites.add(list.getString(i));
@@ -59,12 +59,12 @@ public class FavoritesList {
   public static void save() {
 
     try {
-      ListNBT list = new ListNBT();
+      ListTag list = new ListTag();
 
       for (String s : favorites) {
-        list.add(StringNBT.valueOf(s));
+        list.add(StringTag.valueOf(s));
       }
-      CompoundNBT compound = new CompoundNBT();
+      CompoundTag compound = new CompoundTag();
       compound.put("favorites", list);
       File file = new File(FMLPaths.CONFIGDIR.get().toString(),
           CherishedWorldsMod.MOD_ID + "/favorites.dat");
@@ -72,7 +72,7 @@ public class FavoritesList {
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
-      CompressedStreamTools.write(compound, file);
+      NbtIo.write(compound, file);
     } catch (Exception exception) {
       CherishedWorldsMod.LOGGER.error("Couldn't save favorites list", exception);
     }

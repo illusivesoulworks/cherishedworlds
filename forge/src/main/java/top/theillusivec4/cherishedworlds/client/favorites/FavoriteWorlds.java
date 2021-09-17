@@ -7,31 +7,33 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 import javax.annotation.Nonnull;
-import net.minecraft.client.AnvilConverterException;
+import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.ErrorScreen;
-import net.minecraft.client.gui.screen.WorldSelectionList;
-import net.minecraft.client.gui.screen.WorldSelectionScreen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.storage.SaveFormat;
-import net.minecraft.world.storage.WorldSummary;
+import net.minecraft.client.gui.screens.ErrorScreen;
+import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.LevelSummary;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionListEntryAccessor;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionScreenAccessor;
 
-public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
+import net.minecraft.client.gui.screens.worldselection.WorldSelectionList.WorldListEntry;
+
+public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
 
   @Override
-  public void init(WorldSelectionScreen screen) {
+  public void init(SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
-      TextFieldWidget textField = accessor.getSearchField();
+      EditBox textField = accessor.getSearchField();
 
       if (textField != null) {
         textField.setResponder((s) -> refreshList(selectionList, () -> s));
@@ -42,22 +44,22 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
 
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, WorldSelectionScreen screen) {
+  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
 
-      for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
-        WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
+      for (int i = 0; i < selectionList.children().size(); i++) {
+        WorldSelectionList.WorldListEntry entry = selectionList.children().get(i);
 
         if (entry != null) {
           WorldSelectionListEntryAccessor entryAccessor =
               (WorldSelectionListEntryAccessor) (Object) entry;
-          WorldSummary summary = entryAccessor.getWorldSummary();
+          LevelSummary summary = entryAccessor.getWorldSummary();
 
           if (summary != null) {
-            boolean isFavorite = FavoritesList.contains(summary.getFileName());
+            boolean isFavorite = FavoritesList.contains(summary.getLevelId());
             drawIcon(evt, screen, i, isFavorite, selectionList.getTop(),
                 selectionList.getScrollAmount(), selectionList.getBottom());
           }
@@ -68,22 +70,22 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
 
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, WorldSelectionScreen screen) {
+  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
 
-      for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
-        WorldSelectionList.Entry entry = selectionList.getEventListeners().get(i);
+      for (int i = 0; i < selectionList.children().size(); i++) {
+        WorldSelectionList.WorldListEntry entry = selectionList.children().get(i);
 
         if (entry != null) {
           WorldSelectionListEntryAccessor entryAccessor =
               (WorldSelectionListEntryAccessor) (Object) entry;
-          WorldSummary summary = entryAccessor.getWorldSummary();
+          LevelSummary summary = entryAccessor.getWorldSummary();
 
           if (summary != null) {
-            boolean isFavorite = FavoritesList.contains(summary.getFileName());
+            boolean isFavorite = FavoritesList.contains(summary.getLevelId());
             int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
                 .getScrollAmount());
             int x = evt.getGui().width / 2 - getOffset();
@@ -91,7 +93,7 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
             double mouseY = evt.getMouseY();
 
             if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-              String s = summary.getFileName();
+              String s = summary.getLevelId();
 
               if (isFavorite) {
                 FavoritesList.remove(s);
@@ -110,17 +112,17 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
 
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void clicked(WorldSelectionScreen screen) {
+  public void clicked(SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
-      WorldSelectionList.Entry entry = selectionList.getSelected();
+      WorldSelectionList.WorldListEntry entry = selectionList.getSelected();
 
       if (entry != null) {
         WorldSelectionListEntryAccessor entryAccessor =
             (WorldSelectionListEntryAccessor) (Object) entry;
-        WorldSummary summary = entryAccessor.getWorldSummary();
+        LevelSummary summary = entryAccessor.getWorldSummary();
         Button deleteButton = accessor.getDeleteButton();
 
         if (deleteButton != null && summary != null) {
@@ -143,27 +145,27 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
   private static void refreshList(WorldSelectionList listWorldSelection,
                                   Supplier<String> supplier) {
     Minecraft mc = Minecraft.getInstance();
-    SaveFormat saveformat = mc.getSaveLoader();
-    List<WorldSummary> list;
+    LevelStorageSource saveformat = mc.getLevelSource();
+    List<LevelSummary> list;
 
     try {
-      list = saveformat.getSaveList();
-    } catch (AnvilConverterException anvilconverterexception) {
+      list = saveformat.getLevelList();
+    } catch (LevelStorageException anvilconverterexception) {
       CherishedWorldsMod.LOGGER.error("Couldn't load level list", anvilconverterexception);
-      mc.displayGuiScreen(
-          new ErrorScreen(new TranslationTextComponent("selectWorld.unable_to_load"),
-              new StringTextComponent(anvilconverterexception.getMessage())));
+      mc.setScreen(
+          new ErrorScreen(new TranslatableComponent("selectWorld.unable_to_load"),
+              new TextComponent(anvilconverterexception.getMessage())));
       return;
     }
-    List<WorldSelectionList.Entry> entries = listWorldSelection.getEventListeners();
+    List<WorldSelectionList.WorldListEntry> entries = listWorldSelection.children();
     entries.clear();
-    Iterator<WorldSummary> iter = list.listIterator();
-    List<WorldSummary> favorites = new ArrayList<>();
+    Iterator<LevelSummary> iter = list.listIterator();
+    List<LevelSummary> favorites = new ArrayList<>();
 
     while (iter.hasNext()) {
-      WorldSummary summ = iter.next();
+      LevelSummary summ = iter.next();
 
-      if (FavoritesList.contains(summ.getFileName())) {
+      if (FavoritesList.contains(summ.getLevelId())) {
         favorites.add(summ);
         iter.remove();
       }
@@ -172,29 +174,29 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
     Collections.sort(list);
     String s = supplier == null ? "" : supplier.get().toLowerCase(Locale.ROOT);
 
-    for (WorldSummary worldsummary : favorites) {
+    for (LevelSummary worldsummary : favorites) {
 
-      if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
-          || worldsummary.getFileName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(listWorldSelection.new Entry(listWorldSelection, worldsummary));
+      if (s.isEmpty() || worldsummary.getLevelName().toLowerCase(Locale.ROOT).contains(s)
+          || worldsummary.getLevelId().toLowerCase(Locale.ROOT).contains(s)) {
+        entries.add(listWorldSelection.new WorldListEntry(listWorldSelection, worldsummary));
       }
     }
 
-    for (WorldSummary worldsummary : list) {
+    for (LevelSummary worldsummary : list) {
 
-      if (s.isEmpty() || worldsummary.getDisplayName().toLowerCase(Locale.ROOT).contains(s)
-          || worldsummary.getFileName().toLowerCase(Locale.ROOT).contains(s)) {
-        entries.add(listWorldSelection.new Entry(listWorldSelection, worldsummary));
+      if (s.isEmpty() || worldsummary.getLevelName().toLowerCase(Locale.ROOT).contains(s)
+          || worldsummary.getLevelId().toLowerCase(Locale.ROOT).contains(s)) {
+        entries.add(listWorldSelection.new WorldListEntry(listWorldSelection, worldsummary));
       }
     }
-    WorldSelectionList.Entry entry = listWorldSelection.getSelected();
+    WorldSelectionList.WorldListEntry entry = listWorldSelection.getSelected();
 
     if (entry != null) {
       WorldSelectionListEntryAccessor entryAccessor =
           (WorldSelectionListEntryAccessor) (Object) entry;
-      WorldSummary summary = entryAccessor.getWorldSummary();
+      LevelSummary summary = entryAccessor.getWorldSummary();
       Button deleteButton =
-          ((WorldSelectionScreenAccessor) listWorldSelection.getGuiWorldSelection())
+          ((WorldSelectionScreenAccessor) listWorldSelection.getScreen())
               .getDeleteButton();
 
       if (deleteButton != null && summary != null) {
@@ -203,7 +205,7 @@ public class FavoriteWorlds implements IFavoritesManager<WorldSelectionScreen> {
     }
   }
 
-  private static void disableDeletion(@Nonnull WorldSummary summary, Button deleteButton) {
-    deleteButton.active = !FavoritesList.contains(summary.getFileName());
+  private static void disableDeletion(@Nonnull LevelSummary summary, Button deleteButton) {
+    deleteButton.active = !FavoritesList.contains(summary.getLevelId());
   }
 }

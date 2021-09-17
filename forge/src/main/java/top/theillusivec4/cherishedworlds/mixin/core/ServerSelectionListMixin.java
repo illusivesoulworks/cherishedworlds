@@ -2,8 +2,8 @@ package top.theillusivec4.cherishedworlds.mixin.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.screen.MultiplayerScreen;
-import net.minecraft.client.gui.screen.ServerSelectionList;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import org.spongepowered.asm.mixin.Final;
@@ -19,26 +19,26 @@ public abstract class ServerSelectionListMixin {
 
   @Shadow
   @Final
-  private MultiplayerScreen owner;
+  private JoinMultiplayerScreen owner;
 
   @Shadow
   @Final
-  private List<ServerSelectionList.NormalEntry> serverListInternet;
+  private List<ServerSelectionList.OnlineServerEntry> serverListInternet;
 
   @SuppressWarnings("ConstantConditions")
   @Inject(at = @At("HEAD"), method = "updateOnlineServers", cancellable = true)
   private void _cherishedworlds_updateServers(ServerList serverList, CallbackInfo ci) {
     this.serverListInternet.clear();
-    List<ServerSelectionList.NormalEntry> favorites = new ArrayList<>();
-    List<ServerSelectionList.NormalEntry> others = new ArrayList<>();
+    List<ServerSelectionList.OnlineServerEntry> favorites = new ArrayList<>();
+    List<ServerSelectionList.OnlineServerEntry> others = new ArrayList<>();
 
-    for (int i = 0; i < serverList.countServers(); ++i) {
-      ServerData data = serverList.getServerData(i);
-      ServerSelectionList.NormalEntry entry =
+    for (int i = 0; i < serverList.size(); ++i) {
+      ServerData data = serverList.get(i);
+      ServerSelectionList.OnlineServerEntry entry =
           ServerSelectionListNormalEntryAccessor
               .cherishedworlds$createEntry((ServerSelectionList) (Object) this, this.owner, data);
 
-      if (FavoritesList.contains(data.serverName + data.serverIP)) {
+      if (FavoritesList.contains(data.name + data.ip)) {
         favorites.add(entry);
       } else {
         others.add(entry);
@@ -48,10 +48,10 @@ public abstract class ServerSelectionListMixin {
     this.serverListInternet.addAll(others);
 
     for (int i = 0; i < this.serverListInternet.size(); i++) {
-      serverList.set(i, this.serverListInternet.get(i).getServerData());
+      serverList.replace(i, this.serverListInternet.get(i).getServerData());
     }
     this.setList();
-    serverList.saveServerList();
+    serverList.save();
     ci.cancel();
   }
 

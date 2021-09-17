@@ -19,9 +19,9 @@
 
 package top.theillusivec4.cherishedworlds.client;
 
-import net.minecraft.client.gui.screen.MultiplayerScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.WorldSelectionScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.cherishedworlds.client.favorites.FavoriteServers;
@@ -37,10 +37,10 @@ public class ScreenEventsListener {
   public void onGuiDrawScreen(GuiScreenEvent.DrawScreenEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof WorldSelectionScreen) {
-      WORLDS.draw(evt, (WorldSelectionScreen) screen);
-    } else if (screen instanceof MultiplayerScreen) {
-      SERVERS.draw(evt, (MultiplayerScreen) screen);
+    if (screen instanceof SelectWorldScreen) {
+      WORLDS.draw(evt, (SelectWorldScreen) screen);
+    } else if (screen instanceof JoinMultiplayerScreen) {
+      SERVERS.draw(evt, (JoinMultiplayerScreen) screen);
     }
   }
 
@@ -48,10 +48,10 @@ public class ScreenEventsListener {
   public void onGuiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof WorldSelectionScreen) {
-      WORLDS.click(evt, (WorldSelectionScreen) screen);
-    } else if (screen instanceof MultiplayerScreen) {
-      SERVERS.click(evt, (MultiplayerScreen) screen);
+    if (screen instanceof SelectWorldScreen) {
+      WORLDS.click(evt, (SelectWorldScreen) screen);
+    } else if (screen instanceof JoinMultiplayerScreen) {
+      SERVERS.click(evt, (JoinMultiplayerScreen) screen);
     }
   }
 
@@ -59,10 +59,10 @@ public class ScreenEventsListener {
   public void onGuiMouseClicked(GuiScreenEvent.MouseClickedEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof WorldSelectionScreen) {
-      WORLDS.clicked((WorldSelectionScreen) screen);
-    } else if (screen instanceof MultiplayerScreen) {
-      SERVERS.clicked((MultiplayerScreen) screen);
+    if (screen instanceof SelectWorldScreen) {
+      WORLDS.clicked((SelectWorldScreen) screen);
+    } else if (screen instanceof JoinMultiplayerScreen) {
+      SERVERS.clicked((JoinMultiplayerScreen) screen);
     }
   }
 
@@ -70,10 +70,10 @@ public class ScreenEventsListener {
   public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
     Screen screen = evt.getGui();
 
-    if (screen instanceof WorldSelectionScreen) {
-      WORLDS.init((WorldSelectionScreen) screen);
-    } else if (screen instanceof MultiplayerScreen) {
-      SERVERS.init((MultiplayerScreen) screen);
+    if (screen instanceof SelectWorldScreen) {
+      WORLDS.init((SelectWorldScreen) screen);
+    } else if (screen instanceof JoinMultiplayerScreen) {
+      SERVERS.init((JoinMultiplayerScreen) screen);
     }
   }
 }

@@ -1,38 +1,38 @@
 package top.theillusivec4.cherishedworlds.client.favorites;
 
-import net.minecraft.client.gui.screen.MultiplayerScreen;
-import net.minecraft.client.gui.screen.ServerSelectionList;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import top.theillusivec4.cherishedworlds.mixin.core.MultiplayerScreenAccessor;
 
-public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
+public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen> {
 
   @Override
-  public void init(MultiplayerScreen screen) {
+  public void init(JoinMultiplayerScreen screen) {
     MultiplayerScreenAccessor accessor = (MultiplayerScreenAccessor) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
-      selectionList.updateOnlineServers(screen.getServerList());
+      selectionList.updateOnlineServers(screen.getServers());
     }
   }
 
   @Override
-  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, MultiplayerScreen screen) {
+  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, JoinMultiplayerScreen screen) {
     MultiplayerScreenAccessor accessor = (MultiplayerScreenAccessor) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
 
-      for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
-        ServerSelectionList.Entry entry = selectionList.getEventListeners().get(i);
+      for (int i = 0; i < selectionList.children().size(); i++) {
+        ServerSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry instanceof ServerSelectionList.NormalEntry) {
-          ServerData serverData = ((ServerSelectionList.NormalEntry) entry).getServerData();
+        if (entry instanceof ServerSelectionList.OnlineServerEntry) {
+          ServerData serverData = ((ServerSelectionList.OnlineServerEntry) entry).getServerData();
           boolean isFavorite =
-              FavoritesList.contains(serverData.serverName + serverData.serverIP);
+              FavoritesList.contains(serverData.name + serverData.ip);
           drawIcon(evt, screen, i, isFavorite, selectionList.getTop(),
               selectionList.getScrollAmount(), selectionList.getBottom());
         }
@@ -41,18 +41,18 @@ public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
   }
 
   @Override
-  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, MultiplayerScreen screen) {
+  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, JoinMultiplayerScreen screen) {
     MultiplayerScreenAccessor accessor = (MultiplayerScreenAccessor) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
     if (selectionList != null) {
 
-      for (int i = 0; i < selectionList.getEventListeners().size(); i++) {
-        ServerSelectionList.Entry entry = selectionList.getEventListeners().get(i);
+      for (int i = 0; i < selectionList.children().size(); i++) {
+        ServerSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry instanceof ServerSelectionList.NormalEntry) {
-          ServerData serverData = ((ServerSelectionList.NormalEntry) entry).getServerData();
-          boolean isFavorite = FavoritesList.contains(serverData.serverName + serverData.serverIP);
+        if (entry instanceof ServerSelectionList.OnlineServerEntry) {
+          ServerData serverData = ((ServerSelectionList.OnlineServerEntry) entry).getServerData();
+          boolean isFavorite = FavoritesList.contains(serverData.name + serverData.ip);
           int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
               .getScrollAmount());
           int x = evt.getGui().width / 2 - getOffset();
@@ -60,7 +60,7 @@ public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
           double mouseY = evt.getMouseY();
 
           if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-            String s = serverData.serverName + serverData.serverIP;
+            String s = serverData.name + serverData.ip;
 
             if (isFavorite) {
               FavoritesList.remove(s);
@@ -68,11 +68,11 @@ public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
               FavoritesList.add(s);
             }
             FavoritesList.save();
-            accessor.getSelectionList().updateOnlineServers(screen.getServerList());
+            accessor.getSelectionList().updateOnlineServers(screen.getServers());
             ServerSelectionList.Entry selected = accessor.getSelectionList().getSelected();
 
-            if (selected instanceof ServerSelectionList.NormalEntry) {
-              disableDeletion((ServerSelectionList.NormalEntry) selected,
+            if (selected instanceof ServerSelectionList.OnlineServerEntry) {
+              disableDeletion((ServerSelectionList.OnlineServerEntry) selected,
                   accessor.getDeleteButton());
             }
             return;
@@ -83,7 +83,7 @@ public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
   }
 
   @Override
-  public void clicked(MultiplayerScreen screen) {
+  public void clicked(JoinMultiplayerScreen screen) {
     // NO-OP
   }
 
@@ -92,8 +92,8 @@ public class FavoriteServers implements IFavoritesManager<MultiplayerScreen> {
     return 168;
   }
 
-  private static void disableDeletion(ServerSelectionList.NormalEntry entry, Button deleteButton) {
+  private static void disableDeletion(ServerSelectionList.OnlineServerEntry entry, Button deleteButton) {
     ServerData serverData = entry.getServerData();
-    deleteButton.active = !FavoritesList.contains(serverData.serverName + serverData.serverIP);
+    deleteButton.active = !FavoritesList.contains(serverData.name + serverData.ip);
   }
 }
