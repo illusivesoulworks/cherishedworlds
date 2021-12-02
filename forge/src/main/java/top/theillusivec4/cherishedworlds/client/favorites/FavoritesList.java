@@ -24,7 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
@@ -44,7 +44,7 @@ public class FavoritesList {
       if (compound == null) {
         return;
       }
-      ListTag list = compound.getList("favorites", Constants.NBT.TAG_STRING);
+      ListTag list = compound.getList("favorites", Tag.TAG_STRING);
 
       for (int i = 0; i < list.size(); ++i) {
         favorites.add(list.getString(i));

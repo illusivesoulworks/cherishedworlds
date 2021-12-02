@@ -17,11 +17,11 @@
 
 package top.theillusivec4.cherishedworlds.client.favorites;
 
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.multiplayer.ServerData;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import top.theillusivec4.cherishedworlds.mixin.core.MultiplayerScreenAccessor;
 
 public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen> {
@@ -37,7 +37,7 @@ public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen>
   }
 
   @Override
-  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, JoinMultiplayerScreen screen) {
+  public void draw(ScreenEvent.DrawScreenEvent.Post evt, JoinMultiplayerScreen screen) {
     MultiplayerScreenAccessor accessor = (MultiplayerScreenAccessor) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
@@ -58,7 +58,7 @@ public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen>
   }
 
   @Override
-  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, JoinMultiplayerScreen screen) {
+  public void click(ScreenEvent.MouseClickedEvent.Pre evt, JoinMultiplayerScreen screen) {
     MultiplayerScreenAccessor accessor = (MultiplayerScreenAccessor) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
@@ -72,7 +72,7 @@ public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen>
           boolean isFavorite = FavoritesList.contains(serverData.name + serverData.ip);
           int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
               .getScrollAmount());
-          int x = evt.getGui().width / 2 - getOffset();
+          int x = evt.getScreen().width / 2 - getOffset();
           double mouseX = evt.getMouseX();
           double mouseY = evt.getMouseY();
 
@@ -109,7 +109,8 @@ public class FavoriteServers implements IFavoritesManager<JoinMultiplayerScreen>
     return 168;
   }
 
-  private static void disableDeletion(ServerSelectionList.OnlineServerEntry entry, Button deleteButton) {
+  private static void disableDeletion(ServerSelectionList.OnlineServerEntry entry,
+                                      Button deleteButton) {
     ServerData serverData = entry.getServerData();
     deleteButton.active = !FavoritesList.contains(serverData.name + serverData.ip);
   }

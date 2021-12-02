@@ -20,7 +20,7 @@ package top.theillusivec4.cherishedworlds.client;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.theillusivec4.cherishedworlds.client.favorites.FavoriteServers;
 import top.theillusivec4.cherishedworlds.client.favorites.FavoriteWorlds;
@@ -32,8 +32,8 @@ public class ScreenEventsListener {
   private static final FavoriteServers SERVERS = new FavoriteServers();
 
   @SubscribeEvent
-  public void onGuiDrawScreen(GuiScreenEvent.DrawScreenEvent.Post evt) {
-    Screen screen = evt.getGui();
+  public void onGuiDrawScreen(ScreenEvent.DrawScreenEvent.Post evt) {
+    Screen screen = evt.getScreen();
 
     if (screen instanceof SelectWorldScreen) {
       WORLDS.draw(evt, (SelectWorldScreen) screen);
@@ -43,8 +43,8 @@ public class ScreenEventsListener {
   }
 
   @SubscribeEvent
-  public void onGuiMouseClick(GuiScreenEvent.MouseClickedEvent.Pre evt) {
-    Screen screen = evt.getGui();
+  public void onGuiMouseClick(ScreenEvent.MouseClickedEvent.Pre evt) {
+    Screen screen = evt.getScreen();
 
     if (screen instanceof SelectWorldScreen) {
       WORLDS.click(evt, (SelectWorldScreen) screen);
@@ -54,8 +54,8 @@ public class ScreenEventsListener {
   }
 
   @SubscribeEvent
-  public void onGuiMouseClicked(GuiScreenEvent.MouseClickedEvent.Post evt) {
-    Screen screen = evt.getGui();
+  public void onGuiMouseClicked(ScreenEvent.MouseClickedEvent.Post evt) {
+    Screen screen = evt.getScreen();
 
     if (screen instanceof SelectWorldScreen) {
       WORLDS.clicked((SelectWorldScreen) screen);
@@ -65,8 +65,8 @@ public class ScreenEventsListener {
   }
 
   @SubscribeEvent
-  public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post evt) {
-    Screen screen = evt.getGui();
+  public void onGuiInit(ScreenEvent.InitScreenEvent.Post evt) {
+    Screen screen = evt.getScreen();
 
     if (screen instanceof SelectWorldScreen) {
       WORLDS.init((SelectWorldScreen) screen);

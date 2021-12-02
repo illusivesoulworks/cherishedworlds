@@ -24,18 +24,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 import javax.annotation.Nonnull;
-import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ErrorScreen;
-import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
-import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ErrorScreen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.LevelSummary;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionListEntryAccessor;
 import top.theillusivec4.cherishedworlds.mixin.core.WorldSelectionScreenAccessor;
@@ -59,7 +59,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
 
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void draw(GuiScreenEvent.DrawScreenEvent.Post evt, SelectWorldScreen screen) {
+  public void draw(ScreenEvent.DrawScreenEvent.Post evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getList();
 
@@ -85,7 +85,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
 
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void click(GuiScreenEvent.MouseClickedEvent.Pre evt, SelectWorldScreen screen) {
+  public void click(ScreenEvent.MouseClickedEvent.Pre evt, SelectWorldScreen screen) {
     WorldSelectionScreenAccessor accessor = (WorldSelectionScreenAccessor) screen;
     WorldSelectionList selectionList = accessor.getList();
 
@@ -103,7 +103,7 @@ public class FavoriteWorlds implements IFavoritesManager<SelectWorldScreen> {
             boolean isFavorite = FavoritesList.contains(summary.getLevelId());
             int top = (int) (selectionList.getTop() + 15 + 36 * i - selectionList
                 .getScrollAmount());
-            int x = evt.getGui().width / 2 - getOffset();
+            int x = evt.getScreen().width / 2 - getOffset();
             double mouseX = evt.getMouseX();
             double mouseY = evt.getMouseY();
 
