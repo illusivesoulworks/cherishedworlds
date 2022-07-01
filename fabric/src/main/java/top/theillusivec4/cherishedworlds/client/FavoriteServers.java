@@ -5,6 +5,8 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Pair;
+import top.theillusivec4.cherishedworlds.integration.CompactUiModule;
 import top.theillusivec4.cherishedworlds.mixin.AccessorEntryListWidget;
 import top.theillusivec4.cherishedworlds.mixin.AccessorMultiplayerScreen;
 
@@ -57,8 +59,17 @@ public class FavoriteServers implements FavoritesManager<MultiplayerScreen> {
         if (entry instanceof MultiplayerServerListWidget.ServerEntry) {
           ServerInfo serverInfo = ((MultiplayerServerListWidget.ServerEntry) entry).getServer();
           boolean isFavorite = FavoritesList.contains(serverInfo.name + serverInfo.address);
-          int top = (int) (((AccessorEntryListWidget) serverListWidget).getTop() + 15 + 36 * i -
-              serverListWidget.getScrollAmount());
+          int topOffsetMod = 15;
+          int height = 36;
+
+          if (CompactUiModule.isLoaded()) {
+            Pair<Integer, Integer> result = CompactUiModule.getOffsets(height);
+            topOffsetMod = result.getLeft();
+            height = result.getRight();
+          }
+          int top = (int) (
+              ((AccessorEntryListWidget) serverListWidget).getTop() + topOffsetMod + height * i -
+                  serverListWidget.getScrollAmount());
           int x = screen.width / 2 - getOffset();
 
           if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {

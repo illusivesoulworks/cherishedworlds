@@ -7,7 +7,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
+import top.theillusivec4.cherishedworlds.integration.CompactUiModule;
 
 public interface FavoritesManager<T extends Screen> {
 
@@ -30,7 +32,15 @@ public interface FavoritesManager<T extends Screen> {
                           double scrollAmount, int index, int topOffset, int bottomOffset,
                           boolean isFavorite) {
     Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
-    int top = (int) (topOffset + 15 + 36 * index - scrollAmount);
+    int topOffsetMod = 15;
+    int height = 36;
+
+    if (CompactUiModule.isLoaded()) {
+      Pair<Integer, Integer> result = CompactUiModule.getOffsets(height);
+      topOffsetMod = result.getLeft();
+      height = result.getRight();
+    }
+    int top = (int) (topOffset + topOffsetMod + height * index - scrollAmount);
     int x = screen.width / 2 - getOffset();
 
     if (top < (bottomOffset - 8) && top > topOffset) {

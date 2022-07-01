@@ -34,10 +34,12 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Pair;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.level.storage.LevelStorageException;
 import net.minecraft.world.level.storage.LevelSummary;
 import top.theillusivec4.cherishedworlds.CherishedWorldsMod;
+import top.theillusivec4.cherishedworlds.integration.CompactUiModule;
 import top.theillusivec4.cherishedworlds.mixin.AccessorEntryListWidget;
 import top.theillusivec4.cherishedworlds.mixin.AccessorSelectWorldScreen;
 import top.theillusivec4.cherishedworlds.mixin.AccessorWorldListEntry;
@@ -99,8 +101,17 @@ public class FavoriteWorlds implements FavoritesManager<SelectWorldScreen> {
 
           if (summary != null) {
             boolean isFavorite = FavoritesList.contains(summary.getName());
-            int top = (int) (((AccessorEntryListWidget) worldList).getTop() + 15 + 36 * i -
-                worldList.getScrollAmount());
+            int topOffsetMod = 15;
+            int height = 36;
+
+            if (CompactUiModule.isLoaded()) {
+              Pair<Integer, Integer> result = CompactUiModule.getOffsets(height);
+              topOffsetMod = result.getLeft();
+              height = result.getRight();
+            }
+            int top =
+                (int) (((AccessorEntryListWidget) worldList).getTop() + topOffsetMod + height * i -
+                    worldList.getScrollAmount());
             int x = screen.width / 2 - getOffset();
 
             if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
