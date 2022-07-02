@@ -124,8 +124,9 @@ public class CherishedWorldsMixinHooks {
     }
     WorldSelectionList.Entry entry = selectionList.getSelected();
 
-    if (entry != null) {
-      AccessorWorldSelectionListEntry entryAccessor = (AccessorWorldSelectionListEntry) entry;
+    if (entry instanceof WorldSelectionList.WorldListEntry) {
+      @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
+          (AccessorWorldSelectionListEntry) entry;
       LevelSummary summary = entryAccessor.getWorldSummary();
       Button deleteButton =
           ((AccessorWorldSelectionScreen) selectionList.getScreen()).getDeleteButton();

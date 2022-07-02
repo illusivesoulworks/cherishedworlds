@@ -55,8 +55,9 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
       for (int i = 0; i < selectionList.children().size(); i++) {
         WorldSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry != null) {
-          AccessorWorldSelectionListEntry entryAccessor = (AccessorWorldSelectionListEntry) entry;
+        if (entry instanceof WorldSelectionList.WorldListEntry) {
+          @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
+              (AccessorWorldSelectionListEntry) entry;
           LevelSummary summary = entryAccessor.getWorldSummary();
 
           if (summary != null) {
@@ -81,8 +82,9 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
       for (int i = 0; i < selectionList.children().size(); i++) {
         WorldSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry != null) {
-          AccessorWorldSelectionListEntry entryAccessor = (AccessorWorldSelectionListEntry) entry;
+        if (entry instanceof WorldSelectionList.WorldListEntry) {
+          @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
+              (AccessorWorldSelectionListEntry) entry;
           LevelSummary summary = entryAccessor.getWorldSummary();
 
           if (summary != null) {
@@ -129,8 +131,9 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
     if (selectionList != null) {
       WorldSelectionList.Entry entry = selectionList.getSelected();
 
-      if (entry != null) {
-        AccessorWorldSelectionListEntry entryAccessor = (AccessorWorldSelectionListEntry) entry;
+      if (entry instanceof WorldSelectionList.WorldListEntry) {
+        @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
+            (AccessorWorldSelectionListEntry) entry;
         LevelSummary summary = entryAccessor.getWorldSummary();
         Button deleteButton = accessor.getDeleteButton();
 
