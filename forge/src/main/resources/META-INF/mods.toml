@@ -1,27 +1,26 @@
 modLoader="javafml"
-loaderVersion="${loader_version}"
-license="LGPL-3.0-or-later"
-issueTrackerURL="https://github.com/TheIllusiveC4/CherishedWorlds/issues"
-logoFile="cherishedworlds_icon.png"
+loaderVersion="[41,)"
+license="${license}"
 logoBlur=false
+issueTrackerURL="${issue_tracker}"
+logoFile="${mod_id}_icon.png"
 [[mods]]
-modId="cherishedworlds"
+modId="${mod_id}"
 version="${version}"
-displayName="Cherished Worlds"
-displayURL="https://github.com/TheIllusiveC4/CherishedWorlds"
-authors="C4"
+displayName="${mod_name}"
+authors="${mod_author}"
 description='''
-Favorite/pin/bookmark certain worlds, which will always be at the top of the list and cannot be deleted.
+${mod_description}
 '''
 [[dependencies.cherishedworlds]]
     modId="forge"
     mandatory=true
     versionRange="${forge_version_range}"
     ordering="NONE"
-    side="CLIENT"
+    side="BOTH"
 [[dependencies.cherishedworlds]]
     modId="minecraft"
     mandatory=true
-    versionRange="${mc_version_range}"
+    versionRange="${forge_mc_version_range}"
     ordering="NONE"
-    side="CLIENT"
+    side="BOTH"
