@@ -40,7 +40,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
       EditBox textField = accessor.getSearchBox();
 
       if (textField != null) {
-        selectionList.refreshList(textField.getValue());
+        selectionList.updateFilter(textField.getValue());
       }
     }
   }
@@ -113,7 +113,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
               EditBox textField = accessor.getSearchBox();
 
               if (textField != null) {
-                selectionList.refreshList(textField.getValue());
+                selectionList.updateFilter(textField.getValue());
               }
               return;
             }
