@@ -18,11 +18,13 @@
 package com.illusivesoulworks.cherishedworlds.client.favorites;
 
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
+import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionList;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import com.illusivesoulworks.cherishedworlds.platform.Services;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import java.util.List;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -111,9 +113,18 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
               }
               FavoritesList.save();
               EditBox textField = accessor.getSearchBox();
+              String filter = "";
 
               if (textField != null) {
-                selectionList.updateFilter(textField.getValue());
+                filter = textField.getValue();
+              }
+              AccessorWorldSelectionList accessorWorldSelectionList =
+                  (AccessorWorldSelectionList) selectionList;
+              List<LevelSummary> levelSummaries =
+                  accessorWorldSelectionList.getCurrentlyDisplayedLevels();
+
+              if (levelSummaries != null) {
+                accessorWorldSelectionList.callFillLevels(filter, levelSummaries);
               }
               return;
             }

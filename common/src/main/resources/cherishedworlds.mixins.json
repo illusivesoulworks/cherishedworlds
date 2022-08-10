@@ -8,6 +8,7 @@
     "client": [
       "AccessorJoinMultiplayerScreen",
       "AccessorServerSelectionListEntry",
+      "AccessorWorldSelectionList",
       "AccessorWorldSelectionListEntry",
       "AccessorWorldSelectionScreen",
       "MixinEditServerScreen",
