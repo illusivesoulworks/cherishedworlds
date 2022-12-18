@@ -15,18 +15,22 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.illusivesoulworks.cherishedworlds.platform.services;
+package com.illusivesoulworks.cherishedworlds;
 
-import java.nio.file.Path;
-import net.minecraft.client.gui.components.AbstractSelectionList;
+import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
+import com.mojang.datafixers.util.Pair;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 
-public interface IPlatformHelper {
+public class CherishedWorldsQuiltMod implements ClientModInitializer {
 
-  boolean isModLoaded(String modId);
-
-  Path getGamePath();
-
-  int getTop(AbstractSelectionList<?> abstractSelectionList);
-
-  int getBottom(AbstractSelectionList<?> abstractSelectionList);
+  @Override
+  public void onInitializeClient(ModContainer modContainer) {
+    CherishedWorldsCommonMod.setup();
+    ViewerIntegration.register("compact-ui", (height) -> {
+      int newHeight = (height - 4) / 3 + 4;
+      int newTopOffset = newHeight / 2 - 3;
+      return new Pair<>(newTopOffset, newHeight);
+    });
+  }
 }

@@ -17,31 +17,31 @@
 
 package com.illusivesoulworks.cherishedworlds.platform;
 
+import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorAbstractSelectionList;
 import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
 import java.nio.file.Path;
 import net.minecraft.client.gui.components.AbstractSelectionList;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLPaths;
+import org.quiltmc.loader.api.QuiltLoader;
 
-public class ForgePlatformHelper implements IPlatformHelper {
+public class QuiltPlatformHelper implements IPlatformHelper {
 
   @Override
   public boolean isModLoaded(String modId) {
-    return ModList.get().isLoaded(modId);
+    return QuiltLoader.isModLoaded(modId);
   }
 
   @Override
   public Path getGamePath() {
-    return FMLPaths.GAMEDIR.get();
+    return QuiltLoader.getGameDir();
   }
 
   @Override
   public int getTop(AbstractSelectionList<?> abstractSelectionList) {
-    return abstractSelectionList.getTop();
+    return ((AccessorAbstractSelectionList) abstractSelectionList).getTop();
   }
 
   @Override
   public int getBottom(AbstractSelectionList<?> abstractSelectionList) {
-    return abstractSelectionList.getBottom();
+    return ((AccessorAbstractSelectionList) abstractSelectionList).getBottom();
   }
 }

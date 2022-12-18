@@ -25,33 +25,23 @@ import net.minecraft.client.gui.components.AbstractSelectionList;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
-    @Override
-    public String getPlatformName() {
-        return "Fabric";
-    }
+  @Override
+  public boolean isModLoaded(String modId) {
+    return FabricLoader.getInstance().isModLoaded(modId);
+  }
 
-    @Override
-    public boolean isModLoaded(String modId) {
-        return FabricLoader.getInstance().isModLoaded(modId);
-    }
+  @Override
+  public Path getGamePath() {
+    return FabricLoader.getInstance().getGameDir();
+  }
 
-    @Override
-    public boolean isDevelopmentEnvironment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
-    }
+  @Override
+  public int getTop(AbstractSelectionList<?> abstractSelectionList) {
+    return ((AccessorAbstractSelectionList) abstractSelectionList).getTop();
+  }
 
-    @Override
-    public Path getGamePath() {
-        return FabricLoader.getInstance().getGameDir();
-    }
-
-    @Override
-    public int getTop(AbstractSelectionList<?> abstractSelectionList) {
-        return ((AccessorAbstractSelectionList) abstractSelectionList).getTop();
-    }
-
-    @Override
-    public int getBottom(AbstractSelectionList<?> abstractSelectionList) {
-        return ((AccessorAbstractSelectionList) abstractSelectionList).getBottom();
-    }
+  @Override
+  public int getBottom(AbstractSelectionList<?> abstractSelectionList) {
+    return ((AccessorAbstractSelectionList) abstractSelectionList).getBottom();
+  }
 }

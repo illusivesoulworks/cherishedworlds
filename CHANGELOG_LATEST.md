@@ -2,10 +2,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.19.x/CHANGELOG.md).
 
-## [6.0.1+1.19.2] - 2022.08.10
+## [6.0.2+1.19.3] - 2022.12.18
+### Added
+- Added Quilt support
 ### Changed
-- Updated to Minecraft 1.19.2
-- [Forge] Updated to Forge 43+
-- [Fabric] Updated to Fabric API 0.59.0+
-### Fixed
-- Fixed world selection list not updating when saving/removing favorites
+- Updated to Minecraft 1.19.3
+- [Forge] Updated to Forge 44+
+- [Fabric] Updated to Fabric API 0.69.0+
