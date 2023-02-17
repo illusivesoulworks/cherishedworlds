@@ -136,7 +136,6 @@ modrinth {
     versionType = "${release_type}"
     changelog = file('../CHANGELOG_LATEST.md').text
     uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
-    debugMode = true
     additionalFiles = [sourcesJar]
     gameVersions = "${release_versions}".split(",") as List<String>
     loaders = ["quilt"]
