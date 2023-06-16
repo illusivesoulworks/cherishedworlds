@@ -20,8 +20,8 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorJoinMultiplayerScreen;
 import com.illusivesoulworks.cherishedworlds.platform.Services;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
@@ -40,7 +40,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
   }
 
   @Override
-  public void draw(int mouseX, int mouseY, PoseStack poseStack, JoinMultiplayerScreen screen) {
+  public void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, JoinMultiplayerScreen screen) {
     AccessorJoinMultiplayerScreen accessor = (AccessorJoinMultiplayerScreen) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
@@ -54,7 +54,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
           int top = Services.PLATFORM.getTop(selectionList);
           int bottom = Services.PLATFORM.getBottom(selectionList);
           boolean isFavorite = FavoritesList.contains(serverData.name + serverData.ip);
-          drawIcon(mouseX, mouseY, poseStack, screen, i, isFavorite, top,
+          drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
               selectionList.getScrollAmount(), bottom);
         }
       }

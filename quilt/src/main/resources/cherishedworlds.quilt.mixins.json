@@ -6,10 +6,7 @@
     "mixins": [
     ],
     "client": [
-      "AccessorAbstractSelectionList",
-      "MixinQuiltJoinMultiplayerScreen",
-      "MixinMouseHandler",
-      "MixinSelectWorldScreen"
+      "AccessorAbstractSelectionList"
     ],
     "injectors": {
       "defaultRequire": 1

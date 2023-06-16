@@ -24,7 +24,7 @@ public class ScreenEventsListener {
 
   @SubscribeEvent
   public void onGuiDrawScreen(ScreenEvent.Render.Post evt) {
-    ScreenEvents.onDraw(evt.getMouseX(), evt.getMouseY(), evt.getPoseStack(), evt.getScreen());
+    ScreenEvents.onDraw(evt.getMouseX(), evt.getMouseY(), evt.getGuiGraphics(), evt.getScreen());
   }
 
   @SubscribeEvent

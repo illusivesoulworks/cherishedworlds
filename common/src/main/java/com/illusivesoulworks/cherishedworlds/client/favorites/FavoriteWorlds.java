@@ -22,9 +22,9 @@ import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionLi
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import com.illusivesoulworks.cherishedworlds.platform.Services;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -48,7 +48,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
   }
 
   @Override
-  public void draw(int mouseX, int mouseY, PoseStack poseStack, SelectWorldScreen screen) {
+  public void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, SelectWorldScreen screen) {
     AccessorWorldSelectionScreen accessor = (AccessorWorldSelectionScreen) screen;
     WorldSelectionList selectionList = accessor.getList();
 
@@ -66,7 +66,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
             int top = Services.PLATFORM.getTop(selectionList);
             int bottom = Services.PLATFORM.getBottom(selectionList);
             boolean isFavorite = FavoritesList.contains(summary.getLevelId());
-            drawIcon(mouseX, mouseY, poseStack, screen, i, isFavorite, top,
+            drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
                 selectionList.getScrollAmount(), bottom);
           }
         }

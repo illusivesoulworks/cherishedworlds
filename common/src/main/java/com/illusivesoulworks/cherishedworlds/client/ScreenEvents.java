@@ -20,6 +20,7 @@ package com.illusivesoulworks.cherishedworlds.client;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteServers;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteWorlds;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -29,12 +30,12 @@ public class ScreenEvents {
   private static final FavoriteWorlds WORLDS = new FavoriteWorlds();
   private static final FavoriteServers SERVERS = new FavoriteServers();
 
-  public static void onDraw(int mouseX, int mouseY, PoseStack poseStack, Screen screen) {
+  public static void onDraw(int mouseX, int mouseY, GuiGraphics guiGraphics, Screen screen) {
 
     if (screen instanceof SelectWorldScreen) {
-      WORLDS.draw(mouseX, mouseY, poseStack, (SelectWorldScreen) screen);
+      WORLDS.draw(mouseX, mouseY, guiGraphics, (SelectWorldScreen) screen);
     } else if (screen instanceof JoinMultiplayerScreen) {
-      SERVERS.draw(mouseX, mouseY, poseStack, (JoinMultiplayerScreen) screen);
+      SERVERS.draw(mouseX, mouseY, guiGraphics, (JoinMultiplayerScreen) screen);
     }
   }
 

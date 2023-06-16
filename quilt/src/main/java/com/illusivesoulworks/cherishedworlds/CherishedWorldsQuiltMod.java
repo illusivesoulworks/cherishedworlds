@@ -21,12 +21,26 @@ import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.mojang.datafixers.util.Pair;
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import org.quiltmc.qsl.screen.api.client.ScreenEvents;
+import org.quiltmc.qsl.screen.api.client.ScreenMouseEvents;
 
 public class CherishedWorldsQuiltMod implements ClientModInitializer {
 
   @Override
   public void onInitializeClient(ModContainer modContainer) {
     CherishedWorldsCommonMod.setup();
+    ScreenEvents.AFTER_INIT.register(
+        (screen, client, firstInit) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onInit(
+            screen));
+    ScreenEvents.AFTER_RENDER.register(
+        (screen, graphics, mouseX, mouseY, tickDelta) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onDraw(
+            mouseX, mouseY, graphics, screen));
+    ScreenMouseEvents.AFTER_MOUSE_CLICK.register(
+        (screen, mouseX, mouseY, button) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClick(
+            (int) mouseX, (int) mouseY, screen));
+    ScreenMouseEvents.AFTER_MOUSE_RELEASE.register(
+        (screen, mouseX, mouseY, button) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClicked(
+            screen));
     ViewerIntegration.register("compact-ui", (height) -> {
       int newHeight = (height - 4) / 3 + 4;
       int newTopOffset = newHeight / 2 - 3;
