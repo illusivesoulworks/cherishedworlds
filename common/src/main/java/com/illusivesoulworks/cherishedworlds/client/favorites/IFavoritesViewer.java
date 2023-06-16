@@ -19,8 +19,6 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

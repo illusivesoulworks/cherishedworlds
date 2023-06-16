@@ -19,7 +19,6 @@ package com.illusivesoulworks.cherishedworlds.client;
 
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteServers;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteWorlds;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
