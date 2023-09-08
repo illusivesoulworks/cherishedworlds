@@ -92,18 +92,27 @@ def publishDiscord() {
         def modrinthLinks = new StringJoiner('\\\\n')
 
         if (project(':fabric').hasProperty('modrinth_link')) {
-            cfLinks.add("[Fabric](${project(':fabric').findProperty('modrinth_link')})")
+            modrinthLinks.add("[Fabric](${project(':fabric').findProperty('modrinth_link')})")
         }
 
         if (project(':forge').hasProperty('modrinth_link')) {
-            cfLinks.add("[Forge](${project(':forge').findProperty('modrinth_link')})")
+            modrinthLinks.add("[Forge](${project(':forge').findProperty('modrinth_link')})")
         }
 
         if (project(':quilt').hasProperty('modrinth_link')) {
-            cfLinks.add("[Quilt](${project(':quilt').findProperty('modrinth_link')})")
+            modrinthLinks.add("[Quilt](${project(':quilt').findProperty('modrinth_link')})")
         }
         println(cfLinks)
         println(modrinthLinks)
+        def changelog = file("CHANGELOG_LATEST.md").getText()
+        changelog = changelog.substring(changelog.indexOf("##"))
+        changelog = changelog.replaceAll("\r\n","\\\\r\\\\n").replaceAll("\"","\\\\\"")
+
+        if (changelog.length() >= 1024) {
+            changelog = changelog.substring(0, changelog.length() - 100)
+            changelog = changelog + "...[(See more)](https://github.com/illusivesoulworks/cherishedworlds/blob/1.20.x/CHANGELOG.md)"
+        }
+        println(changelog)
         final String message = """
             {
               "embeds": [
@@ -127,7 +136,7 @@ def publishDiscord() {
                     },
                     {
                       "name": "Changelog",
-                      "value": "${file("CHANGELOG_LATEST.md").text.replaceAll("\n","\\\\n")}"
+                      "value": "${changelog}"
                     }
                   ],
                   "thumbnail": {
