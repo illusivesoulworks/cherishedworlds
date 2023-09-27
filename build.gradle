@@ -106,7 +106,7 @@ def publishDiscord() {
         println(modrinthLinks)
         def changelog = file("CHANGELOG_LATEST.md").getText()
         changelog = changelog.substring(changelog.indexOf("##"))
-        changelog = changelog.replaceAll("\r\n","\\\\r\\\\n").replaceAll("\"","\\\\\"")
+        changelog = changelog.replaceAll("\n","\\\\n").replaceAll("\"","\\\\\"")
 
         if (changelog.length() >= 1024) {
             changelog = changelog.substring(0, changelog.length() - 100)
@@ -178,6 +178,15 @@ tasks.getByPath(':forge:publishCurseForge').configure {
 }
 tasks.getByPath(':fabric:modrinth').mustRunAfter(':quilt:modrinth')
 tasks.getByPath(':forge:modrinth').mustRunAfter(':fabric:modrinth')
+
+tasks.register('publishFabricForge') {
+    dependsOn ':fabric:modrinth', ':forge:modrinth'
+    dependsOn ':fabric:publishCurseForge', ':forge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
 
 tasks.register('publishFabricForgeQuilt') {
     dependsOn ':fabric:modrinth', ':forge:modrinth', ':quilt:modrinth'

@@ -45,5 +45,5 @@ public abstract class MixinWorldSelectionList extends
   }
 
   @Shadow
-  abstract boolean filterAccepts(String filter, LevelSummary level);
+  protected abstract boolean filterAccepts(String filter, LevelSummary level);
 }
