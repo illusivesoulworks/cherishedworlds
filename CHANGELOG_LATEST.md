@@ -2,6 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.20.x/CHANGELOG.md).
 
-## [6.1.3+1.20.1] - 2023.10.26
+## [6.1.4+1.20.1] - 2023.10.27
 ### Fixed
-- Fixed crashes when swapping servers on the server list with mods that edit the server screen [#25](https://github.com/illusivesoulworks/cherishedworlds/issues/25)
+- [Forge] Fixed startup crash
