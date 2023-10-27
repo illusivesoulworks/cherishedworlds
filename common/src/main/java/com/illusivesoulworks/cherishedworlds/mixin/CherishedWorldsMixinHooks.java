@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.cherishedworlds.mixin;
 
+import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoritesList;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorServerSelectionListEntry;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
@@ -37,11 +38,24 @@ import net.minecraft.world.level.storage.LevelSummary;
 public class CherishedWorldsMixinHooks {
 
   public static boolean isNotValidSwap(ServerList serverList, int pos1, int pos2) {
-    ServerData data1 = serverList.get(pos1);
-    ServerData data2 = serverList.get(pos2);
-    boolean isFavored1 = FavoritesList.contains(data1.name + data1.ip);
-    boolean isFavored2 = FavoritesList.contains(data2.name + data2.ip);
-    return (isFavored1 && !isFavored2) || (!isFavored1 && isFavored2);
+    int offset = 0;
+
+    if (pos2 >= serverList.size()) {
+      offset = pos2 - serverList.size() + 1;
+    } else if (pos1 >= serverList.size()) {
+      offset = pos1 - serverList.size() + 1;
+    }
+
+    try {
+      ServerData data1 = serverList.get(pos1 - offset);
+      ServerData data2 = serverList.get(pos2 - offset);
+      boolean isFavored1 = FavoritesList.contains(data1.name + data1.ip);
+      boolean isFavored2 = FavoritesList.contains(data2.name + data2.ip);
+      return (isFavored1 && !isFavored2) || (!isFavored1 && isFavored2);
+    } catch (IndexOutOfBoundsException e) {
+      CherishedWorldsConstants.LOG.error("Error trying to swap servers!", e);
+    }
+    return false;
   }
 
   public static void renameFavorite(String prevName, String newName) {
