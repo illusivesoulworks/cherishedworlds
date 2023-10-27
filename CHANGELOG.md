@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 6.0.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [6.1.3+1.20.1] - 2023.10.26
+### Fixed
+- Fixed crashes when swapping servers on the server list with mods that edit the server screen [#25](https://github.com/illusivesoulworks/cherishedworlds/issues/25)
+
 ## [6.1.2+1.20.1] - 2023.09.08
 ### Added
 - Added `be_by` localization (thanks Gazmanovich!) [#23](https://github.com/illusivesoulworks/cherishedworlds/pull/23)

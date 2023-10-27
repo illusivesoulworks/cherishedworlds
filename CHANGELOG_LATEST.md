@@ -2,8 +2,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.20.x/CHANGELOG.md).
 
-## [6.1.2+1.20.1] - 2023.09.08
-### Added
-- Added `be_by` localization (thanks Gazmanovich!) [#23](https://github.com/illusivesoulworks/cherishedworlds/pull/23)
+## [6.1.3+1.20.1] - 2023.10.26
 ### Fixed
-- Fixed `tt_ru` localization (thanks Amirhan-Taipovjan-Greatest-I!) [#24](https://github.com/illusivesoulworks/cherishedworlds/pull/24)
+- Fixed crashes when swapping servers on the server list with mods that edit the server screen [#25](https://github.com/illusivesoulworks/cherishedworlds/issues/25)
