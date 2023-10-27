@@ -76,7 +76,7 @@ subprojects {
 
 def publishDiscord() {
     try {
-        def cfLinks = new StringJoiner('\\\\n')
+        def cfLinks = new StringJoiner('\\n')
 
         if (project(':fabric').hasProperty('curse_link')) {
             cfLinks.add("[Fabric](${project(':fabric').findProperty('curse_link')})")
