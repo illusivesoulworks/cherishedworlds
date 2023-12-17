@@ -21,7 +21,6 @@ import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionList;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
-import com.illusivesoulworks.cherishedworlds.platform.Services;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
@@ -63,8 +62,8 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
           LevelSummary summary = entryAccessor.getWorldSummary();
 
           if (summary != null) {
-            int top = Services.PLATFORM.getTop(selectionList);
-            int bottom = Services.PLATFORM.getBottom(selectionList);
+            int top = selectionList.getY();
+            int bottom = selectionList.getBottom();
             boolean isFavorite = FavoritesList.contains(summary.getLevelId());
             drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
                 selectionList.getScrollAmount(), bottom);
@@ -99,7 +98,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
               topOffsetMod = override.getFirst();
               height = override.getSecond();
             }
-            int top = (int) (Services.PLATFORM.getTop(selectionList) + topOffsetMod + height * i -
+            int top = (int) (selectionList.getY() + topOffsetMod + height * i -
                 selectionList.getScrollAmount());
             int x = screen.width / 2 - getHorizontalOffset();
 

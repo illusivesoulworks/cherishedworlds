@@ -15,18 +15,22 @@
  * License along with Cherished Worlds.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.illusivesoulworks.cherishedworlds.mixin.core;
+package com.illusivesoulworks.cherishedworlds.platform;
 
-import net.minecraft.client.gui.components.AbstractSelectionList;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
+import java.nio.file.Path;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 
-@Mixin(AbstractSelectionList.class)
-public interface AccessorAbstractSelectionList {
+public class NeoForgePlatformHelper implements IPlatformHelper {
 
-  @Accessor(value = "y0")
-  int getTop();
+  @Override
+  public boolean isModLoaded(String modId) {
+    return ModList.get().isLoaded(modId);
+  }
 
-  @Accessor(value = "y1")
-  int getBottom();
+  @Override
+  public Path getGamePath() {
+    return FMLPaths.GAMEDIR.get();
+  }
 }

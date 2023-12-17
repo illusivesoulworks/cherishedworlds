@@ -17,11 +17,9 @@
 
 package com.illusivesoulworks.cherishedworlds.platform;
 
-import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorAbstractSelectionList;
 import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.components.AbstractSelectionList;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -33,15 +31,5 @@ public class FabricPlatformHelper implements IPlatformHelper {
   @Override
   public Path getGamePath() {
     return FabricLoader.getInstance().getGameDir();
-  }
-
-  @Override
-  public int getTop(AbstractSelectionList<?> abstractSelectionList) {
-    return ((AccessorAbstractSelectionList) abstractSelectionList).getTop();
-  }
-
-  @Override
-  public int getBottom(AbstractSelectionList<?> abstractSelectionList) {
-    return ((AccessorAbstractSelectionList) abstractSelectionList).getBottom();
   }
 }

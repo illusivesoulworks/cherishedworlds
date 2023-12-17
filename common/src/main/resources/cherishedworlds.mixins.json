@@ -20,6 +20,6 @@
     "injectors": {
       "defaultRequire": 1
     },
-    "refmap": "${refmap_target}refmap.json"
+    "refmap": "${refmap_target}.refmap.json"
   }
   

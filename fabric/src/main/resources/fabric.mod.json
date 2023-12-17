@@ -3,29 +3,29 @@
   "id": "${mod_id}",
   "version": "${version}",
   "name": "${mod_name}",
-  "description": "${mod_description}",
+  "description": "${description}",
   "authors": [
     "${mod_author}"
   ],
   "contact": {
-    "issues": "${issue_tracker}"
+    "sources": "${sources_url}",
+    "issues": "${issues_url}"
   },
   "license": "${license}",
   "icon": "${mod_id}_icon.png",
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "client": [
       "com.illusivesoulworks.cherishedworlds.CherishedWorldsFabricMod"
     ]
   },
   "mixins": [
-    "cherishedworlds.mixins.json",
-    "cherishedworlds.fabric.mixins.json"
+    "cherishedworlds.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14",
     "fabric-api": "*",
-    "minecraft": "${fabric_mc_version_range}",
+    "minecraft": "${minecraft_version_range_alt}",
     "java": ">=17"
   }
 }

@@ -18,15 +18,10 @@
 package com.illusivesoulworks.cherishedworlds.platform.services;
 
 import java.nio.file.Path;
-import net.minecraft.client.gui.components.AbstractSelectionList;
 
 public interface IPlatformHelper {
 
   boolean isModLoaded(String modId);
 
   Path getGamePath();
-
-  int getTop(AbstractSelectionList<?> abstractSelectionList);
-
-  int getBottom(AbstractSelectionList<?> abstractSelectionList);
 }

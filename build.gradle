@@ -1,9 +1,14 @@
 import javax.net.ssl.HttpsURLConnection
 import java.nio.charset.StandardCharsets
 
+plugins {
+    // Required for NeoGradle
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+}
+
 subprojects {
     apply plugin: 'java'
-    
+
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
@@ -23,9 +28,9 @@ subprojects {
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_author,
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                'Timestampe'              : System.currentTimeMillis(),
+                'Timestamp'               : System.currentTimeMillis(),
                 'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                'Build-On-Minecraft'      : minecraft_version
+                'Built-On-Minecraft'      : minecraft_version
             ])
         }
     }
@@ -40,32 +45,55 @@ subprojects {
 
     repositories {
         mavenCentral()
-
         maven {
             name = 'Sponge / Mixin'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
-
         maven {
-            name = 'BlameJared Maven (CrT / Bookshelf)'
+            name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
             url = 'https://maven.blamejared.com'
-        }
-		
-		maven {
-            name = 'ParchmentMC'
-            url = 'https://maven.parchmentmc.org/'
         }
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release = 17
+        it.options.getRelease().set(17)
+    }
+
+    processResources {
+        def expandProps = [
+                "version": version,
+                "group": project.group, //Else we target the task's group.
+                "minecraft_version": minecraft_version,
+                "forge_version": forge_version,
+                "forge_loader_version_range": forge_loader_version_range,
+                "forge_version_range": forge_version_range,
+                "minecraft_version_range": minecraft_version_range,
+                "minecraft_version_range_alt": minecraft_version_range_alt,
+                "fabric_version": fabric_version,
+                "fabric_loader_version": fabric_loader_version,
+                "mod_name": mod_name,
+                "mod_author": mod_author,
+                "mod_id": mod_id,
+                "license": license,
+                "issues_url": issues_url,
+                "sources_url": sources_url,
+                "description": project.description,
+                "neoforge_version": neoforge_version,
+                "neoforge_version_range": neoforge_version_range,
+                "refmap_target": mod_id
+        ]
+
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+            expand expandProps
+        }
+        inputs.properties(expandProps)
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 
@@ -86,10 +114,10 @@ def publishDiscord() {
             cfLinks.add("[Forge](${project(':forge').findProperty('curse_link')})")
         }
 
-        if (project(':quilt').hasProperty('curse_link')) {
-            cfLinks.add("[Quilt](${project(':quilt').findProperty('curse_link')})")
+        if (project(':neoforge').hasProperty('curse_link')) {
+            cfLinks.add("[NeoForge](${project(':neoforge').findProperty('curse_link')})")
         }
-        def modrinthLinks = new StringJoiner('\\\\n')
+        def modrinthLinks = new StringJoiner('\\n')
 
         if (project(':fabric').hasProperty('modrinth_link')) {
             modrinthLinks.add("[Fabric](${project(':fabric').findProperty('modrinth_link')})")
@@ -99,26 +127,33 @@ def publishDiscord() {
             modrinthLinks.add("[Forge](${project(':forge').findProperty('modrinth_link')})")
         }
 
-        if (project(':quilt').hasProperty('modrinth_link')) {
-            modrinthLinks.add("[Quilt](${project(':quilt').findProperty('modrinth_link')})")
+        if (project(':neoforge').hasProperty('curse_link')) {
+            modrinthLinks.add("[NeoForge](${project(':neoforge').findProperty('modrinth_link')})")
         }
         println(cfLinks)
         println(modrinthLinks)
         def changelog = file("CHANGELOG_LATEST.md").getText()
         changelog = changelog.substring(changelog.indexOf("##"))
-        changelog = changelog.replaceAll("\n","\\\\n").replaceAll("\"","\\\\\"")
+        changelog = changelog.replaceAll("\n","\\\\n")
 
         if (changelog.length() >= 1024) {
             changelog = changelog.substring(0, changelog.length() - 100)
-            changelog = changelog + "...[(See more)](https://github.com/illusivesoulworks/cherishedworlds/blob/1.20.x/CHANGELOG.md)"
+            changelog = changelog + "...[(See more)](${changelog_link})"
         }
         println(changelog)
+        int color = 65392
+
+        if (release_type == "beta") {
+            color = 16763904
+        } else if (release_type == "alpha") {
+            color = 16724273
+        }
         final String message = """
             {
               "embeds": [
                 {
                   "title": "${mod_name} ${version}",
-                  "color": 65392,
+                  "color": ${color},
                   "fields": [
                     {
                       "name": "Minecraft Versions",
@@ -165,19 +200,42 @@ def publishDiscord() {
     }
 }
 
-tasks.getByPath(':quilt:publishCurseForge').configure {
-    mustRunAfter(':quilt:assemble')
+tasks.getByPath(':forge:publishCurseForge').configure {
+    mustRunAfter(':forge:assemble')
 }
 tasks.getByPath(':fabric:publishCurseForge').configure {
     mustRunAfter(':fabric:assemble')
-    mustRunAfter(':quilt:publishCurseForge')
+    mustRunAfter(':forge:publishCurseForge')
 }
-tasks.getByPath(':forge:publishCurseForge').configure {
-    mustRunAfter(':forge:assemble')
-    mustRunAfter(':fabric:publishCurseForge')
+tasks.getByPath(':fabric:modrinth').mustRunAfter(':forge:modrinth')
+tasks.getByPath(':neoforge:modrinth').mustRunAfter(':fabric:modrinth')
+
+tasks.register('publishForge') {
+    dependsOn ':forge:modrinth'
+    dependsOn ':forge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
 }
-tasks.getByPath(':fabric:modrinth').mustRunAfter(':quilt:modrinth')
-tasks.getByPath(':forge:modrinth').mustRunAfter(':fabric:modrinth')
+
+tasks.register('publishNeoForge') {
+    dependsOn ':neoforge:modrinth'
+    dependsOn ':neoforge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabric') {
+    dependsOn ':fabric:modrinth'
+    dependsOn ':fabric:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
 
 tasks.register('publishFabricForge') {
     dependsOn ':fabric:modrinth', ':forge:modrinth'
@@ -188,9 +246,27 @@ tasks.register('publishFabricForge') {
     }
 }
 
-tasks.register('publishFabricForgeQuilt') {
-    dependsOn ':fabric:modrinth', ':forge:modrinth', ':quilt:modrinth'
-    dependsOn ':fabric:publishCurseForge', ':forge:publishCurseForge', ':quilt:publishCurseForge'
+tasks.register('publishForgeNeoForge') {
+    dependsOn ':forge:modrinth', ':neoforge:modrinth'
+    dependsOn ':forge:publishCurseForge', ':neoforge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabricNeoForge') {
+    dependsOn ':fabric:modrinth', ':neoforge:modrinth'
+    dependsOn ':fabric:publishCurseForge', ':neoforge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishAll') {
+    dependsOn ':fabric:modrinth', ':neoforge:modrinth', ':forge:modrinth'
+    dependsOn ':fabric:publishCurseForge', ':neoforge:publishCurseForge', ':forge:publishCurseForge'
 
     doLast {
         publishDiscord()

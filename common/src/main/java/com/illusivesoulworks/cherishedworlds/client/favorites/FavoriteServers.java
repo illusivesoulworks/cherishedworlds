@@ -19,7 +19,6 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorJoinMultiplayerScreen;
-import com.illusivesoulworks.cherishedworlds.platform.Services;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -51,8 +50,8 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
 
         if (entry instanceof ServerSelectionList.OnlineServerEntry) {
           ServerData serverData = ((ServerSelectionList.OnlineServerEntry) entry).getServerData();
-          int top = Services.PLATFORM.getTop(selectionList);
-          int bottom = Services.PLATFORM.getBottom(selectionList);
+          int top = selectionList.getY();
+          int bottom = selectionList.getBottom();
           boolean isFavorite = FavoritesList.contains(serverData.name + serverData.ip);
           drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
               selectionList.getScrollAmount(), bottom);
@@ -82,7 +81,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
             topOffsetMod = override.getFirst();
             height = override.getSecond();
           }
-          int top = (int) (Services.PLATFORM.getTop(selectionList) + topOffsetMod + height * i -
+          int top = (int) (selectionList.getY() + topOffsetMod + height * i -
               selectionList.getScrollAmount());
           int x = screen.width / 2 - getHorizontalOffset();
 

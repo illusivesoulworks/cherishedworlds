@@ -19,7 +19,6 @@ package com.illusivesoulworks.cherishedworlds.platform;
 
 import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
 import java.nio.file.Path;
-import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 
@@ -33,15 +32,5 @@ public class ForgePlatformHelper implements IPlatformHelper {
   @Override
   public Path getGamePath() {
     return FMLPaths.GAMEDIR.get();
-  }
-
-  @Override
-  public int getTop(AbstractSelectionList<?> abstractSelectionList) {
-    return abstractSelectionList.getTop();
-  }
-
-  @Override
-  public int getBottom(AbstractSelectionList<?> abstractSelectionList) {
-    return abstractSelectionList.getBottom();
   }
 }

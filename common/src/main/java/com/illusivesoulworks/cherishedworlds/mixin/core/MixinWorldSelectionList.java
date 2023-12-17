@@ -33,8 +33,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinWorldSelectionList extends
     ObjectSelectionList<WorldSelectionList.Entry> {
 
-  public MixinWorldSelectionList(Minecraft minecraft, int i, int j, int k, int l, int m) {
-    super(minecraft, i, j, k, l, m);
+  public MixinWorldSelectionList(Minecraft minecraft, int i, int j, int k, int l) {
+    super(minecraft, i, j, k, l);
   }
 
   @SuppressWarnings("ConstantConditions")

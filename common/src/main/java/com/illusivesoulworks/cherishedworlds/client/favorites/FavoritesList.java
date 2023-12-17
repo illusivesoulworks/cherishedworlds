@@ -39,7 +39,7 @@ public class FavoritesList {
       favorites.clear();
       File file = new File(Services.PLATFORM.getGamePath().toString(),
           CherishedWorldsConstants.MOD_ID + "-favorites.dat");
-      CompoundTag compound = NbtIo.read(file);
+      CompoundTag compound = NbtIo.read(file.toPath());
 
       if (compound == null) {
         return;
@@ -70,7 +70,7 @@ public class FavoritesList {
       if (!file.exists()) {
         FileUtils.forceMkdirParent(file);
       }
-      NbtIo.write(compound, file);
+      NbtIo.write(compound, file.toPath());
     } catch (Exception exception) {
       CherishedWorldsConstants.LOG.error("Couldn't save favorites list", exception);
     }
