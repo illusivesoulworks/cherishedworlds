@@ -17,9 +17,11 @@
 
 package com.illusivesoulworks.cherishedworlds.platform;
 
+import com.illusivesoulworks.cherishedworlds.integration.FancyMenuIntegration;
 import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
 import java.nio.file.Path;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.components.AbstractSelectionList;
 
 public class FabricPlatformHelper implements IPlatformHelper {
 
@@ -31,5 +33,15 @@ public class FabricPlatformHelper implements IPlatformHelper {
   @Override
   public Path getGamePath() {
     return FabricLoader.getInstance().getGameDir();
+  }
+
+  @Override
+  public boolean canRender() {
+    return !isModLoaded("fancymenu") || !FancyMenuIntegration.isNavigating();
+  }
+
+  @Override
+  public boolean canInteract() {
+    return !isModLoaded("fancymenu") || !FancyMenuIntegration.isNavigating();
   }
 }

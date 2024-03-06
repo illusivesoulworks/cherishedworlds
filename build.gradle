@@ -53,6 +53,12 @@ subprojects {
             name = 'BlameJared Maven (JEI / CraftTweaker / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -200,19 +206,24 @@ def publishDiscord() {
     }
 }
 
-tasks.getByPath(':forge:publishCurseForge').configure {
-    mustRunAfter(':forge:assemble')
+def ordered(String... dependencyPaths) {
+    def dependencies = dependencyPaths.collect { tasks.getByPath(it) }
+    for (int i = 0; i < dependencies.size() - 1; i++) {
+        dependencies[i + 1].mustRunAfter(dependencies[i])
+    }
+    return dependencies
 }
-tasks.getByPath(':fabric:publishCurseForge').configure {
-    mustRunAfter(':fabric:assemble')
-    mustRunAfter(':forge:publishCurseForge')
+
+tasks.register('publishFabric') {
+    dependsOn ordered(':fabric:modrinth', ':fabric:publishCurseForge')
+
+    doLast {
+        publishDiscord()
+    }
 }
-tasks.getByPath(':fabric:modrinth').mustRunAfter(':forge:modrinth')
-tasks.getByPath(':neoforge:modrinth').mustRunAfter(':fabric:modrinth')
 
 tasks.register('publishForge') {
-    dependsOn ':forge:modrinth'
-    dependsOn ':forge:publishCurseForge'
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge')
 
     doLast {
         publishDiscord()
@@ -220,17 +231,7 @@ tasks.register('publishForge') {
 }
 
 tasks.register('publishNeoForge') {
-    dependsOn ':neoforge:modrinth'
-    dependsOn ':neoforge:publishCurseForge'
-
-    doLast {
-        publishDiscord()
-    }
-}
-
-tasks.register('publishFabric') {
-    dependsOn ':fabric:modrinth'
-    dependsOn ':fabric:publishCurseForge'
+    dependsOn ordered(':neoforge:modrinth', ':neoforge:publishCurseForge')
 
     doLast {
         publishDiscord()
@@ -238,8 +239,7 @@ tasks.register('publishFabric') {
 }
 
 tasks.register('publishFabricForge') {
-    dependsOn ':fabric:modrinth', ':forge:modrinth'
-    dependsOn ':fabric:publishCurseForge', ':forge:publishCurseForge'
+    dependsOn ordered(':forge:modrinth', 'forge:publishCurseForge', ':fabric:modrinth', ':fabric:publishCurseForge')
 
     doLast {
         publishDiscord()
@@ -247,8 +247,7 @@ tasks.register('publishFabricForge') {
 }
 
 tasks.register('publishForgeNeoForge') {
-    dependsOn ':forge:modrinth', ':neoforge:modrinth'
-    dependsOn ':forge:publishCurseForge', ':neoforge:publishCurseForge'
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
 
     doLast {
         publishDiscord()
@@ -256,17 +255,15 @@ tasks.register('publishForgeNeoForge') {
 }
 
 tasks.register('publishFabricNeoForge') {
-    dependsOn ':fabric:modrinth', ':neoforge:modrinth'
-    dependsOn ':fabric:publishCurseForge', ':neoforge:publishCurseForge'
+    dependsOn ordered(':fabric:modrinth', ':fabric:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
 
     doLast {
         publishDiscord()
     }
 }
 
-tasks.register('publishAll') {
-    dependsOn ':fabric:modrinth', ':neoforge:modrinth', ':forge:modrinth'
-    dependsOn ':fabric:publishCurseForge', ':neoforge:publishCurseForge', ':forge:publishCurseForge'
+tasks.register('publishFabricForgeNeoForge') {
+    dependsOn ordered(':forge:modrinth', ':forge:publishCurseForge', ':fabric:modrinth', ':fabric:publishCurseForge', ':neoforge:modrinth', ':neoforge:publishCurseForge')
 
     doLast {
         publishDiscord()

@@ -42,6 +42,8 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":common")
+
+    compileOnly "curse.maven:fancymenu-367706:5153200"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
