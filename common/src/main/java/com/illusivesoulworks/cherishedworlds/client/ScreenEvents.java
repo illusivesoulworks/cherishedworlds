@@ -19,6 +19,7 @@ package com.illusivesoulworks.cherishedworlds.client;
 
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteServers;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteWorlds;
+import com.illusivesoulworks.cherishedworlds.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
@@ -31,28 +32,37 @@ public class ScreenEvents {
 
   public static void onDraw(int mouseX, int mouseY, GuiGraphics guiGraphics, Screen screen) {
 
-    if (screen instanceof SelectWorldScreen) {
-      WORLDS.draw(mouseX, mouseY, guiGraphics, (SelectWorldScreen) screen);
-    } else if (screen instanceof JoinMultiplayerScreen) {
-      SERVERS.draw(mouseX, mouseY, guiGraphics, (JoinMultiplayerScreen) screen);
+    if (Services.PLATFORM.canRender()) {
+
+      if (screen instanceof SelectWorldScreen) {
+        WORLDS.draw(mouseX, mouseY, guiGraphics, (SelectWorldScreen) screen);
+      } else if (screen instanceof JoinMultiplayerScreen) {
+        SERVERS.draw(mouseX, mouseY, guiGraphics, (JoinMultiplayerScreen) screen);
+      }
     }
   }
 
   public static void onMouseClick(int mouseX, int mouseY, Screen screen) {
 
-    if (screen instanceof SelectWorldScreen) {
-      WORLDS.click(mouseX, mouseY, (SelectWorldScreen) screen);
-    } else if (screen instanceof JoinMultiplayerScreen) {
-      SERVERS.click(mouseX, mouseY, (JoinMultiplayerScreen) screen);
+    if (Services.PLATFORM.canInteract()) {
+
+      if (screen instanceof SelectWorldScreen) {
+        WORLDS.click(mouseX, mouseY, (SelectWorldScreen) screen);
+      } else if (screen instanceof JoinMultiplayerScreen) {
+        SERVERS.click(mouseX, mouseY, (JoinMultiplayerScreen) screen);
+      }
     }
   }
 
   public static void onMouseClicked(Screen screen) {
 
-    if (screen instanceof SelectWorldScreen) {
-      WORLDS.clicked((SelectWorldScreen) screen);
-    } else if (screen instanceof JoinMultiplayerScreen) {
-      SERVERS.clicked((JoinMultiplayerScreen) screen);
+    if (Services.PLATFORM.canInteract()) {
+
+      if (screen instanceof SelectWorldScreen) {
+        WORLDS.clicked((SelectWorldScreen) screen);
+      } else if (screen instanceof JoinMultiplayerScreen) {
+        SERVERS.clicked((JoinMultiplayerScreen) screen);
+      }
     }
   }
 

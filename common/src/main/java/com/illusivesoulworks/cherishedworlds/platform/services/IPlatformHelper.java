@@ -29,4 +29,8 @@ public interface IPlatformHelper {
   int getTop(AbstractSelectionList<?> abstractSelectionList);
 
   int getBottom(AbstractSelectionList<?> abstractSelectionList);
+
+  boolean canRender();
+
+  boolean canInteract();
 }

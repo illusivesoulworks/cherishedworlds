@@ -3,11 +3,11 @@ import java.nio.charset.StandardCharsets
 
 subprojects {
     apply plugin: 'java'
-    
+
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
-        
+
     jar {
         from(rootProject.file("LICENSE"))
         from(rootProject.file("COPYING"))
@@ -16,16 +16,16 @@ subprojects {
         from(rootProject.file("CHANGELOG.md"))
         manifest {
             attributes([
-                'Specification-Title'     : mod_name,
-                'Specification-Vendor'    : mod_author,
-                'Specification-Version'   : project.jar.archiveVersion,
-                'Implementation-Title'    : project.name,
-                'Implementation-Version'  : project.jar.archiveVersion,
-                'Implementation-Vendor'   : mod_author,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                'Timestampe'              : System.currentTimeMillis(),
-                'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                'Build-On-Minecraft'      : minecraft_version
+                    'Specification-Title'     : mod_name,
+                    'Specification-Vendor'    : mod_author,
+                    'Specification-Version'   : project.jar.archiveVersion,
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : mod_author,
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    'Timestampe'              : System.currentTimeMillis(),
+                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Build-On-Minecraft'      : minecraft_version
             ])
         }
     }
@@ -50,10 +50,17 @@ subprojects {
             name = 'BlameJared Maven (CrT / Bookshelf)'
             url = 'https://maven.blamejared.com'
         }
-		
-		maven {
+
+        maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org/'
+        }
+
+        maven {
+            url "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
+            }
         }
     }
 
@@ -106,7 +113,7 @@ def publishDiscord() {
         println(modrinthLinks)
         def changelog = file("CHANGELOG_LATEST.md").getText()
         changelog = changelog.substring(changelog.indexOf("##"))
-        changelog = changelog.replaceAll("\n","\\\\n").replaceAll("\"","\\\\\"")
+        changelog = changelog.replaceAll("\n", "\\\\n").replaceAll("\"", "\\\\\"")
 
         if (changelog.length() >= 1024) {
             changelog = changelog.substring(0, changelog.length() - 100)
@@ -182,6 +189,15 @@ tasks.getByPath(':forge:modrinth').mustRunAfter(':fabric:modrinth')
 tasks.register('publishForge') {
     dependsOn ':forge:modrinth'
     dependsOn ':forge:publishCurseForge'
+
+    doLast {
+        publishDiscord()
+    }
+}
+
+tasks.register('publishFabric') {
+    dependsOn ':fabric:modrinth'
+    dependsOn ':fabric:publishCurseForge'
 
     doLast {
         publishDiscord()
