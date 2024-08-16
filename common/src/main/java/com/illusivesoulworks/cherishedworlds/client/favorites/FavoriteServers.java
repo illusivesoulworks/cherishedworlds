@@ -30,12 +30,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
 
   @Override
   public void init(JoinMultiplayerScreen screen) {
-    AccessorJoinMultiplayerScreen accessor = (AccessorJoinMultiplayerScreen) screen;
-    ServerSelectionList selectionList = accessor.getSelectionList();
-
-    if (selectionList != null) {
-      selectionList.updateOnlineServers(screen.getServers());
-    }
+    // NO-OP
   }
 
   @Override
