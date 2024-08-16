@@ -2,6 +2,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.21.x/CHANGELOG.md).
 
-## [10.0.1+1.21] - 2024.07.09
-### Added
-- Added `ko_kr` localization [#30](https://github.com/illusivesoulworks/cherishedworlds/pull/30)
+## [10.0.2+1.21.1] - 2024.08.16
+### Changed
+- Updated to Minecraft 1.21.1
+### Fixed
+- Fixed server list overriding [#33](https://github.com/illusivesoulworks/cherishedworlds/issues/33)
