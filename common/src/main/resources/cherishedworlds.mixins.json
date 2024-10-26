@@ -11,6 +11,7 @@
     "AccessorWorldSelectionList",
     "AccessorWorldSelectionListEntry",
     "AccessorWorldSelectionScreen",
+    "MixinCreateWorldScreen",
     "MixinEditServerScreen",
     "MixinJoinMultiplayerScreen",
     "MixinServerSelectionList",

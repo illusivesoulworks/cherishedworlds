@@ -23,6 +23,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 
 public class CherishedWorldsFabricMod implements ClientModInitializer {
@@ -33,7 +34,8 @@ public class CherishedWorldsFabricMod implements ClientModInitializer {
     ScreenEvents.AFTER_INIT.register(
         (client, screen, scaledWidth, scaledHeight) -> {
 
-          if (screen instanceof JoinMultiplayerScreen || screen instanceof SelectWorldScreen) {
+          if (screen instanceof JoinMultiplayerScreen || screen instanceof SelectWorldScreen ||
+              screen instanceof CreateWorldScreen) {
             com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onInit(screen);
             ScreenEvents.afterRender(screen).register(
                 (screen1, drawContext, mouseX, mouseY, tickDelta) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onDraw(

@@ -17,18 +17,25 @@
 
 package com.illusivesoulworks.cherishedworlds.client;
 
+import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteCreateWorld;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteServers;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteWorlds;
 import com.illusivesoulworks.cherishedworlds.platform.Services;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 
 public class ScreenEvents {
 
   private static final FavoriteWorlds WORLDS = new FavoriteWorlds();
   private static final FavoriteServers SERVERS = new FavoriteServers();
+  private static final FavoriteCreateWorld CREATE_WORLD = new FavoriteCreateWorld();
+
+  public static void onCreateNewWorld(String levelId) {
+    CREATE_WORLD.saveFavorite(levelId);
+  }
 
   public static void onDraw(int mouseX, int mouseY, GuiGraphics guiGraphics, Screen screen) {
 
@@ -38,6 +45,8 @@ public class ScreenEvents {
         WORLDS.draw(mouseX, mouseY, guiGraphics, (SelectWorldScreen) screen);
       } else if (screen instanceof JoinMultiplayerScreen) {
         SERVERS.draw(mouseX, mouseY, guiGraphics, (JoinMultiplayerScreen) screen);
+      } else if (screen instanceof CreateWorldScreen) {
+        CREATE_WORLD.draw(mouseX, mouseY, guiGraphics, (CreateWorldScreen) screen);
       }
     }
   }
@@ -50,6 +59,8 @@ public class ScreenEvents {
         WORLDS.click(mouseX, mouseY, (SelectWorldScreen) screen);
       } else if (screen instanceof JoinMultiplayerScreen) {
         SERVERS.click(mouseX, mouseY, (JoinMultiplayerScreen) screen);
+      } else if (screen instanceof CreateWorldScreen) {
+        CREATE_WORLD.click(mouseX, mouseY, (CreateWorldScreen) screen);
       }
     }
   }
