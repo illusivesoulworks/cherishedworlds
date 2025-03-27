@@ -49,7 +49,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
           int bottom = selectionList.getBottom();
           boolean isFavorite = FavoritesList.contains(serverData.name + serverData.ip);
           drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
-              selectionList.getScrollAmount(), bottom);
+                   selectionList.scrollAmount(), bottom);
         }
       }
     }
@@ -76,8 +76,8 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
             topOffsetMod = override.getFirst();
             height = override.getSecond();
           }
-          int top = (int) (selectionList.getY() + topOffsetMod + height * i -
-              selectionList.getScrollAmount());
+          int top = (int) (selectionList.getY() + topOffsetMod + height * i
+              - selectionList.scrollAmount());
           int x = screen.width / 2 - getHorizontalOffset();
 
           if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
@@ -94,7 +94,7 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
 
             if (selected instanceof ServerSelectionList.OnlineServerEntry) {
               disableDeletion((ServerSelectionList.OnlineServerEntry) selected,
-                  accessor.getDeleteButton());
+                              accessor.getDeleteButton());
             }
             return;
           }

@@ -66,7 +66,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
             int bottom = selectionList.getBottom();
             boolean isFavorite = FavoritesList.contains(summary.getLevelId());
             drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
-                selectionList.getScrollAmount(), bottom);
+                     selectionList.scrollAmount(), bottom);
           }
         }
       }
@@ -98,8 +98,8 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
               topOffsetMod = override.getFirst();
               height = override.getSecond();
             }
-            int top = (int) (selectionList.getY() + topOffsetMod + height * i -
-                selectionList.getScrollAmount());
+            int top = (int) (selectionList.getY() + topOffsetMod + height * i
+                - selectionList.scrollAmount());
             int x = screen.width / 2 - getHorizontalOffset();
 
             if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {

@@ -23,6 +23,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -31,10 +32,10 @@ public interface IFavoritesViewer<T extends Screen> {
 
   ResourceLocation STAR_ICON =
       ResourceLocation.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
-          "textures/gui/staricon.png");
+                                            "textures/gui/staricon.png");
   ResourceLocation EMPTY_STAR_ICON =
       ResourceLocation.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
-          "textures/gui/emptystaricon.png");
+                                            "textures/gui/emptystaricon.png");
 
   void init(T screen);
 
@@ -61,13 +62,13 @@ public interface IFavoritesViewer<T extends Screen> {
     int x = screen.width / 2 - getHorizontalOffset();
 
     if (top < (bottom - 8) && top > topOffset) {
-      guiGraphics.blit(icon, x, top, 0, 0, 9, 9, 9, 9);
+      guiGraphics.blit(RenderType::guiTextured, icon, x, top, 0, 0, 9, 9, 9, 9);
     }
 
     if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-      MutableComponent component = Component.translatable(
-          "selectWorld." + CherishedWorldsConstants.MOD_ID + "." +
-              (isFavorite ? "unfavorite" : "favorite"));
+      String suffix = isFavorite ? "unfavorite" : "favorite";
+      MutableComponent component =
+          Component.translatable("selectWorld." + CherishedWorldsConstants.MOD_ID + "." + suffix);
       guiGraphics.renderTooltip(Minecraft.getInstance().font, component, mouseX, mouseY);
     }
   }
