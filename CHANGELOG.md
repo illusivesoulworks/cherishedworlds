@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 Prior to version 6.0.0, this project used MCVERSION-MAJORMOD.MAJORAPI.MINOR.PATCH.
 
+## [11.0.0+1.21.4] - 2025.03.27
+### Changed
+- Updated to Minecraft 1.21.4
+
 ## [10.1.1+1.21.1] - 2025.03.26
 ### Added
 - Added `pl_pl` localization [#40](https://github.com/illusivesoulworks/cherishedworlds/pull/40)
