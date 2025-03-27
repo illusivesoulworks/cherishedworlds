@@ -93,6 +93,7 @@ modrinth {
     uploadFile = file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")
     additionalFiles = [sourcesJar]
     gameVersions = "${release_versions}".split(",") as List<String>
+    loaders = ["neoforge"]
 }
 
 tasks.modrinth.doLast {
