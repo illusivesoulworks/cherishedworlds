@@ -44,10 +44,10 @@ public class FavoritesList {
       if (compound == null) {
         return;
       }
-      ListTag list = compound.getList("favorites", Tag.TAG_STRING);
+      ListTag list = compound.getListOrEmpty("favorites");
 
       for (int i = 0; i < list.size(); ++i) {
-        favorites.add(list.getString(i));
+        list.getString(i).ifPresent(favorites::add);
       }
     } catch (Exception exception) {
       CherishedWorldsConstants.LOG.error("Couldn't load favorites list", exception);
