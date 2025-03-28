@@ -15,8 +15,9 @@ body:
     label: Minecraft Version
     description: What version of Minecraft are you running? (Unlisted versions are unsupported)
     options:
+      - 1.21.5
+      - 1.21.4
       - 1.21.1
-      - 1.20.4
       - 1.20.1
       - 1.19.2
   validations:
@@ -25,21 +26,8 @@ body:
   id: what-happened
   attributes:
     label: What happened?
-    description: Also tell us, what did you expect to happen?
+    description: Also tell us, what did you expect to happen and what are the steps to reproduce the issue?
     placeholder: A bug happened and I didn't expect that!
-  validations:
-    required: true
-- type: textarea
-  id: reproduction-steps
-  attributes:
-    label: How do you trigger this bug?
-    description: Please make sure to remove all unnecessary mods first.
-    placeholder: A step by step walkthrough to trigger the bug.
-    value: |
-      1.
-      2.
-      3.
-      ...
   validations:
     required: true
 - type: dropdown
@@ -52,31 +40,6 @@ body:
       - Forge
       - NeoForge
       - Quilt
-  validations:
-    required: true
-- type: input
-  id: loader-version
-  attributes:
-    label: Loader Version
-    description: Which version of the above loader are you using?
-    placeholder: |
-      Example: Forge - 37.0.65 or Fabric - 0.7.4
-  validations:
-    required: true
-- type: input
-  id: modloader-api-version
-  attributes:
-    label: API Version
-    description: Which API version of the above loader are you using? (Fabric API on Fabric, QSL/QFAPI on Quilt, N/A on Forge)
-    placeholder: |
-      Example: Fabric API 0.40.1
-- type: input
-  id: mod-version
-  attributes:
-    label: Mod Version
-    description: What version of the mod are you using?
-    placeholder: |
-      Example: Cherished Worlds 1.17.1-5.1.1.0
   validations:
     required: true
 - type: textarea
