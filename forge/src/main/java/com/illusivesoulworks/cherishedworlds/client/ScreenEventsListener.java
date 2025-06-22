@@ -18,7 +18,7 @@
 package com.illusivesoulworks.cherishedworlds.client;
 
 import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 
 public class ScreenEventsListener {
 

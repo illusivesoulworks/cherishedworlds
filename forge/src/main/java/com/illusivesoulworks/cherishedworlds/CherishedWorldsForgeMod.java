@@ -20,7 +20,6 @@ package com.illusivesoulworks.cherishedworlds;
 import com.illusivesoulworks.cherishedworlds.client.ScreenEventsListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.IExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -28,11 +27,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(CherishedWorldsConstants.MOD_ID)
 public class CherishedWorldsForgeMod {
 
-  public CherishedWorldsForgeMod() {
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
-    ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class,
-        () -> new IExtensionPoint.DisplayTest(() -> IExtensionPoint.DisplayTest.IGNORESERVERONLY,
-            (a, b) -> true));
+  public CherishedWorldsForgeMod(FMLJavaModLoadingContext context) {
+    FMLClientSetupEvent.getBus(context.getModBusGroup()).addListener(this::setupClient);
+    context.registerExtensionPoint(IExtensionPoint.DisplayTest.class,
+                                   () -> new IExtensionPoint.DisplayTest(
+                                       () -> IExtensionPoint.DisplayTest.IGNORESERVERONLY,
+                                       (a, b) -> true));
   }
 
   private void setupClient(final FMLClientSetupEvent evt) {

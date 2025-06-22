@@ -20,10 +20,14 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.mojang.datafixers.util.Pair;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -62,14 +66,17 @@ public interface IFavoritesViewer<T extends Screen> {
     int x = screen.width / 2 - getHorizontalOffset();
 
     if (top < (bottom - 8) && top > topOffset) {
-      guiGraphics.blit(RenderType::guiTextured, icon, x, top, 0, 0, 9, 9, 9, 9);
+      guiGraphics.blit(RenderPipelines.GUI_TEXTURED, icon, x, top, 0, 0, 9, 9, 9, 9);
     }
 
     if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
       String suffix = isFavorite ? "unfavorite" : "favorite";
+      List<ClientTooltipComponent> components = new ArrayList<>();
       MutableComponent component =
           Component.translatable("selectWorld." + CherishedWorldsConstants.MOD_ID + "." + suffix);
-      guiGraphics.renderTooltip(Minecraft.getInstance().font, component, mouseX, mouseY);
+      components.add(ClientTooltipComponent.create(component.getVisualOrderText()));
+      guiGraphics.renderTooltip(Minecraft.getInstance().font, components, mouseX, mouseY,
+                                DefaultTooltipPositioner.INSTANCE, null);
     }
   }
 }
