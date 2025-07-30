@@ -1,5 +1,11 @@
-name: Release
-on: [workflow_dispatch]
+name: Publish release
+on:
+  push:
+    tags:
+      - v*.*.*
+
+permissions:
+  contents: write-all
 
 jobs:
   build:
@@ -14,3 +20,11 @@ jobs:
           CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_KEY }}
           MODRINTH_KEY: ${{ secrets.MODRINTH_KEY }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      - run: |
+          gh release create "$tag" \
+              "/fabric/build/libs/*" "/forge/build/libs/*" "/neoforge/build/libs/*" \
+              --title="${tag#v}" \
+              --notes-file="CHANGELOG_LATEST.md"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
