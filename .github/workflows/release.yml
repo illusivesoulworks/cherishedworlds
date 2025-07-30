@@ -22,7 +22,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       - run: |
           gh release create "$tag" \
-              "/fabric/build/libs/*" "/forge/build/libs/*" "/neoforge/build/libs/*" \
+              "fabric/build/libs/*" "forge/build/libs/*" "neoforge/build/libs/*" \
               --title="${tag#v}" \
               --notes-file="CHANGELOG_LATEST.md"
         env:
