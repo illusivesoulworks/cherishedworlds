@@ -41,7 +41,8 @@ public abstract class MixinWorldSelectionList extends
   @Inject(at = @At(value = "INVOKE", target = "net/minecraft/client/gui/screens/worldselection/WorldSelectionList.notifyListUpdated()V"), method = "fillLevels(Ljava/lang/String;Ljava/util/List;)V")
   private void cherishedworlds$fillLevels(String filter, List<LevelSummary> levels,
                                           CallbackInfo ci) {
-    CherishedWorldsMixinHooks.fillLevels(filter, levels, (WorldSelectionList) (Object) this);
+    this.clearEntries();
+    CherishedWorldsMixinHooks.fillLevels(filter, levels, (WorldSelectionList) (Object) this, (it) -> addEntry(it));
   }
 
   @Shadow

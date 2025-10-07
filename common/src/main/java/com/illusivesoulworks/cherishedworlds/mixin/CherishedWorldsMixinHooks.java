@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
@@ -104,9 +105,7 @@ public class CherishedWorldsMixinHooks {
   }
 
   public static void fillLevels(String filter, List<LevelSummary> levels,
-                                WorldSelectionList selectionList) {
-    List<WorldSelectionList.Entry> entries = selectionList.children();
-    entries.clear();
+                                WorldSelectionList selectionList, Consumer<WorldSelectionList.WorldListEntry> add) {
     filter = filter.toLowerCase(Locale.ROOT);
     List<LevelSummary> copy = new ArrayList<>(levels);
     Iterator<LevelSummary> iter = copy.listIterator();
@@ -126,14 +125,14 @@ public class CherishedWorldsMixinHooks {
     for (LevelSummary level : favorites) {
 
       if (filterAccepts(filter, level)) {
-        entries.add(selectionList.new WorldListEntry(selectionList, level));
+        add.accept(new WorldSelectionList.WorldListEntry(selectionList, level));
       }
     }
 
     for (LevelSummary level : copy) {
 
       if (filterAccepts(filter, level)) {
-        entries.add(selectionList.new WorldListEntry(selectionList, level));
+        add.accept(new WorldSelectionList.WorldListEntry(selectionList, level));
       }
     }
     WorldSelectionList.Entry entry = selectionList.getSelected();

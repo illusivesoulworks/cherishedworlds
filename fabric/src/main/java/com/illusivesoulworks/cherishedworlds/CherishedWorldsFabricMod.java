@@ -41,11 +41,15 @@ public class CherishedWorldsFabricMod implements ClientModInitializer {
                 (screen1, drawContext, mouseX, mouseY, tickDelta) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onDraw(
                     mouseX, mouseY, drawContext, screen1));
             ScreenMouseEvents.afterMouseClick(screen).register(
-                (screen1, mouseX, mouseY, button) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClick(
-                    (int) mouseX, (int) mouseY, screen1));
+                (screen1, context, button) -> {com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClick(
+                    (int) context.x(), (int) context.y(), screen1);
+                  return false;
+                });
             ScreenMouseEvents.afterMouseRelease(screen).register(
-                (screen1, mouseX, mouseY, button) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClicked(
-                    screen1));
+                (screen1, context, button) -> {com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClicked(
+                    screen1);
+                  return false;
+                });
           }
         });
 
