@@ -19,7 +19,7 @@ package com.illusivesoulworks.cherishedworlds.mixin.core;
 
 import com.illusivesoulworks.cherishedworlds.mixin.CherishedWorldsMixinHooks;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.EditServerScreen;
+import net.minecraft.client.gui.screens.ManageServerScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,8 +28,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(EditServerScreen.class)
-public class MixinEditServerScreen {
+@Mixin(ManageServerScreen.class)
+public class MixinManageServerScreen {
 
   @Shadow
   @Final

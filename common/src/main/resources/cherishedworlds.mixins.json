@@ -12,7 +12,7 @@
     "AccessorWorldSelectionListEntry",
     "AccessorWorldSelectionScreen",
     "MixinWorldOpenFlows",
-    "MixinEditServerScreen",
+    "MixinManageServerScreen",
     "MixinJoinMultiplayerScreen",
     "MixinServerSelectionList",
     "MixinServerSelectionListEntry",

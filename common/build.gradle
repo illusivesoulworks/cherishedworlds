@@ -4,7 +4,7 @@ plugins {
 }
 
 minecraft {
-    version(minecraft_version)
+    version("1.21.9")
     def aw = file("src/main/resources/${mod_id}.accesswidener")
     if (aw.exists()) {
         accessWideners(aw)

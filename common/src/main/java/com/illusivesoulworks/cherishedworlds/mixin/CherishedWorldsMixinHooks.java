@@ -24,9 +24,12 @@ import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionLi
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
@@ -105,10 +108,17 @@ public class CherishedWorldsMixinHooks {
 
   public static void fillLevels(String filter, List<LevelSummary> levels,
                                 WorldSelectionList selectionList) {
-    List<WorldSelectionList.Entry> entries = selectionList.children();
-    entries.clear();
     filter = filter.toLowerCase(Locale.ROOT);
     List<LevelSummary> copy = new ArrayList<>(levels);
+    Map<String, WorldSelectionList.Entry> entries = new LinkedHashMap<>();
+
+    for (WorldSelectionList.Entry entry : selectionList.children()) {
+      LevelSummary level = entry.getLevelSummary();
+
+      if (level != null) {
+        entries.put(level.getLevelId(), entry);
+      }
+    }
     Iterator<LevelSummary> iter = copy.listIterator();
     List<LevelSummary> favorites = new ArrayList<>();
 
@@ -122,20 +132,22 @@ public class CherishedWorldsMixinHooks {
     }
     Collections.sort(favorites);
     Collections.sort(copy);
+    List<WorldSelectionList.Entry> newEntries = new ArrayList<>();
 
     for (LevelSummary level : favorites) {
 
       if (filterAccepts(filter, level)) {
-        entries.add(selectionList.new WorldListEntry(selectionList, level));
+        newEntries.add(entries.get(level.getLevelId()));
       }
     }
 
     for (LevelSummary level : copy) {
 
       if (filterAccepts(filter, level)) {
-        entries.add(selectionList.new WorldListEntry(selectionList, level));
+        newEntries.add(entries.get(level.getLevelId()));
       }
     }
+    selectionList.replaceEntries(newEntries);
     WorldSelectionList.Entry entry = selectionList.getSelected();
 
     if (entry instanceof WorldSelectionList.WorldListEntry) {
