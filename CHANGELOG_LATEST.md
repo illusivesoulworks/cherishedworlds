@@ -2,8 +2,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.21.x/CHANGELOG.md).
 
-## [13.0.1+1.21.8] - 2025.07.29
+## [14.0.0+1.21.10] - 2025.10.08
 ### Added
-- Added `es_mx` localization [#41](https://github.com/illusivesoulworks/cherishedworlds/pull/41)
+- Added `es_ar` localization [#44](https://github.com/illusivesoulworks/cherishedworlds/pull/44)
 ### Changed
-- Updated to Minecraft 1.21.8
+- Updated to Minecraft 1.21.10
