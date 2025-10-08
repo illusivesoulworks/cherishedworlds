@@ -28,9 +28,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AccessorWorldSelectionScreen {
 
   @Accessor
-  Button getDeleteButton();
-
-  @Accessor
   EditBox getSearchBox();
 
   @Accessor

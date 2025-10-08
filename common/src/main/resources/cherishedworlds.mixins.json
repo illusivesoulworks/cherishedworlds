@@ -9,13 +9,13 @@
     "AccessorJoinMultiplayerScreen",
     "AccessorServerSelectionListEntry",
     "AccessorWorldSelectionList",
-    "AccessorWorldSelectionListEntry",
     "AccessorWorldSelectionScreen",
-    "MixinWorldOpenFlows",
-    "MixinManageServerScreen",
     "MixinJoinMultiplayerScreen",
+    "MixinManageServerScreen",
+    "MixinLevelSummary",
     "MixinServerSelectionList",
     "MixinServerSelectionListEntry",
+    "MixinWorldOpenFlows",
     "MixinWorldSelectionList"
   ],
   "injectors": {

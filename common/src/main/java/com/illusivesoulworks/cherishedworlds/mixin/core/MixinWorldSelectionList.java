@@ -24,7 +24,6 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.world.level.storage.LevelSummary;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -38,12 +37,9 @@ public abstract class MixinWorldSelectionList extends
   }
 
   @SuppressWarnings("ConstantConditions")
-  @Inject(at = @At(value = "INVOKE", target = "net/minecraft/client/gui/screens/worldselection/WorldSelectionList.notifyListUpdated()V"), method = "fillLevels(Ljava/lang/String;Ljava/util/List;)V")
-  private void cherishedworlds$fillLevels(String filter, List<LevelSummary> levels,
+  @Inject(at = @At(value = "INVOKE", target = "net/minecraft/client/gui/screens/worldselection/WorldSelectionList.setSelected(Lnet/minecraft/client/gui/screens/worldselection/WorldSelectionList$Entry;)V"), method = "fillLevels(Ljava/lang/String;Ljava/util/List;)V")
+  private void cherishedworlds$sortLevels(String filter, List<LevelSummary> levels,
                                           CallbackInfo ci) {
-    CherishedWorldsMixinHooks.fillLevels(filter, levels, (WorldSelectionList) (Object) this);
+    this.sort(CherishedWorldsMixinHooks.getLevelComparator());
   }
-
-  @Shadow
-  protected abstract boolean filterAccepts(String filter, LevelSummary level);
 }

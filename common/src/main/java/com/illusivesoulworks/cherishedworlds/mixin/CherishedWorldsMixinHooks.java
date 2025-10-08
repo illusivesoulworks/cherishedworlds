@@ -20,17 +20,9 @@ package com.illusivesoulworks.cherishedworlds.mixin;
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoritesList;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorServerSelectionListEntry;
-import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
-import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
@@ -90,7 +82,7 @@ public class CherishedWorldsMixinHooks {
       ServerData data = serverList.get(i);
       ServerSelectionList.OnlineServerEntry entry =
           AccessorServerSelectionListEntry.cherishedworlds$createEntry(serverSelectionList, screen,
-              data);
+                                                                       data);
 
       if (FavoritesList.contains(data.name + data.ip)) {
         favorites.add(entry);
@@ -106,65 +98,27 @@ public class CherishedWorldsMixinHooks {
     }
   }
 
-  public static void fillLevels(String filter, List<LevelSummary> levels,
-                                WorldSelectionList selectionList) {
-    filter = filter.toLowerCase(Locale.ROOT);
-    List<LevelSummary> copy = new ArrayList<>(levels);
-    Map<String, WorldSelectionList.Entry> entries = new LinkedHashMap<>();
+  public static Comparator<WorldSelectionList.Entry> getLevelComparator() {
+    return (o1, o2) -> {
+      LevelSummary l1 = o1.getLevelSummary();
+      LevelSummary l2 = o2.getLevelSummary();
 
-    for (WorldSelectionList.Entry entry : selectionList.children()) {
-      LevelSummary level = entry.getLevelSummary();
+      if (l1 != null && l2 != null) {
+        boolean isFavorite1 = FavoritesList.contains(l1.getLevelId());
+        boolean isFavorite2 = FavoritesList.contains(l2.getLevelId());
 
-      if (level != null) {
-        entries.put(level.getLevelId(), entry);
+        if (isFavorite1 && !isFavorite2) {
+          return -1;
+        } else if (!isFavorite1 && isFavorite2) {
+          return 1;
+        }
+        return l1.compareTo(l2);
       }
-    }
-    Iterator<LevelSummary> iter = copy.listIterator();
-    List<LevelSummary> favorites = new ArrayList<>();
-
-    while (iter.hasNext()) {
-      LevelSummary summ = iter.next();
-
-      if (FavoritesList.contains(summ.getLevelId())) {
-        favorites.add(summ);
-        iter.remove();
-      }
-    }
-    Collections.sort(favorites);
-    Collections.sort(copy);
-    List<WorldSelectionList.Entry> newEntries = new ArrayList<>();
-
-    for (LevelSummary level : favorites) {
-
-      if (filterAccepts(filter, level)) {
-        newEntries.add(entries.get(level.getLevelId()));
-      }
-    }
-
-    for (LevelSummary level : copy) {
-
-      if (filterAccepts(filter, level)) {
-        newEntries.add(entries.get(level.getLevelId()));
-      }
-    }
-    selectionList.replaceEntries(newEntries);
-    WorldSelectionList.Entry entry = selectionList.getSelected();
-
-    if (entry instanceof WorldSelectionList.WorldListEntry) {
-      @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
-          (AccessorWorldSelectionListEntry) entry;
-      LevelSummary summary = entryAccessor.getWorldSummary();
-      Button deleteButton =
-          ((AccessorWorldSelectionScreen) selectionList.getScreen()).getDeleteButton();
-
-      if (deleteButton != null && summary != null) {
-        deleteButton.active = !FavoritesList.contains(summary.getLevelId());
-      }
-    }
+      return 0;
+    };
   }
 
-  private static boolean filterAccepts(String filter, LevelSummary level) {
-    return level.getLevelName().toLowerCase(Locale.ROOT).contains(filter) ||
-        level.getLevelId().toLowerCase(Locale.ROOT).contains(filter);
+  public static boolean canDelete(LevelSummary levelSummary) {
+    return !FavoritesList.contains(levelSummary.getLevelId());
   }
 }

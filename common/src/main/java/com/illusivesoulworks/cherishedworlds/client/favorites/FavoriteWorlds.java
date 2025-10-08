@@ -19,7 +19,6 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionList;
-import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionListEntry;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
@@ -56,18 +55,13 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
       for (int i = 0; i < selectionList.children().size(); i++) {
         WorldSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry instanceof WorldSelectionList.WorldListEntry) {
-          @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
-              (AccessorWorldSelectionListEntry) entry;
-          LevelSummary summary = entryAccessor.getWorldSummary();
-
-          if (summary != null) {
-            int top = selectionList.getY();
-            int bottom = selectionList.getBottom();
-            boolean isFavorite = FavoritesList.contains(summary.getLevelId());
-            drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
-                     selectionList.scrollAmount(), bottom);
-          }
+        if (entry instanceof WorldSelectionList.WorldListEntry worldListEntry) {
+          LevelSummary summary = worldListEntry.getLevelSummary();
+          int top = selectionList.getY();
+          int bottom = selectionList.getBottom();
+          boolean isFavorite = FavoritesList.contains(summary.getLevelId());
+          drawIcon(mouseX, mouseY, guiGraphics, screen, i, isFavorite, top,
+                   selectionList.scrollAmount(), bottom);
         }
       }
     }
@@ -83,50 +77,45 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
       for (int i = 0; i < selectionList.children().size(); i++) {
         WorldSelectionList.Entry entry = selectionList.children().get(i);
 
-        if (entry instanceof WorldSelectionList.WorldListEntry) {
-          @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
-              (AccessorWorldSelectionListEntry) entry;
-          LevelSummary summary = entryAccessor.getWorldSummary();
+        if (entry instanceof WorldSelectionList.WorldListEntry worldListEntry) {
+          LevelSummary summary = worldListEntry.getLevelSummary();
+          boolean isFavorite = FavoritesList.contains(summary.getLevelId());
+          int topOffsetMod = 15;
+          int height = 36;
+          Pair<Integer, Integer> override = ViewerIntegration.getOverride(height);
 
-          if (summary != null) {
-            boolean isFavorite = FavoritesList.contains(summary.getLevelId());
-            int topOffsetMod = 15;
-            int height = 36;
-            Pair<Integer, Integer> override = ViewerIntegration.getOverride(height);
+          if (override != null) {
+            topOffsetMod = override.getFirst();
+            height = override.getSecond();
+          }
+          int top = (int) (selectionList.getY() + topOffsetMod + height * i
+              - selectionList.scrollAmount());
+          int x = screen.width / 2 - getHorizontalOffset();
 
-            if (override != null) {
-              topOffsetMod = override.getFirst();
-              height = override.getSecond();
+          if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
+            String s = summary.getLevelId();
+
+            if (isFavorite) {
+              FavoritesList.remove(s);
+            } else {
+              FavoritesList.add(s);
             }
-            int top = (int) (selectionList.getY() + topOffsetMod + height * i
-                - selectionList.scrollAmount());
-            int x = screen.width / 2 - getHorizontalOffset();
+            FavoritesList.save();
+            EditBox textField = accessor.getSearchBox();
+            String filter = "";
 
-            if (mouseY >= top && mouseY <= (top + 9) && mouseX >= x && mouseX <= (x + 9)) {
-              String s = summary.getLevelId();
-
-              if (isFavorite) {
-                FavoritesList.remove(s);
-              } else {
-                FavoritesList.add(s);
-              }
-              FavoritesList.save();
-              EditBox textField = accessor.getSearchBox();
-              String filter = "";
-
-              if (textField != null) {
-                filter = textField.getValue();
-              }
-              AccessorWorldSelectionList accessorWorldSelectionList =
-                  (AccessorWorldSelectionList) selectionList;
-              List<LevelSummary> levelSummaries =
-                  accessorWorldSelectionList.getCurrentlyDisplayedLevels();
-
-              if (levelSummaries != null) {
-                accessorWorldSelectionList.callFillLevels(filter, levelSummaries);
-              }
-              return;
+            if (textField != null) {
+              filter = textField.getValue();
             }
+            AccessorWorldSelectionList accessorWorldSelectionList =
+                (AccessorWorldSelectionList) selectionList;
+            List<LevelSummary> levelSummaries =
+                accessorWorldSelectionList.getCurrentlyDisplayedLevels();
+
+            if (levelSummaries != null) {
+              accessorWorldSelectionList.callFillLevels(filter, levelSummaries);
+            }
+            return;
           }
         }
       }
@@ -135,23 +124,7 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
 
   @Override
   public void clicked(SelectWorldScreen screen) {
-    AccessorWorldSelectionScreen accessor = (AccessorWorldSelectionScreen) screen;
-    WorldSelectionList selectionList = accessor.getList();
-
-    if (selectionList != null) {
-      WorldSelectionList.Entry entry = selectionList.getSelected();
-
-      if (entry instanceof WorldSelectionList.WorldListEntry) {
-        @SuppressWarnings("ConstantConditions") AccessorWorldSelectionListEntry entryAccessor =
-            (AccessorWorldSelectionListEntry) entry;
-        LevelSummary summary = entryAccessor.getWorldSummary();
-        Button deleteButton = accessor.getDeleteButton();
-
-        if (deleteButton != null && summary != null) {
-          deleteButton.active = !FavoritesList.contains(summary.getLevelId());
-        }
-      }
-    }
+    // NO-OP
   }
 
   @Override
