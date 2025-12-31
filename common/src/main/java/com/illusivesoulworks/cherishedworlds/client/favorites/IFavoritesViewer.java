@@ -30,15 +30,15 @@ import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPosition
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface IFavoritesViewer<T extends Screen> {
 
-  ResourceLocation STAR_ICON =
-      ResourceLocation.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
+  Identifier STAR_ICON =
+      Identifier.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
                                             "textures/gui/staricon.png");
-  ResourceLocation EMPTY_STAR_ICON =
-      ResourceLocation.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
+  Identifier EMPTY_STAR_ICON =
+      Identifier.fromNamespaceAndPath(CherishedWorldsConstants.MOD_ID,
                                             "textures/gui/emptystaricon.png");
 
   void init(T screen);
@@ -53,7 +53,7 @@ public interface IFavoritesViewer<T extends Screen> {
 
   default void drawIcon(int mouseX, int mouseY, GuiGraphics guiGraphics, T screen, int index,
                         boolean isFavorite, int topOffset, double scrollAmount, int bottom) {
-    ResourceLocation icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
+    Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
     int topOffsetMod = 15;
     int height = 36;
     Pair<Integer, Integer> override = ViewerIntegration.getOverride(height);

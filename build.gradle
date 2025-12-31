@@ -10,6 +10,10 @@ def publishDiscord() {
     try {
         def cfLinks = new StringJoiner('\\n')
 
+        if (project(':neoforge').hasProperty('curse_link')) {
+            cfLinks.add("[NeoForge](${project(':neoforge').findProperty('curse_link')})")
+        }
+
         if (project(':fabric').hasProperty('curse_link')) {
             cfLinks.add("[Fabric](${project(':fabric').findProperty('curse_link')})")
         }
@@ -17,11 +21,11 @@ def publishDiscord() {
         if (project(':forge').hasProperty('curse_link')) {
             cfLinks.add("[Forge](${project(':forge').findProperty('curse_link')})")
         }
+        def modrinthLinks = new StringJoiner('\\n')
 
         if (project(':neoforge').hasProperty('curse_link')) {
-            cfLinks.add("[NeoForge](${project(':neoforge').findProperty('curse_link')})")
+            modrinthLinks.add("[NeoForge](${project(':neoforge').findProperty('modrinth_link')})")
         }
-        def modrinthLinks = new StringJoiner('\\n')
 
         if (project(':fabric').hasProperty('modrinth_link')) {
             modrinthLinks.add("[Fabric](${project(':fabric').findProperty('modrinth_link')})")
@@ -29,10 +33,6 @@ def publishDiscord() {
 
         if (project(':forge').hasProperty('modrinth_link')) {
             modrinthLinks.add("[Forge](${project(':forge').findProperty('modrinth_link')})")
-        }
-
-        if (project(':neoforge').hasProperty('curse_link')) {
-            modrinthLinks.add("[NeoForge](${project(':neoforge').findProperty('modrinth_link')})")
         }
         println(cfLinks)
         println(modrinthLinks)
