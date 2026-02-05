@@ -23,6 +23,7 @@ import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorServerSelectionL
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
@@ -31,6 +32,21 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.world.level.storage.LevelSummary;
 
 public class CherishedWorldsMixinHooks {
+
+  public static LevelSummary.BackupStatus getBackupStatus(LevelSummary levelSummary,
+                                                          LevelSummary.BackupStatus original) {
+
+    if (original != LevelSummary.BackupStatus.UPGRADE_TO_SNAPSHOT && FavoritesList.contains(
+        levelSummary.getLevelId())) {
+      int levelVersion = levelSummary.levelVersion().minecraftVersion().version();
+      int currentVersion = SharedConstants.getCurrentVersion().dataVersion().version();
+
+      if (levelVersion < currentVersion) {
+        return LevelSummary.BackupStatus.UPGRADE_TO_SNAPSHOT;
+      }
+    }
+    return original;
+  }
 
   public static boolean isNotValidSwap(ServerList serverList, int pos1, int pos2) {
     int offset = 0;
