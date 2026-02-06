@@ -36,7 +36,7 @@ public class CherishedWorldsMixinHooks {
   public static LevelSummary.BackupStatus getBackupStatus(LevelSummary levelSummary,
                                                           LevelSummary.BackupStatus original) {
 
-    if (original != LevelSummary.BackupStatus.UPGRADE_TO_SNAPSHOT && FavoritesList.contains(
+    if (original == LevelSummary.BackupStatus.NONE && FavoritesList.contains(
         levelSummary.getLevelId())) {
       int levelVersion = levelSummary.levelVersion().minecraftVersion().version();
       int currentVersion = SharedConstants.getCurrentVersion().dataVersion().version();
