@@ -2,6 +2,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.21.x/CHANGELOG.md).
 
-## [15.1.0+1.21.11] - 2026.02.05
+## [15.2.0+1.21.11] - 2026.03.06
 ### Added
-- Added "Confirm and Backup" screen to favored worlds that attempt to be loaded on newer Minecraft versions [#49](https://github.com/illusivesoulworks/cherishedworlds/issues/49)
+- Added configuration option for backup prompts [#49](https://github.com/illusivesoulworks/cherishedworlds/issues/49)
+- Added `de_de` localization [#50](https://github.com/illusivesoulworks/cherishedworlds/pull/50)
