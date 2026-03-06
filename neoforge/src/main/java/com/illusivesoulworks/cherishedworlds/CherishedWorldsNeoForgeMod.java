@@ -28,6 +28,7 @@ public class CherishedWorldsNeoForgeMod {
 
   public CherishedWorldsNeoForgeMod(IEventBus eventBus) {
     eventBus.addListener(this::setupClient);
+    CherishedWorldsCommonMod.setupConfig();
   }
 
   private void setupClient(final FMLClientSetupEvent evt) {

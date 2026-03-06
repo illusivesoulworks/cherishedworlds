@@ -17,6 +17,9 @@
   "entrypoints": {
     "client": [
       "com.illusivesoulworks.cherishedworlds.CherishedWorldsFabricMod"
+    ],
+    "spectrelib-config": [
+      "com.illusivesoulworks.cherishedworlds.CherishedWorldsConfigInitializer"
     ]
   },
   "mixins": [

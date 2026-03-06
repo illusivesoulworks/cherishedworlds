@@ -17,6 +17,7 @@
 
 package com.illusivesoulworks.cherishedworlds.mixin;
 
+import com.illusivesoulworks.cherishedworlds.CherishedWorldsConfig;
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoritesList;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorServerSelectionListEntry;
@@ -35,14 +36,20 @@ public class CherishedWorldsMixinHooks {
 
   public static LevelSummary.BackupStatus getBackupStatus(LevelSummary levelSummary,
                                                           LevelSummary.BackupStatus original) {
+    CherishedWorldsConfig.BackupType backupType =
+        CherishedWorldsConfig.CLIENT.backupWorldType.get();
 
-    if (original == LevelSummary.BackupStatus.NONE && FavoritesList.contains(
-        levelSummary.getLevelId())) {
-      int levelVersion = levelSummary.levelVersion().minecraftVersion().version();
-      int currentVersion = SharedConstants.getCurrentVersion().dataVersion().version();
+    if (original == LevelSummary.BackupStatus.NONE
+        && backupType != CherishedWorldsConfig.BackupType.NONE) {
 
-      if (levelVersion < currentVersion) {
-        return LevelSummary.BackupStatus.UPGRADE_TO_SNAPSHOT;
+      if (backupType == CherishedWorldsConfig.BackupType.ALL
+          || FavoritesList.contains(levelSummary.getLevelId())) {
+        int levelVersion = levelSummary.levelVersion().minecraftVersion().version();
+        int currentVersion = SharedConstants.getCurrentVersion().dataVersion().version();
+
+        if (levelVersion < currentVersion) {
+          return LevelSummary.BackupStatus.UPGRADE_TO_SNAPSHOT;
+        }
       }
     }
     return original;

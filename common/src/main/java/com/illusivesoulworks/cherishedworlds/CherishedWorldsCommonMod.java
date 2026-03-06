@@ -18,10 +18,17 @@
 package com.illusivesoulworks.cherishedworlds;
 
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoritesList;
+import com.illusivesoulworks.spectrelib.config.SpectreConfig;
+import com.illusivesoulworks.spectrelib.config.SpectreConfigLoader;
 
 public class CherishedWorldsCommonMod {
 
   public static void setup() {
     FavoritesList.load();
+  }
+
+  public static void setupConfig() {
+    SpectreConfigLoader.add(SpectreConfig.Type.CLIENT, CherishedWorldsConfig.CLIENT_SPEC,
+                            CherishedWorldsConstants.MOD_ID);
   }
 }

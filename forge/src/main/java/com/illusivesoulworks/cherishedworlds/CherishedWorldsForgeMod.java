@@ -33,6 +33,7 @@ public class CherishedWorldsForgeMod {
                                    () -> new IExtensionPoint.DisplayTest(
                                        () -> IExtensionPoint.DisplayTest.IGNORESERVERONLY,
                                        (a, b) -> true));
+    CherishedWorldsCommonMod.setupConfig();
   }
 
   private void setupClient(final FMLClientSetupEvent evt) {

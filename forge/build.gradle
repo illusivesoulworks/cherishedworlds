@@ -69,6 +69,11 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
     compileOnly "curse.maven:fancymenu-367706:5319786"
+
+    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}"
+    jarJar(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "[0.16.1,2.0)") {
+        jarJar.pin(it, "${spectrelib_version}")
+    }
 }
 
 sourceSets.each {
