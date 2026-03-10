@@ -1,4 +1,5 @@
 {
   "selectWorld.cherishedworlds.favorite": "Zu Favoriten hinzufügen",
-  "selectWorld.cherishedworlds.unfavorite": "Aus Favoriten entfernen"
+  "selectWorld.cherishedworlds.unfavorite": "Aus Favoriten entfernen",
+  "gui.cherishedworlds.config.backupWorldType": "Legt fest, welche Welten beim Laden mit einer neueren Minecraft-Version zur Sicherung auffordern."
 }
