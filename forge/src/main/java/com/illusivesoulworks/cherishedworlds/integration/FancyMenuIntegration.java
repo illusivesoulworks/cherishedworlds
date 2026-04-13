@@ -1,12 +1,21 @@
 package com.illusivesoulworks.cherishedworlds.integration;
 
-import de.keksuccino.fancymenu.customization.overlay.CustomizationOverlay;
-import de.keksuccino.fancymenu.customization.overlay.CustomizationOverlayMenuBar;
-
 public class FancyMenuIntegration {
 
   public static boolean isNavigating() {
-    CustomizationOverlayMenuBar menuBar = CustomizationOverlay.getCurrentMenuBarInstance();
-    return menuBar != null && menuBar.isEntryContextMenuOpen();
+    try {
+      Class<?> customizationOverlayClass =
+          Class.forName("de.keksuccino.fancymenu.customization.overlay.CustomizationOverlay");
+      Object menuBar = customizationOverlayClass.getMethod("getCurrentMenuBarInstance")
+          .invoke(null);
+
+      if (menuBar == null) {
+        return false;
+      }
+      Object result = menuBar.getClass().getMethod("isEntryContextMenuOpen").invoke(menuBar);
+      return result instanceof Boolean && (Boolean) result;
+    } catch (ReflectiveOperationException | LinkageError ex) {
+      return false;
+    }
   }
 }

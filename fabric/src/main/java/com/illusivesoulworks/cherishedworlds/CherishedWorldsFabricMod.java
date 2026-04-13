@@ -37,7 +37,7 @@ public class CherishedWorldsFabricMod implements ClientModInitializer {
           if (screen instanceof JoinMultiplayerScreen || screen instanceof SelectWorldScreen ||
               screen instanceof CreateWorldScreen) {
             com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onInit(screen);
-            ScreenEvents.afterRender(screen).register(
+            ScreenEvents.afterExtract(screen).register(
                 (screen1, drawContext, mouseX, mouseY, tickDelta) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onDraw(
                     mouseX, mouseY, drawContext, screen1));
             ScreenMouseEvents.afterMouseClick(screen).register(

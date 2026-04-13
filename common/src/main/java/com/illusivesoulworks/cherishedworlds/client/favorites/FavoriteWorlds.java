@@ -22,7 +22,7 @@ import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionLi
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorWorldSelectionScreen;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
@@ -46,7 +46,8 @@ public class FavoriteWorlds implements IFavoritesViewer<SelectWorldScreen> {
   }
 
   @Override
-  public void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, SelectWorldScreen screen) {
+  public void draw(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics,
+                   SelectWorldScreen screen) {
     AccessorWorldSelectionScreen accessor = (AccessorWorldSelectionScreen) screen;
     WorldSelectionList selectionList = accessor.getList();
 

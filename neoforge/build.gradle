@@ -2,7 +2,7 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.moddev' version '2.0.123'
+    id 'net.neoforged.moddev' version '2.0.141'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
 }
@@ -10,11 +10,6 @@ plugins {
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neoforge_version
-
-    parchment {
-        mappingsVersion = project.parchment_version
-        minecraftVersion = project.parchment_mc
-    }
 
     runs {
         client {

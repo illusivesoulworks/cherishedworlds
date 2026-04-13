@@ -21,7 +21,7 @@ import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteCreateWorl
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteServers;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoriteWorlds;
 import com.illusivesoulworks.cherishedworlds.platform.Services;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
@@ -37,7 +37,8 @@ public class ScreenEvents {
     CREATE_WORLD.saveFavorite(levelId);
   }
 
-  public static void onDraw(int mouseX, int mouseY, GuiGraphics guiGraphics, Screen screen) {
+  public static void onDraw(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics,
+                            Screen screen) {
 
     if (Services.PLATFORM.canRender()) {
 

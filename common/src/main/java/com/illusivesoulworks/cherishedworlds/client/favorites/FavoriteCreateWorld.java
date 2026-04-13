@@ -1,6 +1,6 @@
 package com.illusivesoulworks.cherishedworlds.client.favorites;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 
 public class FavoriteCreateWorld implements IFavoritesViewer<CreateWorldScreen> {
@@ -13,7 +13,8 @@ public class FavoriteCreateWorld implements IFavoritesViewer<CreateWorldScreen> 
   }
 
   @Override
-  public void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, CreateWorldScreen screen) {
+  public void draw(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics,
+                   CreateWorldScreen screen) {
     drawIcon(mouseX, mouseY, guiGraphics, screen, 0, isFavorited, screen.height - 35, 0,
         screen.height + 25);
   }

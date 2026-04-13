@@ -23,7 +23,7 @@ import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
@@ -43,7 +43,7 @@ public interface IFavoritesViewer<T extends Screen> {
 
   void init(T screen);
 
-  void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, T screen);
+  void draw(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics, T screen);
 
   void click(int mouseX, int mouseY, T screen);
 
@@ -51,7 +51,8 @@ public interface IFavoritesViewer<T extends Screen> {
 
   int getHorizontalOffset();
 
-  default void drawIcon(int mouseX, int mouseY, GuiGraphics guiGraphics, T screen, int index,
+  default void drawIcon(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics, T screen,
+                        int index,
                         boolean isFavorite, int topOffset, double scrollAmount, int bottom) {
     Identifier icon = isFavorite ? STAR_ICON : EMPTY_STAR_ICON;
     int topOffsetMod = 15;
@@ -75,8 +76,8 @@ public interface IFavoritesViewer<T extends Screen> {
       MutableComponent component =
           Component.translatable("selectWorld." + CherishedWorldsConstants.MOD_ID + "." + suffix);
       components.add(ClientTooltipComponent.create(component.getVisualOrderText()));
-      guiGraphics.renderTooltip(Minecraft.getInstance().font, components, mouseX, mouseY,
-                                DefaultTooltipPositioner.INSTANCE, null);
+      guiGraphics.tooltip(Minecraft.getInstance().font, components, mouseX, mouseY,
+                          DefaultTooltipPositioner.INSTANCE, null);
     }
   }
 }

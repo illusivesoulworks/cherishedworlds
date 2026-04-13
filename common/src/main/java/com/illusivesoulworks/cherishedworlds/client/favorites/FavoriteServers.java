@@ -20,7 +20,7 @@ package com.illusivesoulworks.cherishedworlds.client.favorites;
 import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
 import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorJoinMultiplayerScreen;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
@@ -34,7 +34,8 @@ public class FavoriteServers implements IFavoritesViewer<JoinMultiplayerScreen> 
   }
 
   @Override
-  public void draw(int mouseX, int mouseY, GuiGraphics guiGraphics, JoinMultiplayerScreen screen) {
+  public void draw(int mouseX, int mouseY, GuiGraphicsExtractor guiGraphics,
+                   JoinMultiplayerScreen screen) {
     AccessorJoinMultiplayerScreen accessor = (AccessorJoinMultiplayerScreen) screen;
     ServerSelectionList selectionList = accessor.getSelectionList();
 
