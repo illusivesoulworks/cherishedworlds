@@ -40,6 +40,6 @@ public class MixinJoinMultiplayerScreen {
   private void cherishedworlds$initButtons(CallbackInfo ci) {
     this.deleteButton.active =
         CherishedWorldsMixinHooks.editDeleteButton(this.serverSelectionList.getSelected(),
-            this.deleteButton.active);
+                                                   this.deleteButton.active);
   }
 }

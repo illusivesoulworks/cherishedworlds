@@ -17,14 +17,10 @@
 
 package com.illusivesoulworks.cherishedworlds;
 
-import com.illusivesoulworks.cherishedworlds.integration.ViewerIntegration;
-import com.mojang.datafixers.util.Pair;
+import com.illusivesoulworks.cherishedworlds.client.ScreenEventHooks;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
-import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
-import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
-import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.fabricmc.fabric.api.client.screen.v1.Screens;
 
 public class CherishedWorldsFabricMod implements ClientModInitializer {
 
@@ -32,32 +28,8 @@ public class CherishedWorldsFabricMod implements ClientModInitializer {
   public void onInitializeClient() {
     CherishedWorldsCommonMod.setup();
     ScreenEvents.AFTER_INIT.register(
-        (client, screen, scaledWidth, scaledHeight) -> {
-
-          if (screen instanceof JoinMultiplayerScreen || screen instanceof SelectWorldScreen ||
-              screen instanceof CreateWorldScreen) {
-            com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onInit(screen);
-            ScreenEvents.afterRender(screen).register(
-                (screen1, drawContext, mouseX, mouseY, tickDelta) -> com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onDraw(
-                    mouseX, mouseY, drawContext, screen1));
-            ScreenMouseEvents.afterMouseClick(screen).register(
-                (screen1, mouseContext, consumed) -> {
-                  com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClick(
-                      (int) mouseContext.x(), (int) mouseContext.y(), screen1);
-                  return false;
-                });
-            ScreenMouseEvents.afterMouseRelease(screen).register(
-                (screen1, mouseContext, consumed) -> {
-                  com.illusivesoulworks.cherishedworlds.client.ScreenEvents.onMouseClicked(screen1);
-                  return false;
-                });
-          }
-        });
-
-    ViewerIntegration.register("compact-ui", (height) -> {
-      int newHeight = (height - 4) / 3 + 4;
-      int newTopOffset = newHeight / 2 - 3;
-      return new Pair<>(newTopOffset, newHeight);
-    });
+        (client, screen, scaledWidth, scaledHeight) ->
+            ScreenEventHooks.addFavoritesWidget(screen,
+                                                widget -> Screens.getWidgets(screen).add(widget)));
   }
 }

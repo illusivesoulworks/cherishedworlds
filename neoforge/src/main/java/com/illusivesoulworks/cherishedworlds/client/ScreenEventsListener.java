@@ -23,22 +23,7 @@ import net.neoforged.neoforge.client.event.ScreenEvent;
 public class ScreenEventsListener {
 
   @SubscribeEvent
-  public void onGuiDrawScreen(ScreenEvent.Render.Post evt) {
-    ScreenEvents.onDraw(evt.getMouseX(), evt.getMouseY(), evt.getGuiGraphics(), evt.getScreen());
-  }
-
-  @SubscribeEvent
-  public void onGuiMouseClick(ScreenEvent.MouseButtonReleased.Pre evt) {
-    ScreenEvents.onMouseClick((int) evt.getMouseX(), (int) evt.getMouseY(), evt.getScreen());
-  }
-
-  @SubscribeEvent
-  public void onGuiMouseClicked(ScreenEvent.MouseButtonReleased.Post evt) {
-    ScreenEvents.onMouseClicked(evt.getScreen());
-  }
-
-  @SubscribeEvent
   public void onGuiInit(ScreenEvent.Init.Post evt) {
-    ScreenEvents.onInit(evt.getScreen());
+    ScreenEventHooks.addFavoritesWidget(evt.getScreen(), evt::addListener);
   }
 }

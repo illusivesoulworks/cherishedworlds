@@ -2,21 +2,34 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.minecraftforge.gradle' version '[6.0.46,6.2)'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
+    id 'net.minecraftforge.jarjar' version '0.2.3'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
 }
 
-mixin {
-    config("${mod_id}.mixins.json")
-}
-
 minecraft {
-    mappings channel: "official", version: "${minecraft_version}"
-    reobf = false
-    copyIdeResources = true
+    runs {
+        configureEach {
+            workingDir = layout.projectDirectory.dir('run')
 
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+        }
+
+        register('client')
+
+        register('server') {
+            args '--nogui'
+        }
+
+        register('gameTestServer')
+
+        register('data') {
+            workingDir = layout.projectDirectory.dir('run-data')
+
+            args '--mod', mod_id, '--all', '--output', layout.projectDirectory.dir('src/generated/resources'), '--existing', layout.projectDirectory.dir('src/main/resources')
+        }
+    }
     // Automatically enable forge AccessTransformers if the file exists
     // This location is hardcoded in Forge and can not be changed.
     // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -24,56 +37,27 @@ minecraft {
     if (at.exists()) {
         accessTransformer = at
     }
-
-    runs {
-        client {
-            workingDirectory file('runs/client')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory file('runs/server')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory file('runs/data')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                }
-            }
-        }
-    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+repositories {
+    minecraft.mavenizer(it) // In Kotlin, it = this
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+    mavenCentral()
+}
+
+jarJar.register()
+
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+//    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
     compileOnly "curse.maven:fancymenu-367706:5319786"
 
     implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "${spectrelib_version}"
-    jarJar(group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-forge', version: "[0.16.1,2.0)") {
-        jarJar.pin(it, "${spectrelib_version}")
-    }
+    jarJar "com.illusivesoulworks.spectrelib:spectrelib-forge:${spectrelib_version}"
 }
 
 sourceSets.each {
@@ -127,5 +111,24 @@ tasks.modrinth.doLast {
 
     if (project.hasProperty('modrinth_page') && tasks.modrinth.newVersion != null) {
         project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
+    }
+}
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'forge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'forge')
+            }
+        }
     }
 }

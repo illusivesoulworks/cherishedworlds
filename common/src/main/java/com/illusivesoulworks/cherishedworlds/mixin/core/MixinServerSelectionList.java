@@ -19,9 +19,9 @@ package com.illusivesoulworks.cherishedworlds.mixin.core;
 
 import com.illusivesoulworks.cherishedworlds.mixin.CherishedWorldsMixinHooks;
 import java.util.List;
-import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.client.server.LanServer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,16 +34,21 @@ public abstract class MixinServerSelectionList {
 
   @Shadow
   @Final
-  private JoinMultiplayerScreen screen;
+  private List<ServerSelectionList.OnlineServerEntry> onlineServers;
 
   @Shadow
   @Final
-  private List<ServerSelectionList.OnlineServerEntry> onlineServers;
+  private List<ServerSelectionList.NetworkServerEntry> networkServers;
 
   @SuppressWarnings("ConstantConditions")
   @Inject(at = @At(value = "INVOKE", target = "net/minecraft/client/gui/screens/multiplayer/ServerSelectionList.refreshEntries()V"), method = "updateOnlineServers")
-  private void cherishedworlds$updateServers(ServerList serverList, CallbackInfo ci) {
-    CherishedWorldsMixinHooks.updateServers(serverList, this.onlineServers,
-        (ServerSelectionList) (Object) this, this.screen);
+  private void cherishedworlds$updateOnlineServers(ServerList serverList, CallbackInfo ci) {
+    CherishedWorldsMixinHooks.updateOnlineServers(serverList, this.onlineServers);
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  @Inject(at = @At(value = "INVOKE", target = "net/minecraft/client/gui/screens/multiplayer/ServerSelectionList.refreshEntries()V"), method = "updateNetworkServers")
+  private void cherishedworlds$updateNetworkServers(List<LanServer> serverList, CallbackInfo ci) {
+    CherishedWorldsMixinHooks.updateNetworkServers(serverList, this.networkServers);
   }
 }

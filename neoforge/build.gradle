@@ -2,7 +2,7 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.moddev' version '2.0.123'
+    id 'net.neoforged.moddev' version '2.0.140'
     id 'com.modrinth.minotaur' version '2.+'
     id 'net.darkhax.curseforgegradle' version '1.+'
 }
@@ -10,37 +10,31 @@ plugins {
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neoforge_version
-
-    parchment {
-        mappingsVersion = project.parchment_version
-        minecraftVersion = project.parchment_mc
+    addModdingDependenciesTo sourceSets.test
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
     }
-
     runs {
+        configureEach {
+            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
+            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
         client {
             client()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            gameDirectory = this.mkdir(this.file("runs/client"))
         }
-
-        server {
-            server()
-            programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        clientData {
+        data {
             clientData()
+            gameDirectory = this.mkdir(this.file("runs/data"))
+            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
-
-        configureEach {
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
-            logLevel = org.slf4j.event.Level.DEBUG
+        server {
+            server()
+            this.file("runs/server").createParentDirectories()
+            gameDirectory = this.mkdir(this.file("runs/server"))
         }
     }
 
@@ -58,7 +52,10 @@ configurations {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    compileOnly "curse.maven:fancymenu-367706:5319786"
+    compileOnly "curse.maven:fancymenu-367706:7896739"
+    runtimeOnly "curse.maven:fancymenu-367706:7896739"
+    runtimeOnly "curse.maven:konkrete-410295:7891762"
+    runtimeOnly "curse.maven:melody-938643:7875755"
 
     implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
     jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
@@ -104,5 +101,48 @@ tasks.modrinth.doLast {
 
     if (project.hasProperty('modrinth_page') && tasks.modrinth.newVersion != null) {
         project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
+    }
+}
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neoforge_version       : neoforge_version,
+            neoforge_version_range : neoforge_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            license                : license,
+            issues_url             : issues_url,
+            version                : version,
+            mod_author             : mod_author,
+            mod_description        : description,
+            sources_url            : sources_url
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
     }
 }

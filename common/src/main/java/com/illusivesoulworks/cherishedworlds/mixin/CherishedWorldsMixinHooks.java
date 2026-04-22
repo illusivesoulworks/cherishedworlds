@@ -20,16 +20,22 @@ package com.illusivesoulworks.cherishedworlds.mixin;
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConfig;
 import com.illusivesoulworks.cherishedworlds.CherishedWorldsConstants;
 import com.illusivesoulworks.cherishedworlds.client.favorites.FavoritesList;
-import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorServerSelectionListEntry;
+import com.illusivesoulworks.cherishedworlds.client.favorites.AbstractFavoritesListWidget;
+import com.illusivesoulworks.cherishedworlds.mixin.core.AccessorNetworkServerEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.SharedConstants;
+import net.minecraft.client.gui.components.events.ContainerEventHandler;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.client.gui.screens.worldselection.WorldSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
+import net.minecraft.client.server.LanServer;
 import net.minecraft.world.level.storage.LevelSummary;
 
 public class CherishedWorldsMixinHooks {
@@ -93,31 +99,49 @@ public class CherishedWorldsMixinHooks {
     return flag;
   }
 
-  public static void updateServers(ServerList serverList,
-                                   List<ServerSelectionList.OnlineServerEntry> onlineServers,
-                                   ServerSelectionList serverSelectionList,
-                                   JoinMultiplayerScreen screen) {
-    onlineServers.clear();
+  public static void updateOnlineServers(ServerList servers,
+                                         List<ServerSelectionList.OnlineServerEntry> onlineServers) {
     List<ServerSelectionList.OnlineServerEntry> favorites = new ArrayList<>();
     List<ServerSelectionList.OnlineServerEntry> others = new ArrayList<>();
 
-    for (int i = 0; i < serverList.size(); ++i) {
-      ServerData data = serverList.get(i);
-      ServerSelectionList.OnlineServerEntry entry =
-          AccessorServerSelectionListEntry.cherishedworlds$createEntry(serverSelectionList, screen,
-                                                                       data);
+    for (ServerSelectionList.OnlineServerEntry onlineServer : onlineServers) {
+      ServerData data = onlineServer.getServerData();
 
       if (FavoritesList.contains(data.name + data.ip)) {
-        favorites.add(entry);
+        favorites.add(onlineServer);
       } else {
-        others.add(entry);
+        others.add(onlineServer);
       }
     }
+    onlineServers.clear();
     onlineServers.addAll(favorites);
     onlineServers.addAll(others);
 
     for (int i = 0; i < onlineServers.size(); i++) {
-      serverList.replace(i, onlineServers.get(i).getServerData());
+      servers.replace(i, onlineServers.get(i).getServerData());
+    }
+  }
+
+  public static void updateNetworkServers(List<LanServer> servers,
+                                          List<ServerSelectionList.NetworkServerEntry> onlineServers) {
+    List<ServerSelectionList.NetworkServerEntry> favorites = new ArrayList<>();
+    List<ServerSelectionList.NetworkServerEntry> others = new ArrayList<>();
+
+    for (ServerSelectionList.NetworkServerEntry onlineServer : onlineServers) {
+      LanServer data = ((AccessorNetworkServerEntry) onlineServer).getServerData();
+
+      if (FavoritesList.contains(data.getAddress())) {
+        favorites.add(onlineServer);
+      } else {
+        others.add(onlineServer);
+      }
+    }
+    onlineServers.clear();
+    onlineServers.addAll(favorites);
+    onlineServers.addAll(others);
+
+    for (int i = 0; i < onlineServers.size(); i++) {
+      servers.set(i, ((AccessorNetworkServerEntry) onlineServers.get(i)).getServerData());
     }
   }
 
@@ -139,6 +163,28 @@ public class CherishedWorldsMixinHooks {
       }
       return 0;
     };
+  }
+
+  public static Optional<GuiEventListener> getChildAt(ContainerEventHandler eventHandler,
+                                                      Optional<GuiEventListener> original, double x,
+                                                      double y) {
+
+    if (eventHandler instanceof SelectWorldScreen
+        || eventHandler instanceof JoinMultiplayerScreen) {
+
+      for (GuiEventListener child : eventHandler.children()) {
+
+        if (child instanceof AbstractFavoritesListWidget<?, ?> widget) {
+
+          if (widget.isMouseOver(x, y)) {
+            return Optional.of(child);
+          } else {
+            return original;
+          }
+        }
+      }
+    }
+    return original;
   }
 
   public static boolean canDelete(LevelSummary levelSummary) {

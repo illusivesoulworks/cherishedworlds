@@ -18,6 +18,7 @@
 package com.illusivesoulworks.cherishedworlds.mixin.core;
 
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import org.spongepowered.asm.mixin.Mixin;

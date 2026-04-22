@@ -24,8 +24,4 @@ public interface IPlatformHelper {
   boolean isModLoaded(String modId);
 
   Path getGamePath();
-
-  boolean canRender();
-
-  boolean canInteract();
 }

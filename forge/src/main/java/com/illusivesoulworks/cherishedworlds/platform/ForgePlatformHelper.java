@@ -17,7 +17,6 @@
 
 package com.illusivesoulworks.cherishedworlds.platform;
 
-import com.illusivesoulworks.cherishedworlds.integration.FancyMenuIntegration;
 import com.illusivesoulworks.cherishedworlds.platform.services.IPlatformHelper;
 import java.nio.file.Path;
 import net.minecraftforge.fml.ModList;
@@ -27,21 +26,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
   @Override
   public boolean isModLoaded(String modId) {
-    return ModList.get().isLoaded(modId);
+    return ModList.isLoaded(modId);
   }
 
   @Override
   public Path getGamePath() {
     return FMLPaths.GAMEDIR.get();
-  }
-
-  @Override
-  public boolean canRender() {
-    return !isModLoaded("fancymenu") || !FancyMenuIntegration.isNavigating();
-  }
-
-  @Override
-  public boolean canInteract() {
-    return !isModLoaded("fancymenu") || !FancyMenuIntegration.isNavigating();
   }
 }

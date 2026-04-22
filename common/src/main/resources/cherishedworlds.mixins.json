@@ -6,10 +6,11 @@
   "mixins": [
   ],
   "client": [
+    "AccessorNetworkServerEntry",
     "AccessorJoinMultiplayerScreen",
-    "AccessorServerSelectionListEntry",
     "AccessorWorldSelectionList",
     "AccessorWorldSelectionScreen",
+    "MixinContainerEventHandler",
     "MixinJoinMultiplayerScreen",
     "MixinManageServerScreen",
     "MixinLevelSummary",
@@ -20,7 +21,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "refmap": "${mod_id}.refmap.json"
+  }
 }
   
