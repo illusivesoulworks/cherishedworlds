@@ -116,6 +116,10 @@ public class CherishedWorldsMixinHooks {
     onlineServers.clear();
     onlineServers.addAll(favorites);
     onlineServers.addAll(others);
+
+    for (int i = 0; i < onlineServers.size(); i++) {
+      servers.replace(i, onlineServers.get(i).getServerData());
+    }
   }
 
   public static void updateNetworkServers(List<LanServer> servers,
