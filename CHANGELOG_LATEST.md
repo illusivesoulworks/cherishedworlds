@@ -2,9 +2,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 This is a copy of the changelog for the most recent version. For the full version history, go [here](https://github.com/illusivesoulworks/cherishedworlds/blob/1.21.x/CHANGELOG.md).
 
-## [16.0.0+26.1.2] - 2026.04.28
-### Added
-- Added accessibility features such as narration and key navigation
+## [16.0.1+26.1.2] - 2026.07.19
 ### Changed
-- More streamlined star icon rendering, including focused and hovered states
-- Better native compatibility with various menu mods
+- Updated `tt_ru` localization [#55](https://github.com/illusivesoulworks/cherishedworlds/pull/55)
+### Fixed
+- Fixed crash for LAN servers on the multiplayer screen [#59](https://github.com/illusivesoulworks/cherishedworlds/issues/59)
+- [Forge] Fixed missing SpectreLib library [#58](https://github.com/illusivesoulworks/cherishedworlds/issues/58)
