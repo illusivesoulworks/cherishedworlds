@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2022 Illusive Soulworks
+ * Copyright (C) 2018-2026 Illusive Soulworks
  *
  * Cherished Worlds is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
@@ -139,10 +139,6 @@ public class CherishedWorldsMixinHooks {
     onlineServers.clear();
     onlineServers.addAll(favorites);
     onlineServers.addAll(others);
-
-    for (int i = 0; i < onlineServers.size(); i++) {
-      servers.set(i, ((AccessorNetworkServerEntry) onlineServers.get(i)).getServerData());
-    }
   }
 
   public static Comparator<WorldSelectionList.Entry> getLevelComparator() {
