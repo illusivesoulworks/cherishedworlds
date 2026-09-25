@@ -2,9 +2,9 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
-    id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.+'
+    id 'net.fabricmc.fabric-loom'
+    id 'com.modrinth.minotaur'
+    id 'net.darkhax.curseforgegradle'
 }
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"

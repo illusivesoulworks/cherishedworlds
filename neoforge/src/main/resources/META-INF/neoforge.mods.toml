@@ -8,8 +8,7 @@ issueTrackerURL= "${issues_url}"
     displayName = "${mod_name}"
     displayURL = "${sources_url}"
     displayTest = "IGNORE_ALL_VERSION"
-    logoFile = "${mod_id}_icon.png"
-    logoBlur = false
+    iconFile = "${mod_id}_icon.png"
     authors = "${mod_author}"
     description = '''${description}'''
 [[mixins]]

@@ -2,8 +2,18 @@ import javax.net.ssl.HttpsURLConnection
 import java.nio.charset.StandardCharsets
 
 plugins {
-    // Required for NeoGradle
-    id "org.jetbrains.gradle.plugin.idea-ext" version "1.3"
+    // see https://maven.fabricmc.net/fabric-loom/fabric-loom.gradle.plugin/maven-metadata.xml for new versions
+    id 'net.fabricmc.fabric-loom' version '1.18.1' apply false
+    // see https://projects.neoforged.net/neoforged/moddevgradle for new versions
+    id 'net.neoforged.moddev' version '2.0.147' apply false
+    // see https://plugins.gradle.org/plugin/com.modrinth.minotaur for new versions
+    id 'com.modrinth.minotaur' version '2.10.0' apply false
+    // see https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle for new versions
+    id 'net.darkhax.curseforgegradle' version '1.3.33' apply false
+    // see https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle for new versions
+    id 'net.minecraftforge.gradle' version '7.0.40' apply false
+    // see https://plugins.gradle.org/plugin/net.darkhax.curseforgegradle for new versions
+    id 'net.minecraftforge.jarjar' version '0.2.3' apply false
 }
 
 def publishDiscord() {
@@ -13,7 +23,7 @@ def publishDiscord() {
         def modLoaders = []
         modLoaders.add(['neoforge', "NeoForge"])
         modLoaders.add(['fabric', "Fabric"])
-//        modLoaders.add(['forge', "Forge"])
+        modLoaders.add(['forge', "Forge"])
 
         for (int i = 0; i < links.size(); i++) {
             def link = links[i]
@@ -110,7 +120,7 @@ def ordered(List<String> dependencyPaths) {
 }
 
 tasks.register('publishMod') {
-    def loaders = ['fabric', 'neoforge']
+    def loaders = ['forge', 'fabric', 'neoforge']
     List<String> publishTasks = []
     loaders.each {
         publishTasks.add(":${it}:modrinth")

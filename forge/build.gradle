@@ -2,10 +2,10 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.minecraftforge.gradle' version '[7.0.17,8)'
-    id 'net.minecraftforge.jarjar' version '0.2.3'
-    id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.+'
+    id 'net.minecraftforge.gradle'
+    id 'net.minecraftforge.jarjar'
+    id 'com.modrinth.minotaur'
+    id 'net.darkhax.curseforgegradle'
 }
 
 minecraft {

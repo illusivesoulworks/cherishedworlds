@@ -2,9 +2,9 @@ import net.darkhax.curseforgegradle.TaskPublishCurseForge
 
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.moddev' version '2.0.140'
-    id 'com.modrinth.minotaur' version '2.+'
-    id 'net.darkhax.curseforgegradle' version '1.+'
+    id 'net.neoforged.moddev'
+    id 'com.modrinth.minotaur'
+    id 'net.darkhax.curseforgegradle'
 }
 
 neoForge {
@@ -57,8 +57,8 @@ dependencies {
     runtimeOnly "curse.maven:konkrete-410295:8321892"
     runtimeOnly "curse.maven:melody-938643:8316116"
 
-    implementation group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
-    jarJar group: 'com.illusivesoulworks.spectrelib', name: 'spectrelib-neoforge', version: "${spectrelib_version}"
+    implementation "com.illusivesoulworks.spectrelib:spectrelib-neoforge:$spectrelib_version"
+    jarJar "com.illusivesoulworks.spectrelib:spectrelib-neoforge:$spectrelib_version"
 }
 
 
@@ -104,30 +104,6 @@ tasks.modrinth.doLast {
         project.ext.modrinth_link = "${modrinth_page}/version/${tasks.modrinth.newVersion.id}"
     }
 }
-
-var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-    var replaceProperties = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neoforge_version       : neoforge_version,
-            neoforge_version_range : neoforge_version_range,
-            mod_id                 : mod_id,
-            mod_name               : mod_name,
-            license                : license,
-            issues_url             : issues_url,
-            version                : version,
-            mod_author             : mod_author,
-            mod_description        : description,
-            sources_url            : sources_url
-    ]
-    inputs.properties replaceProperties
-    expand replaceProperties
-    from "src/main/templates"
-    into "build/generated/sources/modMetadata"
-}
-
-sourceSets.main.resources.srcDir generateModMetadata
-neoForge.ideSyncTask generateModMetadata
 
 // Implement mcgradleconventions loader attribute
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)

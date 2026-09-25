@@ -17,8 +17,8 @@
 
 package com.illusivesoulworks.cherishedworlds;
 
-import com.illusivesoulworks.cherishedworlds.client.ScreenEventsListener;
-import net.minecraftforge.common.MinecraftForge;
+import com.illusivesoulworks.cherishedworlds.client.ScreenEventHooks;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -38,6 +38,8 @@ public class CherishedWorldsForgeMod {
 
   private void setupClient(final FMLClientSetupEvent evt) {
     CherishedWorldsCommonMod.setup();
-    MinecraftForge.EVENT_BUS.register(new ScreenEventsListener());
+    ScreenEvent.Init.Post.BUS.addListener(screenEvent -> {
+      ScreenEventHooks.addFavoritesWidget(screenEvent.getScreen(), screenEvent::addListener);
+    });
   }
 }
