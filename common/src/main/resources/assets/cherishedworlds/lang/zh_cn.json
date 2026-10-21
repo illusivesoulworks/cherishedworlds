@@ -1,4 +1,7 @@
 {
-  "selectWorld.cherishedworlds.favorite": "添加到书签",
-  "selectWorld.cherishedworlds.unfavorite": "从书签中删除"
+  "selectWorld.cherishedworlds.favorite": "添加至收藏夹",
+  "selectWorld.cherishedworlds.unfavorite": "从收藏夹移除",
+  "gui.cherishedworlds.config.backupWorldType": "决定在使用较新的 Minecraft 版本加载存档时，哪些世界会提示进行备份。",
+  "gui.narrate.cherishedworlds.favorite": "将 %s 添加至收藏夹",
+  "gui.narrate.cherishedworlds.unfavorite": "将 %s 从收藏夹移除"
 }
